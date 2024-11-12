@@ -5,7 +5,7 @@ import bedImage from '../../Assets/bed.png'
 import washroomImage from '../../Assets/washroom.png'
 import area from '../../Assets/area.png'
 import { IoIosArrowRoundForward } from "react-icons/io";
-
+import ProgressBar from '../progressBar/progressBar'
 export default function FeaturedProperties() {
   return (
     <div className='featuedProperties'>
@@ -18,12 +18,16 @@ export default function FeaturedProperties() {
       </div>
       <div className='propertyList row'>
       <div className='col-lg-3 cardWrapper'>
-      <div className="card">
+      <div className="card propertyCard">
+      <div className='propertyTags'>
+        <div className='propertyTag rent'>Rent</div>
+        <div className='propertyTag featured'>Featured</div>
+      </div>
       <div className='propertyInfo'>
       <div className='propertyTitle'>Skyper Pool Apartment</div>
       <div className='propertyLocation'><img  src={locationVector}/> &nbsp;1800-1818 79th St</div>
       <div className='priceAmenity'>
-      <div className='propertyPrice'>$3,95,000</div>
+      <div className='propertyPrice'>$&nbsp;3,95,000</div>
       <div className='amenities'>
         <div className='amenity'>
         <img src={bedImage} alt='beds'/>

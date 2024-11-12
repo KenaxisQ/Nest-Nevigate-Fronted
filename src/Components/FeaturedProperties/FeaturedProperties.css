@@ -133,3 +133,31 @@ text-decoration-skip-ink: none;
     text-underline-position: from-font;
     text-decoration-skip-ink: none;
 }
+.propertyCard{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.propertyTags{
+    display: flex;
+  
+    
+}
+.propertyTag{
+    padding: 10px;
+    border-radius: 30px ;
+    color: white;
+    margin-right: 10px;
+    width: 120px;
+    text-transform:uppercase;
+    font-weight: bold;
+    font-size: 12px;
+}
+.rent{
+    background:#1F4B43;
+}
+.featured{
+    background: #E7C873;
+    color: black;
+ 
+}
