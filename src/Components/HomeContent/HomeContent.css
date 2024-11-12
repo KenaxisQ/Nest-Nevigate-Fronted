@@ -1,0 +1,150 @@
+.homeContentBody{
+
+}
+.filterProperties{
+    display: flex;
+    justify-content: space-between;
+    /* width: 80%; */
+    margin: 5% 25% ;
+}
+.inputboxesWrapper{
+    display: flex;
+    justify-content: space-between;
+    /* width: auto; */
+}
+.selectedFilter{
+    border-bottom: 3px solid black;
+    padding-bottom: 5px;
+}
+.searchSectionWrapper{
+   
+    border: 2px solid white;
+    border-radius: 50px;
+    background-color: white;
+    padding: 10px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+.selectWrapper{
+    padding: 2px;
+    border:1px solid #cccccc;
+    border-radius: 30px;
+    width:260px;
+}
+.inputWrapper{
+    border-radius:36px;
+    height: 54px;
+    display:inline-block;
+    overflow:hidden;
+    border:1px solid #cccccc;
+    padding:6px 6px;
+    background-color: none;
+  }
+  .selectBox{
+    width:224px;
+    height:40px;
+    border:none;
+    outline:none;
+    padding: 0px 10px
+  }
+  input[type=text] {
+    border-radius: 20px;
+    border: 1px solid #cccccc;
+    color:black;
+    font-style: oblique;
+    width:100%;
+    height: 40px;   
+    border: none;
+  }
+  .searchBoxWrapper{
+    padding-top: 2px;
+    border: 1px solid #cccccc;
+    border-radius: 30px;  
+    padding-left:15px; 
+}
+
+.searchButtonWrapper{
+    display: flex;
+    justify-content: flex-end;
+}
+  input[type=text]:focus{
+    border: none;
+    outline: none;
+
+  }
+  .searchButton{
+    padding: 10px;
+    border-radius: 50px;
+   height: 50px;
+   width: 180px;
+}
+
+.categoryWapper{
+    display: none;
+}
+  
+/* .Gap_150{
+    height: 200px;
+} */
+@media (max-width: 768px) {
+.filterProperties{
+    margin: 0px;
+}
+}
+@media (max-width: 1199px) {
+
+    .searchSectionWrapper{
+        justify-content: space-evenly;
+    }
+    .searchButtonWrapper{
+        margin-top: 30px;
+    }
+}
+@media (max-width: 1199px) {
+    .searchBoxWrapper{
+        margin-top: 20px;
+    }
+    .selectBox{
+        width: 100%;
+    }
+    .selectWrapper {
+        width: 100%;
+        padding: 10px;
+}
+.searchBoxWrapper{
+    padding: 10px;
+}
+.selectBox{
+    width: 100%;
+}
+    .searchSectionWrapper{
+        justify-content: flex-start;
+    }
+    .searchButtonWrapper{
+        justify-content: center;
+
+    }
+    .searchButtonWrapper button{
+         background: #064749;
+        color: white;
+    }
+
+}
+@media (max-width:450px) {
+    .homeContentBody p{
+        margin-bottom: 0px !important;
+    }
+    
+    .homeContentBody h1{
+       font-size: medium;
+    }
+    .categoryWapper{
+        margin-bottom: 20px;
+        display:block;
+    }
+    .filterProperties{
+        display: none;
+    }
+
+}

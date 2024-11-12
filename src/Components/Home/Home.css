@@ -1,0 +1,15 @@
+.home{
+    height:100vh;
+    width: 100%;
+    background-image: url('../../Assets/nn_bg1.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 700px;
+    
+}
+@media (max-width: 592px){
+
+    .home{
+        background-image: url('../../Assets/nn_bg.png');
+    }
+}
