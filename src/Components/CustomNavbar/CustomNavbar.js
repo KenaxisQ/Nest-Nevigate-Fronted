@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Phone, User,UserRound } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import './CustomNavbar.css';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,18 +13,18 @@ const Navbar = () => {
         <div className="d-none d-lg-flex nav_left">
           <ul className="navbar-nav me-auto">
             <li className="nav-item">
-              <a className="nav-link active" href="#" >Home</a>
+              <Link className="nav-link active" as={Link} to="/home" >Home</Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">Listing</a>
+              <Link className="nav-link" as={Link} to="/listings">Listing</Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">Contact</a>
+              <Link className="nav-link" has={Link} to="/contact">Contact</Link>
             </li>
           </ul>
         </div>
       
-        <a className="navbar-brand mx-auto" href="#">
+        <Link className="navbar-brand mx-auto" as={Link} to="/home">
           <div className="align-items-center">
             {/* <img 
               src="/api/placeholder/40/40" 
@@ -33,7 +34,7 @@ const Navbar = () => {
             /> */}
             <span>Next Navigate</span>
           </div>
-        </a>
+        </Link>
 
         <div className="d-none d-lg-flex align-items-center nav_right_section">
           <a href="tel:+1234567890" className="text-decoration-none me-4">
