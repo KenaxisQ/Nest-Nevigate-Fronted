@@ -1,3 +1,4 @@
+import { PropertyForm } from '../AddPropertyForm/PropertyForm';
 import FeaturedProperties from '../FeaturedProperties/FeaturedProperties'
 import HomePage from '../Home/Home'
 import React from 'react'
@@ -26,6 +27,10 @@ export default function Landing() {
       {
         path: "listings",
         element: (<>{"Not yet Implemented"}</>)
+      },
+      {
+        path: "add-property",
+        element: (<><PropertyForm /></>)
       }
       ]
 

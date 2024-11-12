@@ -25,7 +25,7 @@ export default function FeaturedProperties() {
       </div>
       <div className='propertyInfo'>
       <div className='propertyTitle'>Skyper Pool Apartment</div>
-      <div className='propertyLocation'><img  src={locationVector}/> &nbsp;1800-1818 79th St</div>
+      <div className='propertyLocation'><img  alt="" src={locationVector}/> &nbsp;1800-1818 79th St</div>
       <div className='priceAmenity'>
       <div className='propertyPrice'>$&nbsp;3,95,000</div>
       <div className='amenities'>

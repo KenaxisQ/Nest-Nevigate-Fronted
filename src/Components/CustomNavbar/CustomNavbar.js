@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Phone, User,UserRound } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './CustomNavbar.css';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const navigate = useNavigate();
   return (
 
     <nav className="navbar navbar-expand-lg fixed-top" style={{borderBottom: '1px solid #97AABE'}}>
@@ -46,7 +46,7 @@ const Navbar = () => {
           <button className="btn text-dark me-3 user_icon">
             <UserRound size={20} />
           </button>
-          <button className="btn rounded-pill px-4 add_property_btn">
+          <button className="btn rounded-pill px-4 add_property_btn" onClick={() => {navigate('/add-property', {state: { customData: 'additional data' },search : '?name=JohnDoe&age=30'});}}>
             Add Property<span></span>
           </button>
         </div>

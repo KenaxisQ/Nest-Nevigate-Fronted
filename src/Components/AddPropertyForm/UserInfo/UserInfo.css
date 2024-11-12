@@ -1,0 +1,51 @@
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .profile-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .username {
+    font-weight: bold;
+  }
+  
+  .profile-info {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .profile-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .change-password {
+    background: transparent;
+    border-radius: 30px;
+    border-color: black;
+  }
+  
+  .view-listings {
+    background: transparent;
+    border-radius: 30px;
+    border-color: black;
+  }
+
+  .logout-account {
+    background-color: #be1717;
+    color: white;
+    border-radius: 30px;
+  }
