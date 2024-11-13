@@ -1,0 +1,43 @@
+.citiesCard{
+    height: 400px;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    padding: 20px;
+}
+.outerCard{
+    padding: 20px;
+    border: none;
+    background: none;
+}
+.citiesCard p{
+    text-align: left;
+    color: white;
+    font-family: Roboto;
+    font-size: 18.05px;
+    font-weight: 500;
+    line-height: 21.66px;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    /* display:none; */
+   
+}
+/* .citiesCard:hover p{
+
+    display: block;
+} */
+
+.bg-1{
+    background: url('../../Assets/city1.jpg');
+}
+.bg-2{
+    background: url('../../Assets/city2.jpg');
+}
+.bg-3{
+    background: url('../../Assets/city3.jpg');
+}
+.bg-4{
+    background: url('../../Assets/city4.jpg');
+}
+.bg-5{
+    background: url('../../Assets/city5.jpg');
+}

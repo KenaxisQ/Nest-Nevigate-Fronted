@@ -1,0 +1,167 @@
+.footerWrapper{
+    background: #1F4B43;
+    padding: 40px;
+    padding-bottom: 30px;
+    margin-top: 200px;
+    color: white;
+    text-align: start;
+}
+.footerEmailAndSubscribeWrapper p{
+    font-family: Roboto;
+font-size: 19px;
+font-weight: 500;
+line-height: 19px;
+text-align: left;
+text-underline-position: from-font;
+text-decoration-skip-ink: none;
+
+}
+.footerEmailWrapper{
+    padding: 12px 0px;
+    border-bottom: 1px solid #FFFFFF14;
+}
+.sendBtn{
+    color:white;
+    background: #FFFFFF14;
+    border-radius: 30px;
+    padding:8px 25px;
+
+}
+input[type='email']{
+    line-height: 40px;
+    border: none;
+    background: none;
+    color: white;
+}
+input[type='email']:focus{
+outline: none;
+border: none;
+}
+::placeholder {
+    color: white;
+  }
+::-ms-input-placeholder{
+    color: white;
+}
+.followUSText{
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+}
+.logoSection img{
+    height: 80px;
+}
+.logoSection,.followus,.followUsIcons,.footerElements   {
+    display: flex;
+    justify-content: space-between;
+}
+.logoSection{
+    border-bottom: 1px solid #FFFFFF14;
+    margin-bottom: 80px;
+}
+.socialMediaIcon{
+    margin: 70px 20px;
+
+}
+.footerElements{
+    border-bottom: 1px solid #FFFFFF14;
+    padding-bottom: 60px;
+    margin-bottom: 50px;
+}
+.footerElements p{
+    font-family: Roboto;
+font-size: 15px;
+font-weight: 400;
+line-height: 28.5px;
+text-align: left;
+text-underline-position: from-font;
+text-decoration-skip-ink: none;
+}
+p.footerSubHeading{
+    font-family: Roboto;
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 22.8px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    }
+.copyRight{
+    text-align:center;
+}
+.footerWrapperForMobile{
+    display: none;
+}
+
+@media (max-width:959px) {
+
+    .footerWrapper{
+        display: none;
+    }
+
+    .footerWrapperForMobile{
+        background-color: #1F4B43;
+        margin-top: 50px;
+        display: block;
+    }
+    .footerWrapperForMobile img{
+        height: 40px;
+    }
+    .followUsIcons{
+        display: block;
+        text-align: start ;
+        justify-content: flex-start !important;
+    }
+    .socialMediaIcon{
+        margin:0px 0px 30px 0px;
+    }
+    .discover{
+        margin-right: 15px
+    }
+    .footerElements{
+        margin-bottom:0px;
+    }
+    .footerEmailAndSubscribeWrapper p{
+        font-family: Roboto;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 19px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    
+    }
+    .footerEmailWrapper{
+        display: flex;
+
+        padding: 12px 10px;
+        border-bottom: 1px solid #FFFFFF14;
+    }
+    .sendBtn{
+        padding: 10px;
+    }
+    .logoSection{
+        display:block;
+    }
+    .logoSection img{
+        align-items: flex-start;
+    }
+    .footerLogo{
+        text-align: left;
+        padding: 20px 0px 0px 20px;
+    }
+    .footerEmailAndSubscribeWrapper{
+        padding: 20px 0px 0px 20px;
+    }
+    p.footerSubHeading{
+        font-size: 14px;
+    }
+    .footerElements{
+        text-wrap: nowrap;
+    }
+    p{
+        font-size: 12px;
+    }
+    .quickLinks{
+        margin: 0px;
+    }
+}

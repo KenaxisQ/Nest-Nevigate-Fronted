@@ -5,7 +5,6 @@ import bedImage from '../../Assets/bed.png'
 import washroomImage from '../../Assets/washroom.png'
 import area from '../../Assets/area.png'
 import { IoIosArrowRoundForward } from "react-icons/io";
-import ProgressBar from '../progressBar/progressBar'
 export default function FeaturedProperties() {
   return (
     <div className='featuedProperties'>
@@ -18,7 +17,7 @@ export default function FeaturedProperties() {
       </div>
       <div className='propertyList row'>
       <div className='col-lg-3 cardWrapper'>
-      <div className="card propertyCard">
+      <div className="card propertylistingcard propertyCard">
       <div className='propertyTags'>
         <div className='propertyTag rent'>Rent</div>
         <div className='propertyTag featured'>Featured</div>
@@ -49,37 +48,37 @@ export default function FeaturedProperties() {
       </div>
       </div>
       <div className='col-lg-3 cardWrapper'>
-      <div className="card">
+      <div className="card propertylistingcard">
       </div>
       </div>
       <div className='col-lg-3 cardWrapper'>
-      <div className="card">
+      <div className="card propertylistingcard">
       </div>
       </div>
       <div className='col-lg-3 cardWrapper'>
-      <div className="card">
+      <div className="card propertylistingcard">
       </div>
       </div>
       </div>
       <div className='propertyList row'>
       <div className='col-lg-3 cardWrapper'>
-      <div className="card">
+      <div className="card propertylistingcard">
       </div>
       </div>
       <div className='col-lg-3 cardWrapper'>
-      <div className="card">
+      <div className="card propertylistingcard">
       </div>
       </div>
       <div className='col-lg-3 cardWrapper'>
-      <div className="card">
+      <div className="card propertylistingcard">
       </div>
       </div>
       <div className='col-lg-3 cardWrapper'>
-      <div className="card">
+      <div className="card propertylistingcard">
       </div>
       </div>
       </div>
-      <buttton className='btn seeAllListings'>See All Listing <IoIosArrowRoundForward /></buttton>
+      <buttton className='btn NN_btn1'>See All Listing <IoIosArrowRoundForward /></buttton>
     </div>
   )
 }

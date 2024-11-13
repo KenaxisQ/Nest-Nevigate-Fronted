@@ -36,7 +36,7 @@ text-decoration-skip-ink: none;
     padding: 20px;
 
 }
-.card{
+.propertylistingcard{
     border: 1px solid black;
     margin-bottom: 20px;
     height: 450px;
@@ -121,11 +121,11 @@ text-decoration-skip-ink: none;
     display: flex;
     justify-content: space-between;
 }
-.seeAllListings{
+.NN_btn1{
     background: #E7C873;
     border-radius: 30px;
     padding: 15px;
-    width: 200px;
+    /* width: 200px; */
     font-family: Roboto;
     font-size: 15px;
     font-weight: 500;

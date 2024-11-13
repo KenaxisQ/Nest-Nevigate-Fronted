@@ -32,7 +32,7 @@ const Navbar = () => {
               className="me-2"
               style={{ width: '40px', height: '40px' }}
             /> */}
-            <span>Next Navigate</span>
+            <span>Nest Navigate</span>
           </div>
         </Link>
 

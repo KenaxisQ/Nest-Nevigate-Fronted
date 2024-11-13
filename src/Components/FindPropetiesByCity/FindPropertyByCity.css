@@ -1,0 +1,44 @@
+.propertiesByCity{
+    margin-top: 80px;
+    background: #F7F7F7;
+    padding:130px 0px ;
+
+    font-family: Roboto;
+    font-size: 38px;
+    font-weight: 500;
+    line-height: 49.4px;
+    text-align: center;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+}
+.propertiesByCity p{
+font-family: Roboto;
+font-weight: 400;
+font-size: 16.15px;
+line-height: 30.68px;
+text-align: center;
+}
+.gap_200{
+    margin-top: 200px;
+}
+.becomeAgent{
+    margin-top: 100px;
+    padding: 30px;
+    background: #1F4B43;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width:990px) {
+    .becomeAgent{
+       text-align: left;
+    }
+
+    @media (max-width:600px) {
+        .becomeAgent{
+            display: block;
+        }
+        }
+        
+}

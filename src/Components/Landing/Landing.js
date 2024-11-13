@@ -1,5 +1,7 @@
 import { PropertyForm } from '../AddPropertyForm/PropertyForm';
 import FeaturedProperties from '../FeaturedProperties/FeaturedProperties'
+import FindPropertyByCity from '../FindPropetiesByCity/FindPropertyByCity';
+import Footer from '../Footer/Footer';
 import HomePage from '../Home/Home'
 import React from 'react'
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
@@ -16,12 +18,12 @@ export default function Landing() {
       children: [{
         index: true,
         element: (
-          <><HomePage /><FeaturedProperties /></>
+          <><HomePage /><FeaturedProperties /><FindPropertyByCity/><Footer/></>
         )
       },
       {
         path: "home",
-        element: (<><HomePage /><FeaturedProperties /></>
+        element: (<><HomePage /><FeaturedProperties /><FindPropertyByCity/><Footer/></>
         )
       },
       {
