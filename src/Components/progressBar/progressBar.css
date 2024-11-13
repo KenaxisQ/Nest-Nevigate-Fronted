@@ -4,7 +4,7 @@
   .progressbar li {
     list-style: none;
     display: inline-block;
-    width: 30.33%;
+    width: 25.33%;
     position: relative;
     text-align: center;
     cursor: pointer;
@@ -53,4 +53,8 @@
   } 
   .progressbar li.active + li:after {
     background-color: #1F4B43;
+  }
+  .progressBarWrapper{
+    display: flex;
+    flex-direction: column;
   }
