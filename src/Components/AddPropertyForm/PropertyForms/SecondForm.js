@@ -1,15 +1,17 @@
 import { useForm, FormProvider, useWatch } from "react-hook-form";
 import { FormRenderDynamic } from "./FormRenderDynamic/FormRenderDynamic";
-
-export const SecondForm = () => {
+import PropTypes from "prop-types";
+export const SecondForm = ({setStep}) => {
    
-
     return (
         <>
         <FormProvider>
-            <FormRenderDynamic />
+            <FormRenderDynamic setStep={setStep}/>
         </FormProvider>
-            <h1>Second form</h1>
         </>
     )
+}
+
+SecondForm.propTypes = {
+    setStep: PropTypes.func.isRequired
 }
