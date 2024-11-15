@@ -1,5 +1,6 @@
 import { PropertyForm } from '../AddPropertyForm/PropertyForm';
 import FeaturedProperties from '../FeaturedProperties/FeaturedProperties'
+import FilterProperties from '../FilterProperties/FilterProperties';
 import FindPropertyByCity from '../FindPropetiesByCity/FindPropertyByCity';
 import Footer from '../Footer/Footer';
 import HomePage from '../Home/Home'
@@ -33,6 +34,10 @@ export default function Landing() {
       {
         path: "add-property",
         element: (<><PropertyForm /></>)
+      },
+      {
+        path: "search",
+        element: (<><FilterProperties/></>)
       }
       ]
 
