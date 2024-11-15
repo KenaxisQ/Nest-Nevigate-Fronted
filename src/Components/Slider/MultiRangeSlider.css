@@ -1,0 +1,32 @@
+.multi-range-slider .bar-inner,.multi-range-slider .thumb,.multi-range-slider .thumb .caption * {
+
+  background-color:#1F4B43 ;
+}
+.multi-range-slider .ruler{
+  display: none;
+}
+.multi-range-slider {
+    display: flex;
+    position: relative;
+    border: none;
+    border-radius: none;
+    padding:none;
+    box-shadow: none;
+    flex-direction: column;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.minMaxWrapper{
+  font-size: 12px;
+}
+.minMaxWrapper input[type="text"]{
+
+  width: 20%;
+}
+.multi-range-slider .bar-right,.multi-range-slider .thumb::before ,.multi-range-slider .bar-left,
+.multi-range-slider .bar-inner-left,.multi-range-slider .bar-inner-right{
+box-shadow: none;
+border: none;
+}
+
