@@ -297,7 +297,6 @@ export const FormRenderDynamic = ({ setStep }) => {
                               onChange={(event) => {
                                 setValue(prop.fieldName, event.target.checked);
                               }}
-                              className="form-check-input"
                             />
                         <label for={prop?.fieldName}>{prop?.name}</label>
                         </div>
@@ -324,8 +323,8 @@ export const FormRenderDynamic = ({ setStep }) => {
                           onChange={(event) => {
                             setValue(prop.fieldName, event.target.checked);
                           }}
-                          className="form-check-input"
                         />
+                        &nbsp;
                         <label for={prop?.fieldName}>{prop?.name}</label>
                       </div>
                     </div>
@@ -347,7 +346,6 @@ export const FormRenderDynamic = ({ setStep }) => {
                           onChange={(event) => {
                             setValue(prop.fieldName, event.target.checked);
                           }}
-                          className="form-check-input"
                         />
                         <label for={prop?.fieldName}>{prop?.name}</label>
                         </div>
