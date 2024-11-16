@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/Nest-Navigate-Fronted/static/css/main.0840e5f5.css",
+    "main.js": "/Nest-Navigate-Fronted/static/js/main.08b3a1fc.js",
+    "static/js/453.223a59d5.chunk.js": "/Nest-Navigate-Fronted/static/js/453.223a59d5.chunk.js",
+    "static/media/nn_bg.png": "/Nest-Navigate-Fronted/static/media/nn_bg.4199c14e01de449c7f28.png",
+    "static/media/nn_bg1.png": "/Nest-Navigate-Fronted/static/media/nn_bg1.9facfd275ad60f58ecca.png",
+    "static/media/propertyImg1.jpg": "/Nest-Navigate-Fronted/static/media/propertyImg1.93cb5b4e5675c85e3a41.jpg",
+    "static/media/city2.jpg": "/Nest-Navigate-Fronted/static/media/city2.229f47ac41322c69dff8.jpg",
+    "static/media/city3.jpg": "/Nest-Navigate-Fronted/static/media/city3.e61d15043c93c65d1887.jpg",
+    "static/media/city5.jpg": "/Nest-Navigate-Fronted/static/media/city5.64864a877c1cc2191165.jpg",
+    "static/media/city1.jpg": "/Nest-Navigate-Fronted/static/media/city1.b6a81d9b79d4853752bc.jpg",
+    "static/media/city4.jpg": "/Nest-Navigate-Fronted/static/media/city4.ccd951ddb63cd8688302.jpg",
+    "static/media/p1.jpg": "/Nest-Navigate-Fronted/static/media/p1.9e9a9fc64155bfac4399.jpg",
+    "index.html": "/Nest-Navigate-Fronted/index.html",
+    "main.0840e5f5.css.map": "/Nest-Navigate-Fronted/static/css/main.0840e5f5.css.map",
+    "main.08b3a1fc.js.map": "/Nest-Navigate-Fronted/static/js/main.08b3a1fc.js.map",
+    "453.223a59d5.chunk.js.map": "/Nest-Navigate-Fronted/static/js/453.223a59d5.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0840e5f5.css",
+    "static/js/main.08b3a1fc.js"
+  ]
+}
