@@ -1,132 +1,88 @@
-.filterProperty {
-  padding: 40px;
+.filterProperty{
+    padding:40px;
+}
+.rentOrBuybtn{
+border-radius: 0px;
+width: 50%;
+font-family: Roboto;
+font-size: 15px;
+font-weight: 400;
+line-height: 28px;
+text-underline-position: from-font;
+text-decoration-skip-ink: none;
+border: none;
+height: 48px;
+
+}
+.bg_1F4B43{
+    background-color:#1F4B43 ;
+}
+.bg_white{
+    background-color: white;
+}
+.bg_E9E9E9{
+    background-color: #E9E9E9;
 }
 
-.rentOrBuybtn {
-  border-radius: 0;
-  width: 50%;
-  font-family: Roboto;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 28px;
-  border: none;
-  height: 48px;
-  margin: 10px 0;
+.color_white{
+    color: white;
 }
+.filterOptionsForRealestateType,.filterOptionsForBedRooms,.filterOptionsForFurniture{
+    text-align: left;
+    font-family: Inter;
+font-size: 17.5px;
+font-weight: 500;
+line-height: 21.18px;
+text-align: left;
+text-underline-position: from-font;
+text-decoration-skip-ink: none;
 
-.bg_1F4B43 {
-  background-color: #1F4B43;
 }
-
-.bg_E9E9E9 {
-  background-color: #E9E9E9;
-}
-
-.color_white {
-  color: white;
-}
-
-.filterOptionsForRealestateType,
-.filterOptionsForBedRooms,
-.filterOptionsForFurniture {
-  text-align: left;
-  font-family: Inter;
-  font-size: 17.5px;
-  font-weight: 500;
-  margin-bottom: 15px;
-}
-
+/* Style for the default checkbox */
 input[type="checkbox"] {
-  width: 15px;
-  height: 15px;
-  appearance: none;
-  border: 2px solid #888;
-  border-radius: 4px;
-  background-color: white;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
+    width: 15px;          /* Size of the checkbox */
+    height: 15px;
+    appearance: none;     /* Remove default styling in some browsers */
+    border: 2px solid #888; /* Border color */
+    border-radius: 4px;   /* Rounded corners */
+    background-color: white;  /* Default background color */
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease; /* Smooth transitions */
+  }
 
-input[type="checkbox"]:checked {
-  background-color: #1F4B43;
-  border-color: #1F4B43;
-}
+  /* Change background when checkbox is checked */
+  input[type="checkbox"]:checked {
+    background-color: #1F4B43; /* Green background when checked */
+    border-color: #1F4B43;
+    color: white;  /* Match border color */
+  }
 
-input[type="checkbox"]:checked::before {
-  content: '✔';
-  position: absolute;
-  top: -1px;
-  left: 2px;
-  color: white;
-  font-size: 10px;
-}
+  /* Add a checkmark using a pseudo-element when checked */
+  input[type="checkbox"]:checked::before {
+    content: '✔';              /* Checkmark */
+    position: absolute;
+    top: -1px;
+    left: 2px;
+    color: white;              /* Checkmark color */
+    font-size: 10px;
+    line-height: 16px;
+  }
 
-.filterProperty p {
-  margin-bottom: 0 !important;
+.filterProperty p{
+    margin-bottom: 0px !important;
+    font-size: 12px;
 }
-
 .selectRealestateType {
-  font-family: Lexend;
-  font-size: 22.5px;
-  font-weight: 600;
-  text-align: left;
-  margin: 20px 0;
-}
+    font-family: Lexend;
+    font-size: 22.5px;
+    font-weight: 600;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    margin:20px 0px;
 
-.LeaseValue {
-  font-weight: 500;
 }
-
-.toggleFilterBtn {
-  background-color: #1f4b43;
-  color: white;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom: 15px;
-}
-
-.propertyList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.cardWrapper {
-  margin-bottom: 20px;
-}
-
-.col-lg-4 {
-  flex: 1 1 calc(33.333% - 20px);
-}
-
-.col-lg-3 {
-  flex: 1 1 calc(25% - 20px);
-}
-
-.col-lg-12 {
-  flex: 1 1 100%;
-}
-
-/* Button for View All functionality */
-.viewAllButton {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.viewAllBtn {
-  background-color: #1F4B43;
-  color: white;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.viewAllBtn:hover {
-  background-color: #155f51;
+.LeaseValue{
+    font-weight: 500;
 }
