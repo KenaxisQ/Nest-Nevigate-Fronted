@@ -1,5 +1,16 @@
+.SearchContent{
+
+}
 .filterProperty{
     padding:40px;
+}
+.filterbtn{
+    color: white;
+}
+.filterbtn:hover{
+    color: #1F4B43;
+    background-color: none;
+    border: 1px solid #1F4B43;
 }
 .rentOrBuybtn{
 border-radius: 0px;
@@ -85,4 +96,9 @@ input[type="checkbox"] {
 }
 .LeaseValue{
     font-weight: 500;
+}
+.filterButtonWrapper{
+    text-align: left;
+    padding: 20px 0px 0px 20px;
+    margin-top: 80px;
 }

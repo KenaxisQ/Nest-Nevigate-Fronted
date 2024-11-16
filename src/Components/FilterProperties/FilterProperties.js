@@ -1,8 +1,14 @@
 import { React, useState } from 'react';
 import './FilterProperties.css';
+import Navbar from '../CustomNavbar/CustomNavbar';
 import PropertyCard from '../PropertyCard/PropertyCard';
 import CustomRangeSlider from '../Slider/MultiRangeSlider';
 import RangeSlider from '../Slider/RangeSlider';
+import { MdFilterAlt, MdFilterAltOff } from "react-icons/md";
+import FindPropertyByCity from '../FindPropetiesByCity/FindPropertyByCity';
+import Footer from '../Footer/Footer';
+import BecomeAnAgent from '../Become an Agent/BecomeAnAgent';
+
 
 export default function FilterProperties({ properties }) {
   const [leaseValue, setLeaseValue] = useState(50); // Default value
@@ -57,8 +63,12 @@ export default function FilterProperties({ properties }) {
   const propertiesToShow = showAllProperties ? properties : properties.slice(0, 12);
 
   return (
+    <div className="SearchContent">
+      <Navbar/>
+      <div className="filterButtonWrapper">
+      <button className='btn filterbtn bg_1F4B43' onClick={()=>{setIsFilterOpen(!isFilterOpen)}}>{!isFilterOpen?<MdFilterAlt size="30px" />:< MdFilterAltOff size="30px"/>}{!isFilterOpen?"Show Filter":"Hide Filter"}</button>
+      </div>
     <div className="Wrapper row">
-      <button className='btn btn-success' onClick={()=>{setIsFilterOpen(!isFilterOpen)}}>{!isFilterOpen?"Show Filter":"Hide Filter"}</button>
       {isFilterOpen && (
         <div className="col-lg-3" style={{padding:'20px'}}>
           <div className="filterComponent">
@@ -204,6 +214,10 @@ export default function FilterProperties({ properties }) {
           {showAllProperties ? "Show Less" : "View All"}
         </button>
       </div>
+    </div>
+    <FindPropertyByCity/>
+    <BecomeAnAgent/>
+    <Footer/>
     </div>
   );
 }
