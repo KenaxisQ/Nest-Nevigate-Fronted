@@ -21,24 +21,3 @@ text-align: center;
 .gap_200{
     margin-top: 200px;
 }
-.becomeAgent{
-    margin-top: 100px;
-    padding: 30px;
-    background: #1F4B43;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-}
-
-@media (max-width:990px) {
-    .becomeAgent{
-       text-align: left;
-    }
-
-    @media (max-width:600px) {
-        .becomeAgent{
-            display: block;
-        }
-        }
-        
-}

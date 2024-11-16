@@ -3,7 +3,7 @@ import './Home.css'
 import CustomNavbar from '../CustomNavbar/CustomNavbar';
 import HomeContent from '../HomeContent/HomeContent';
 const HomePage = () => {
- 
+
   return (
     <div className="home">
       <div className='navbar' ><CustomNavbar/></div>
@@ -11,7 +11,7 @@ const HomePage = () => {
        <div className='Home_content'>
        <HomeContent/>
        </div>
-       
+
     </div>
   );
 };

@@ -44,8 +44,8 @@ border: none;
     color: white;
 }
 .followUSText{
-    writing-mode: vertical-rl;
-    text-orientation: upright;
+    align-content: center;
+    padding: 15px 0px 0px 0px;
 }
 .logoSection img{
     height: 80px;
@@ -128,7 +128,7 @@ p.footerSubHeading{
     text-align: left;
     text-underline-position: from-font;
     text-decoration-skip-ink: none;
-    
+
     }
     .footerEmailWrapper{
         display: flex;
