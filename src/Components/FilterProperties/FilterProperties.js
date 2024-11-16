@@ -7,7 +7,7 @@ import RangeSlider from '../Slider/RangeSlider';
 import { MdFilterAlt, MdFilterAltOff } from "react-icons/md";
 import FindPropertyByCity from '../FindPropetiesByCity/FindPropertyByCity';
 import Footer from '../Footer/Footer';
-import BecomeAnAgent from '../Become an Agent/BecomeAnAgent';
+import { BsSearch } from "react-icons/bs";
 
 
 export default function FilterProperties({ properties }) {
@@ -15,7 +15,7 @@ export default function FilterProperties({ properties }) {
   const [budget, setBudget] = useState(70); // Default value
   const [isFilterOpen, setIsFilterOpen] = useState(false); // Track whether the filter is open
   const [showAllProperties, setShowAllProperties] = useState(false); // Toggle between showing 12 and all properties
-
+  const [searchKeyword, setSearchKeyword] = useState("");
   // Handle slider changes
   const handleLeaseChange = (newValue) => setLeaseValue(newValue);
   const handleBudgetChange = (newValue) => setBudget(newValue);
@@ -65,9 +65,23 @@ export default function FilterProperties({ properties }) {
   return (
     <div className="SearchContent">
       <Navbar/>
-      <div className="filterButtonWrapper">
-      <button className='btn filterbtn bg_1F4B43' onClick={()=>{setIsFilterOpen(!isFilterOpen)}}>{!isFilterOpen?<MdFilterAlt size="30px" />:< MdFilterAltOff size="30px"/>}{!isFilterOpen?"Show Filter":"Hide Filter"}</button>
+     <div className="filterOptionsWrapper">
+     <div className="filterSearchWrapper">
+	    <input id="search" className='searchProperties' placeholder='Search Properties...' type="search" onChange={(e)=>setSearchKeyword(e.target.value)}/>
+      <button className='btn search_button'>Search&nbsp;&nbsp;<BsSearch /></button>
       </div>
+      <div className="filterButtonWrapper">
+      <button className='btn filterbtn bg_1F4B43' onClick={()=>{setIsFilterOpen(!isFilterOpen)}}>{!isFilterOpen?<MdFilterAlt size="30px" />:< MdFilterAltOff size="30px"/>}<span className='hideFilterText'>{!isFilterOpen?"Show Filter":"Hide Filter"}</span></button>
+      </div>
+     </div>
+     {searchKeyword!=""&&searchKeyword.length>5&&
+     (
+      <div className="searchInfo">
+      <h4>Showing Results"{searchKeyword}"</h4>
+      <p>{Math.floor(Math.random() * (100 - 1 + 1)) +1  } Properties found</p>
+      </div>
+      )}
+
     <div className="Wrapper row">
       {isFilterOpen && (
         <div className="col-lg-3" style={{padding:'20px'}}>
@@ -216,7 +230,6 @@ export default function FilterProperties({ properties }) {
       </div>
     </div>
     <FindPropertyByCity/>
-    <BecomeAnAgent/>
     <Footer/>
     </div>
   );

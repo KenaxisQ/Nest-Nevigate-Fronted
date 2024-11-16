@@ -97,8 +97,53 @@ input[type="checkbox"] {
 .LeaseValue{
     font-weight: 500;
 }
-.filterButtonWrapper{
-    text-align: left;
-    padding: 20px 0px 0px 20px;
+
+.filterOptionsWrapper{
     margin-top: 80px;
+    display: flex;
+    justify-content: space-between;
+
+}
+.filterSearchWrapper{
+    align-content:flex-end;
+    padding-bottom: 2px;
+    width: 60%;
+    margin-left: 20px;
+    display: flex;
+    justify-content:space-evenly;
+}
+.searchProperties{
+    height: 50px;
+    border-radius: 20px;
+    width: 80%;
+    padding: 10px 20px;
+}
+.searchProperties::placeholder{
+    color: grey;
+}
+.search_button{
+    padding: 10px 20px;
+    background: #1F4B43;
+    border-radius: 30px;
+    color: white;
+}
+.search_button:hover{
+    background: none;
+    border:1px solid #1F4B43;
+}
+.searchInfo{
+    margin-top: 30px;
+}
+@media (max-width:600px) {
+    .filterSearchWrapper{
+        display: block;
+        width: 100%;
+
+    }
+    .hideFilterText{
+        display: none;
+    }
+    .search_button{
+        margin-top: 20px;
+    }
 }

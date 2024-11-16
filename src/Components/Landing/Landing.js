@@ -2,14 +2,15 @@ import { PropertyForm } from '../AddPropertyForm/PropertyForm';
 import FeaturedProperties from '../FeaturedProperties/FeaturedProperties'
 import FilterProperties from '../FilterProperties/FilterProperties';
 import FindPropertyByCity from '../FindPropetiesByCity/FindPropertyByCity';
+import PropertyDetails from '../PropertyDetailsPage/PropertyDetailsPage';
 import Footer from '../Footer/Footer';
 import HomePage from '../Home/Home'
 import React from 'react'
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
-export default function Landing() { 
+export default function Landing() {
 
   const properties = [
-    { id: 1, type: 'Rent', title: 'Skyper Pool Apartment', location: '1800-1818 79th St', price: '  3,95,000', beds: 2, washrooms: 6, area: 4 },
+    { id: 1, type: 'Rent', title: 'Skyper Pool Apartment', location: '1800-1818 79th St', price: '₹3,95,000', beds: 2, washrooms: 6, area: 4 },
     { id: 2, type: 'Sale', title: 'Beachside Villa', location: '100 Ocean Blvd', price: '₹2,50,000', beds: 3, washrooms: 4, area: 5 },
     { id: 3, type: 'Rent', title: 'Sunset Loft', location: '50 Sunset Ave', price: '₹1,80,000', beds: 1, washrooms: 2, area: 3 },
     { id: 4, type: 'Sale', title: 'Downtown Apartment', location: '2500 Downtown St', price: '₹5,00,000', beds: 4, washrooms: 4, area: 6 },
@@ -56,6 +57,10 @@ export default function Landing() {
       {
         path: "search",
         element: (<><FilterProperties   properties={properties}/></>)
+      },
+      {
+        path:"detail",
+        element:(<PropertyDetails/>)
       }
       ]
 
@@ -64,10 +69,6 @@ export default function Landing() {
   return (
     <>
       <RouterProvider router={router} />
-      {/* <HomePage/>
-    <FeaturedProperties/>
-    <h1>Hi</h1>
-    <PropertyForm /> */}
     </>
   )
 }
