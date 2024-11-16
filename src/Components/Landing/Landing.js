@@ -3,7 +3,8 @@ import FeaturedProperties from '../FeaturedProperties/FeaturedProperties'
 import FilterProperties from '../FilterProperties/FilterProperties';
 import FindPropertyByCity from '../FindPropetiesByCity/FindPropertyByCity';
 import Footer from '../Footer/Footer';
-import HomePage from '../Home/Home'
+import HomePage from '../Home/Home';
+import {LoginPage} from '../Login/LoginPage';
 import React from 'react'
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
 export default function Landing() { 
@@ -56,6 +57,10 @@ export default function Landing() {
       {
         path: "search",
         element: (<><FilterProperties   properties={properties}/></>)
+      },
+      {
+        path: "login",
+        element: (<><LoginPage /></>)
       }
       ]
 

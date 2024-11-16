@@ -1,0 +1,42 @@
+#ex1{
+    padding: 10% 10% 5% 10%;
+    margin: 0;
+    align-items: center;
+}
+
+#nav-item-login{
+    color: black;
+}
+.login-field-center{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+}
+
+#loginName[type='email']{
+    color: black;
+    /* color: white; */
+}
+/* .container{
+    width: 100%;
+    height: 40%;
+    padding-top: 7%;
+} */
+/* @media (max-width: 991.98px) {
+    #ex1{
+        padding: 20% 20% 5% 20%;
+        margin: 0;
+    }
+    
+    #nav-item-login{
+        color: black;
+    }
+    
+} */
+
+/* #loginName ::placeholder
+{
+    color: black;
+    background-color: black;
+} */
