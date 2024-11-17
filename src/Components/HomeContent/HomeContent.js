@@ -34,7 +34,7 @@ export default function HomeContent() {
           <option>Plot/Land</option>
         </select>
         </div>
-        <div className='selectWrapper col-lg-2'>
+        <div className='selectWrapper col-lg-3'>
         <select className="selectBox">
           <option>All</option>
           <option>Land</option>
@@ -45,12 +45,12 @@ export default function HomeContent() {
         <div className='searchBoxWrapper col-lg-6'>
         <input type="text" placeholder="Enter Keywords"/>
         </div>
-        <div className='searchButtonWrapper col-lg-3'>
+        <div className='searchButtonWrapper col-lg-2'>
         <button className='btn btn-primary searchButton'>Search</button>
         </div>
         </div>
         <div className='Gap_150'>
-      
+
         </div>
     </div>
   )
