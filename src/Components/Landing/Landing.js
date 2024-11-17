@@ -2,7 +2,7 @@ import { PropertyForm } from '../AddPropertyForm/PropertyForm';
 import FeaturedProperties from '../FeaturedProperties/FeaturedProperties'
 import FilterProperties from '../FilterProperties/FilterProperties';
 import FindPropertyByCity from '../FindPropetiesByCity/FindPropertyByCity';
-import PropertyDetails from '../PropertyDetailsPage/PropertyDetailsPage';
+import PropertyDetails from '../PropertyDetailsPage/PropertyDetailsPage.js';
 import Footer from '../Footer/Footer';
 import HomePage from '../Home/Home';
 import {LoginPage} from '../Login/LoginPage';
