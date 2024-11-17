@@ -1,10 +1,13 @@
 import './App.css';
 import Landing from './Components/Landing/Landing';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
 import { LoginPage } from './Components/Login/LoginPage';
 function App() {
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to top of the page
+  }, [<Landing/>]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   return (
     <div className="App">

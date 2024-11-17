@@ -8,6 +8,7 @@ import HomePage from '../Home/Home';
 import {LoginPage} from '../Login/LoginPage';
 import React from 'react'
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
+import ScrollToTop from '../ScrollToTop';
 export default function Landing() {
 
   const properties = [
@@ -39,17 +40,17 @@ export default function Landing() {
       children: [{
         index: true,
         element: (
-          <><HomePage /><FeaturedProperties   properties={properties} /><FindPropertyByCity/><Footer/></>
+          <><ScrollToTop/><HomePage /><FeaturedProperties   properties={properties} /><FindPropertyByCity/><Footer/></>
         )
       },
       {
         path: "home",
-        element: (<><HomePage /><FeaturedProperties properties={properties}/><FindPropertyByCity/><Footer/></>
+        element: (<><ScrollToTop/><HomePage /><FeaturedProperties properties={properties}/><FindPropertyByCity/><Footer/></>
         )
       },
       {
         path: "listings",
-        element: (<><FilterProperties properties={properties}/></>)
+        element: (<><ScrollToTop/><FilterProperties properties={properties}/></>)
       },
       {
         path: "add-property",
@@ -57,11 +58,11 @@ export default function Landing() {
       },
       {
         path: "search",
-        element: (<><FilterProperties   properties={properties}/></>)
+        element: (<><ScrollToTop/><FilterProperties   properties={properties}/></>)
       },
       {
         path:"detail",
-        element:(<PropertyDetails properties={properties}/>)
+        element:(<><ScrollToTop/><PropertyDetails properties={properties}/></>)
       },
       {
         path: "login",
