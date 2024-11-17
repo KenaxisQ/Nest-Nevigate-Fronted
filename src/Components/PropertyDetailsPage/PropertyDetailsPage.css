@@ -1,5 +1,83 @@
 .propertyDetailsPage{
-    margin-top: 60px;
+
+margin-top: 80px;
 }
-.activeImg{
+.propertyDetailsPage{
+    color: #7D7D7D;
+
+}
+.col_black{
+    color: black;
+}
+.propertyImagesDisplay{
+    max-width: 80%;
+    margin-top: 70px;
+    display: flex;
+    justify-content: center;
+}
+.image-gallery-content.image-gallery-thumbnails-left .image-gallery-slide .image-gallery-image, .image-gallery-content.image-gallery-thumbnails-right .image-gallery-slide .image-gallery-image{
+    max-height: 75vh;
+}
+.PropertyDetailDescription{
+    padding: 20px 12%;
+    text-align: left;
+}
+.propertyBasicInfo{
+    text-align: left;
+    padding: 20px;
+}
+.propertyDetails{
+    display: flex;
+    justify-content: space-evenly;
+}
+.propertyDetailsInner{
+display: flex;
+justify-content: space-between;
+}
+.propertyDetailsInner .answertag{
+    color: black;
+}
+.askingPrice{
+    font-size: 16px;
+    font-weight: 500;
+}
+.propertydetailsIcons{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    text-wrap: nowrap;
+
+}
+.propertydetailsIcons p{
+    margin: 0px 20px 0px 0px;
+    font-family: Lexend;
+font-size: 14.4px;
+font-weight: 700;
+line-height: 20.8px;
+text-align: left;
+text-underline-position: from-font;
+text-decoration-skip-ink: none;
+
+}
+
+@media (max-width:600px) {
+
+    .image-gallery-content.image-gallery-thumbnails-left .image-gallery-slide .image-gallery-image, .image-gallery-content.image-gallery-thumbnails-right .image-gallery-slide .image-gallery-image{
+        max-height: 100vh;
+    }
+    .propertyImagesDisplay{
+        max-width: 100%;
+    }
+    .propertyDetailTitle h2{
+        font-size:14px;
+        font-weight: 500;
+    }
+    .propertyDetailTitle{
+        margin: 20px;
+        font-size: 12px;
+        text-align: left;
+    }
+        .propertyDetails{
+        margin-left: 20px;
+    }
 }

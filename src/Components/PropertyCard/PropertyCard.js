@@ -1,7 +1,7 @@
 // PropertyCard.js
 import React from 'react';
 import locationVector from '../../Assets/LocationVector.png';
-import bedImage from '../../Assets/bed.png';
+import bedImage from '../../Assets/bedIcon.svg';
 import washroomImage from '../../Assets/washroom.png';
 import areaImage from '../../Assets/area.png';
 import './PropertyCard.css';
