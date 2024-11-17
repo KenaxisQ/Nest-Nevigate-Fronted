@@ -49,7 +49,7 @@ export default function Landing() {
       },
       {
         path: "listings",
-        element: (<>{"Not yet Implemented"}</>)
+        element: (<><FilterProperties properties={properties}/></>)
       },
       {
         path: "add-property",
@@ -61,7 +61,7 @@ export default function Landing() {
       },
       {
         path:"detail",
-        element:(<PropertyDetails/>)
+        element:(<PropertyDetails properties={properties}/>)
       },
       {
         path: "login",

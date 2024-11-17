@@ -19,16 +19,16 @@ const Navbar = () => {
               <Link className="nav-link" as={Link} to="/listings">Listing</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" has={Link} to="/contact">Contact</Link>
+            <a className='nav-link' href='#footer'>Contact</a>
             </li>
           </ul>
         </div>
-      
+
         <Link className="navbar-brand mx-auto" as={Link} to="/home">
           <div className="align-items-center">
-            {/* <img 
-              src="/api/placeholder/40/40" 
-              alt="Next Navigate Logo" 
+            {/* <img
+              src="/api/placeholder/40/40"
+              alt="Next Navigate Logo"
               className="me-2"
               style={{ width: '40px', height: '40px' }}
             /> */}
@@ -52,7 +52,7 @@ const Navbar = () => {
         </div>
         </div>
 
-        <button 
+        <button
           className={`hamburger-button d-lg-none ${isOpen ? 'active' : ''}`}
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle navigation"
@@ -92,7 +92,7 @@ const Navbar = () => {
             </li>
           </ul>
         </div>
-        
+
       </div>
     </nav>
   );

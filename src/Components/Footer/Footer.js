@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from '../../Assets/logo-whitepng.png' 
+import logo from '../../Assets/logo-whitepng.png'
 import './Footer.css'
 import { FaFacebookF } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
@@ -8,7 +8,7 @@ import { FaLinkedinIn } from "react-icons/fa6";
 import { IoIosArrowRoundForward } from "react-icons/io";
 export default function Footer() {
   return (
-    <div className='container-fluid' style={{padding:'0px',color:'white'}}>
+    <div className='container-fluid' id ="footer" style={{padding:'0px',color:'white'}}>
       <div className='footerWrapper'>
         <div className='logoSection'>
             <img src={logo} alt='Nest Navigate'/>
@@ -47,7 +47,7 @@ export default function Footer() {
         <p>Location 5</p>
         <p>Location 6</p>
         </div>
-       
+
         <div className='quicklinks'>
         <p class='footerSubHeading'>Quick Links</p>
         <p>About</p>
@@ -84,7 +84,7 @@ export default function Footer() {
             </div>
         </div>
        <div className='footerElements'>
-     
+
         <div className='discover'>
         <p class='footerSubHeading'>Discover</p>
         <p>Location 1</p>
@@ -94,7 +94,7 @@ export default function Footer() {
         <p>Location 5</p>
         <p>Location 6</p>
         </div>
-       
+
         <div className='quicklinks'>
         <p class='footerSubHeading'>Quick Links</p>
         <p>About</p>

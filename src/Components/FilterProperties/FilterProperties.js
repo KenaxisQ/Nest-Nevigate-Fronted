@@ -10,7 +10,7 @@ import Footer from '../Footer/Footer';
 import { BsSearch } from "react-icons/bs";
 
 
-export default function FilterProperties({ properties }) {
+export default function FilterProperties({ properties,isFindPropertyByCityRequired}) {
   const [leaseValue, setLeaseValue] = useState(50); // Default value
   const [budget, setBudget] = useState(70); // Default value
   const [isFilterOpen, setIsFilterOpen] = useState(false); // Track whether the filter is open
@@ -224,12 +224,12 @@ export default function FilterProperties({ properties }) {
 
       {/* View All button */}
       <div className="viewAllButton">
-        <button onClick={toggleViewAll} className="btn viewAllBtn">
+        <button onClick={toggleViewAll} className="btn viewAllBtn" style={{background:'#1F4B43', color:'white', borderRadius:'20px'}}>
           {showAllProperties ? "Show Less" : "View All"}
         </button>
       </div>
     </div>
-    <FindPropertyByCity/>
+    {isFindPropertyByCityRequired&&<FindPropertyByCity/>}
     <Footer/>
     </div>
   );

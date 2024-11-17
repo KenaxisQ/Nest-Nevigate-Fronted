@@ -18,7 +18,7 @@ margin-top: 80px;
 .image-gallery-content.image-gallery-thumbnails-left .image-gallery-slide .image-gallery-image, .image-gallery-content.image-gallery-thumbnails-right .image-gallery-slide .image-gallery-image{
     max-height: 75vh;
 }
-.PropertyDetailDescription{
+.PropertyDetailDescription,.amenitiesWrapper{
     padding: 20px 12%;
     text-align: left;
 }
@@ -59,6 +59,46 @@ text-underline-position: from-font;
 text-decoration-skip-ink: none;
 
 }
+.propertydetailsIconscol p{
+   margin: 20px 0px;
+}
+.agentDetails {
+    margin-top: 40px 0px;
+    padding: 20px 0px;
+}
+.agentDetails .namecard{
+    padding: 20px 0px;
+    display: flex;
+    justify-content:left;
+}
+.agentDetails .namecard p{
+    margin: 0px 0px 0px 20px;
+}
+.agentDetails .namecard img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.contactAgentBtn{
+    padding: 10px;
+    border-radius: 30px;
+}
+.bg_0B132A{
+    background: #0B132A;
+
+}
+.amenityIcons {
+    border-radius:8px;
+    height: 45px;
+    width: 45px;
+}
+.featuredPropertiesHeading{
+    background: none;
+    border: 1px solid white;
+    border-radius: 30px;
+    background: #1F4B43;
+    color: white;
+}
 
 @media (max-width:600px) {
 
@@ -80,4 +120,11 @@ text-decoration-skip-ink: none;
         .propertyDetails{
         margin-left: 20px;
     }
+    .PropertyDetailDescription,.amenitiesWrapper{
+        padding: 20px 0%;
+    }
+    .slick-dots{
+        height: 20px;
+        overflow:hidden;
+      }
 }

@@ -1,7 +1,8 @@
-import React from "react";
+import React from 'react'
+import PropertyCard from '../PropertyCard/PropertyCard';
 import Slider from "react-slick";
-import './CityCarousel.css'
-export default function CityCarousel({cityPropertiesInfo}) {
+
+export default function PropertyCarousel({properties}) {
 
     var settings = {
         dots: true,                // Show navigation dots
@@ -44,19 +45,23 @@ export default function CityCarousel({cityPropertiesInfo}) {
         centerPadding: '50px',     // Padding on sides when centerMode is enabled
         focusOnSelect: false,       // Enable focus on selected slide
       };
-
   return (
-    <div className='container' style={{marginTop:'50px'}}>
-    <div className="mt-20">
-    <Slider {...settings}>
-        {cityPropertiesInfo.map((city)=>(<div className="card outerCard">
-          <div className="flex flex-col justify-center citiesCard " style={{backgroundImage:`url(${city.Image})`}}>
-            <p className="text-xl font-semibold">{city.Name}</p>
-            <p>{city.Properties} Properties</p>
+   <div className="propertySliderWrapper" style={{margin:'0px 20px'}}>
+     <Slider {...settings}>
+    {properties.map((property) => (
+          <div className='col-lg-3 cardWrapper' key={property.id}>
+            <PropertyCard
+              type={property.type}
+              title={property.title}
+              location={property.location}
+              price={property.price}
+              beds={property.beds}
+              washrooms={property.washrooms}
+              area={property.area}
+            />
           </div>
-        </div>))}
+        ))}
     </Slider>
-    </div>
-  </div>
+   </div>
   )
 }

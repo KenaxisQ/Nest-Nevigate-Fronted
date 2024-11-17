@@ -23,7 +23,7 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area }) =
           <div className='amenities'>
             <div className='amenity'>
               <img src={bedImage} alt='beds' />
-              <span>&nbsp;{beds}</span>
+              <span>{beds}</span>
             </div>
             <div className='amenity'>
               <img src={washroomImage} alt='washrooms' />
