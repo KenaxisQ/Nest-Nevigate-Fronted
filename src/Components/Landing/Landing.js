@@ -8,6 +8,7 @@ import HomePage from '../Home/Home';
 import {LoginPage} from '../Login/LoginPage';
 import React from 'react'
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
+import { AdminDashboardHome } from '../AdminDashboard/AdminDashboardHome';
 export default function Landing() {
 
   const properties = [
@@ -66,6 +67,10 @@ export default function Landing() {
       {
         path: "login",
         element: (<><LoginPage /></>)
+      },
+      {
+        path: "admin",
+        element: (<><AdminDashboardHome /></>)
       }
       ]
 

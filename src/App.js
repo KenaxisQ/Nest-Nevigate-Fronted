@@ -8,7 +8,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   return (
     <div className="App">
-      <GoogleOAuthProvider clientId="ClientId">
+      {/* <GoogleOAuthProvider clientId="358263423974-6gm1pcu71j1g4o5jr2bqi5398pssbk61.apps.googleusercontent.com">
         <GoogleLogin
             onSuccess={credentialResponse => {
               setIsAuthenticated(true);
@@ -20,7 +20,8 @@ function App() {
           />
           {!isAuthenticated && <LoginPage />}
             {isAuthenticated && <Landing/>}
-      </GoogleOAuthProvider>
+      </GoogleOAuthProvider> */}
+      <Landing/>
     </div>
   )
 }
