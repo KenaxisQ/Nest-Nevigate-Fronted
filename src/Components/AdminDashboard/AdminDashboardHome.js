@@ -1,67 +1,107 @@
-/* eslint-disable jsx-a11y/img-redundant-alt */
+import React, { useState } from 'react';
 import "./AdminDashboardHome.css";
 import AdminDashboard from "../../Assets/AdminDashboard.svg";
+import AdminDashboardActive from "../../Assets/AdminDashboardActive.svg";
 import AdminProperties from "../../Assets/AdminProperties-icon.svg";
-import AdminManageRequests from "../../Assets/AdminManageRequests_icon.svg";
+import AdminPropertiesActive from '../../Assets/AdminProperties-iconActive.svg'
+import AdminManageRequests from "../../Assets/AdminManageRequests_icon.svg"
+import AdminManageRequestsActive from "../../Assets/AdminManageRequests_iconActive.svg"
 import AdminUsers from "../../Assets/AdminUsers-icon.svg";
 import AdminSettings from "../../Assets/AdminSettings-icon.svg";
-import Plusframe from "../../Assets/plus.png";
+import AdminUsersActive from "../../Assets/AdminUsers-iconActive.svg";
+import AdminSettingsActive from "../../Assets/Admin_Settings_Active.svg";
+import Plusframe from "../../Assets/Admin_Create_Project_inactive.svg";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { IoIosCloseCircleOutline } from "react-icons/io";
+import { MdOutlineCloseFullscreen } from "react-icons/md";
+import MenuItem from '../../Components/MenuItem';  // Import the reusable MenuItem component
+
 export const AdminDashboardHome = () => {
-  const onCollapse = () => {
-    document
-      .getElementById("toggle-btn")
-      .addEventListener("click", function () {
-        var sidebar = document.getElementById("sidebar");
-        var content = document.getElementById("content");
-        if (sidebar.classList.contains("sidebar-collapsed")) {
-          sidebar.classList.remove("sidebar-collapsed");
-          content.classList.remove("content-expanded");
-          this.innerHTML = '<i class="fas fa-angle-left"></i>';
-        } else {
-          sidebar.classList.add("sidebar-collapsed");
-          content.classList.add("content-expanded");
-          this.innerHTML = '<i class="fas fa-angle-right"></i>';
-        }
-      });
+  const [isSideNavOpen, setIsSideNavOpen] = useState(false);
+  const [isHamburgHovered, setIsHamburgHovered] = useState(false);
+  const [activeMenu, setActiveMenu] = useState(null); // Track active menu item
+
+  const handleSideNavToggle = () => {
+    setIsSideNavOpen(!isSideNavOpen);
+    setIsHamburgHovered(false); // Reset hover state on toggle
   };
+
+  const handleMenuClick = (menu) => {
+    setActiveMenu(menu);
+  };
+
   return (
-    <>
-      <div className="container-fluid"> 
-      <div className="row">
-        <div className="col-md-3">
-          <div className="sidebar" id="sidebar">
-            <button className="adminbtn">
-            <div><img src={Plusframe} alt="+"/> &nbsp;Create new project</div></button>
-            <button className="adminbtn">
-              <img src={AdminDashboard} alt="Dashboard" />
-              &nbsp; Dashboard
-            </button>
-            <button className="adminbtn">
-            <img src={AdminProperties} alt="Dashboard" />
-            &nbsp; Properties
-            </button>
-            <button className="adminbtn">
-            <img src={AdminManageRequests} alt="Dashboard" />
-            &nbsp; Manage Requests
-            </button>
-            <button className="adminbtn">
-            <img src={AdminUsers} alt="Dashboard" />
-            &nbsp; Users
-            </button>
-            <button className="adminbtn">
-            <img src={AdminUsers} alt="Dashboard" />
-            &nbsp; Agents
-            </button>
-            <button className="adminbtn">
-            <img src={AdminSettings} alt="Dashboard" />
-            &nbsp; Settings
-            </button>
-          </div>
+    <div className="AdminDashboardWrapper">
+      <div className="AdminDashboard">
+        <div className={`adminSidebar ${isSideNavOpen ? 'open' : ''}`}>
+          <div className="adminmenuSidebar">
+            {/* Sidebar Toggle Button */}
+            <div
+              className="menuItem minMaxBtn"
+              onClick={handleSideNavToggle}
+              onMouseEnter={() => setIsHamburgHovered(true)}
+              onMouseLeave={() => setIsHamburgHovered(false)}
+              style={{ border: '1px solid white', display: 'flex', justifyContent: 'space-evenly' }}
+            >
+              {isSideNavOpen ? (
+                <MdOutlineCloseFullscreen color='white' size="25px" />
+              ) : (
+                <RxHamburgerMenu color={isHamburgHovered ? '#1F4B43' : 'white'} size="25px" />
+              )}
+            </div>
+
+            <div className={`menuItem ${isSideNavOpen ? 'createprojectbtn' : ''}`} style={{ margin: '10px 6px' }}>
+              <img src={Plusframe} alt="Create new project" />
+              {isSideNavOpen && <span>Create new project</span>}
+            </div>
+            <MenuItem
+              icon={AdminDashboard}
+              activeIcon={AdminDashboardActive}
+              label="Dashboard"
+              onClick={() => handleMenuClick('dashboard')}
+              isActive={activeMenu === 'dashboard'}
+              isSideNavOpen={isSideNavOpen}
+            />
+            <MenuItem
+              icon={AdminProperties}
+              activeIcon={AdminPropertiesActive}
+              label="Properties"
+              onClick={() => handleMenuClick('properties')}
+              isActive={activeMenu === 'properties'}
+              isSideNavOpen={isSideNavOpen}
+            />
+            <MenuItem
+              icon={AdminManageRequests}
+              activeIcon={AdminManageRequestsActive}
+              label="Manage Requests"
+              onClick={() => handleMenuClick('manageRequests')}
+              isActive={activeMenu === 'manageRequests'}
+              isSideNavOpen={isSideNavOpen}
+            />
+            <MenuItem
+              icon={AdminUsers}
+              activeIcon={AdminUsersActive}
+              label="Users"
+              onClick={() => handleMenuClick('users')}
+              isActive={activeMenu === 'users'}
+              isSideNavOpen={isSideNavOpen}
+            />
+            <MenuItem
+              icon={AdminSettings}
+              activeIcon={AdminSettingsActive}
+              label="Settings"
+              onClick={() => handleMenuClick('settings')}
+              isActive={activeMenu === 'settings'}
+              isSideNavOpen={isSideNavOpen}
+            />
+         </div>
         </div>
-        <div className="col-md-9">
+
+        {/* Main Content */}
+        <div className="col">
+          {/* Main content goes here */}
         </div>
       </div>
-      </div>
-    </>
+    </div>
   );
 };
