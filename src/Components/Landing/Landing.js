@@ -71,7 +71,7 @@ export default function Landing() {
       },
       {
         path: "admin",
-        element: (<><AdminDashboardHome/></>)
+        element: (<><AdminDashboardHome properties={properties}/></>)
       }
       ]
 

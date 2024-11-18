@@ -66,19 +66,6 @@ text-decoration-skip-ink: none;
     margin-top: 40px 0px;
     padding: 20px 0px;
 }
-.agentDetails .namecard{
-    padding: 20px 0px;
-    display: flex;
-    justify-content:left;
-}
-.agentDetails .namecard p{
-    margin: 0px 0px 0px 20px;
-}
-.agentDetails .namecard img{
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-}
 .contactAgentBtn{
     padding: 10px;
     border-radius: 30px;

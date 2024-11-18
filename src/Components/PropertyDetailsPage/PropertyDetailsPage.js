@@ -34,6 +34,7 @@ import playGroundIcon from '../../Assets/playground1.svg';
 import taxiStandIcon from '../../Assets/taxistand.svg';
 import PropertyCarousel from '../PropertyCarousel/PropertyCarousel';
 import Footer from '../Footer/Footer';
+import NameCard from '../NameCard/NameCard';
 
 // Image items for the gallery
 const images = [
@@ -193,14 +194,16 @@ export default function PropertyDetails({properties}) {
           </div>
           <div className="agentDetails">
           <h4 className='agentDetails col_black'>Agent Detail</h4>
-          <div className="namecard">
+          {/* <div className="namecard">
             <img src={agentAvatar} alt="" />
             <div className="agentspecs">
             <p className='col_black'>priyanka Arul Mohan</p>
             <p style={{marginTop: '0px'}}>Supervisor</p>
             </div>
-          </div>
-          <button className='btn contactAgentBtn bg_0B132A color_white'><FaPhoneAlt />&nbsp;&nbsp;&nbsp;Contact Agent & View Property Listings</button>
+          </div> */}
+           <NameCard name="priyanka Arul Mohan"  designation="Supervisor" avatar={agentAvatar}   />
+          <button className='btn contactAgentBtn bg_0B132A color_white' style={{margin:'20px 0px'}}>
+            <FaPhoneAlt />&nbsp;&nbsp;&nbsp;Contact Agent & View Property Listings</button>
           </div>
         </div>
        </div>

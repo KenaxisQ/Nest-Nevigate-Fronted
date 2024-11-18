@@ -12,7 +12,7 @@
     display: flex;
     flex-direction: column;
     background-color: #1f4b43;
-    height: 100vh;
+    /* height: 100vh; */
     position: relative;
     transition: width 0.3s ease;
     width: 70px;
@@ -97,3 +97,63 @@
     background: white;
     color: #1f4b43;
   }
+  .adminDashboardHeader{
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #00000014;
+
+  }
+  .adminHeading{
+  font-family: Roboto;
+  font-size: 32px;
+  font-weight: 400;
+  }
+  .adminDashboardContent{
+    padding: 20px;
+  }
+  .analyticsCardWrapper{
+
+  }
+  .analyticsCard{
+    background: #F3F3F3;
+    padding: 20px;
+    border-radius: 20px;
+    text-align: left;
+    font-family: Roboto;
+  }
+  .analyticsValue{
+font-size: 28px;
+font-weight: 500;
+line-height: 32.81px;
+letter-spacing: 0.01em;
+
+  }
+  .analyticsRegarding{
+    margin-top: 30px;
+font-size: 14px;
+font-weight: 400;
+line-height: 16.41px;
+color: #797979;
+text-wrap: nowrap;
+}
+.analyticsDiscription{
+font-size: 10px;
+font-weight: 400;
+line-height: 12px;
+letter-spacing: 0.02em;
+}
+.recentListingSection{
+  margin-top: 20px;
+  text-align: left;
+  padding: 10px;
+}
+.headingAndFilter{
+  display: flex;
+  justify-content: space-between;
+
+}
+.headingAndFilter select{
+  border: none;
+  outline: none;
+}
