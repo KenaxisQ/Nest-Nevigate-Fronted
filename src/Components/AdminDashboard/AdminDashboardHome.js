@@ -12,18 +12,17 @@ import AdminUsersActive from "../../Assets/AdminUsers-iconActive.svg";
 import AdminSettingsActive from "../../Assets/Admin_Settings_Active.svg";
 import Plusframe from "../../Assets/Admin_Create_Project_inactive.svg";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { IoIosCloseCircleOutline } from "react-icons/io";
 import { MdOutlineCloseFullscreen } from "react-icons/md";
-import MenuItem from '../../Components/MenuItem';  // Import the reusable MenuItem component
+import MenuItem from '../../Components/MenuItem';
 
 export const AdminDashboardHome = () => {
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   const [isHamburgHovered, setIsHamburgHovered] = useState(false);
-  const [activeMenu, setActiveMenu] = useState(null); // Track active menu item
+  const [activeMenu, setActiveMenu] = useState(null);
 
   const handleSideNavToggle = () => {
     setIsSideNavOpen(!isSideNavOpen);
-    setIsHamburgHovered(false); // Reset hover state on toggle
+    setIsHamburgHovered(false);
   };
 
   const handleMenuClick = (menu) => {
@@ -35,7 +34,6 @@ export const AdminDashboardHome = () => {
       <div className="AdminDashboard">
         <div className={`adminSidebar ${isSideNavOpen ? 'open' : ''}`}>
           <div className="adminmenuSidebar">
-            {/* Sidebar Toggle Button */}
             <div
               className="menuItem minMaxBtn"
               onClick={handleSideNavToggle}
@@ -97,9 +95,8 @@ export const AdminDashboardHome = () => {
          </div>
         </div>
 
-        {/* Main Content */}
         <div className="col">
-          {/* Main content goes here */}
+
         </div>
       </div>
     </div>
