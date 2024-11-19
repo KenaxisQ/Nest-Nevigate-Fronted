@@ -20,7 +20,9 @@
     color: white;
     font-size: 24px;
 }
-.thumbnail-image{
+.thumbnailimage{
+    display: flex;
+    flex-direction: column;
     width: 100%;
     max-width: 400px;
     border-radius: 10px;
@@ -34,10 +36,53 @@
 .asking-Price{
     display: flex;
     flex-direction: column;
+    
 }
 
-.thumbnail-image{
+/* .thumbnail-image{
     margin-top: 20px;
     display: flex;
     flex-direction: column;
-}
+} */
+
+/* Hide the default file input */
+.file-input {
+    display: none;
+  }
+  
+  /* Style the square button that acts as the trigger for the file input */
+  .upload-button-wrapper {
+    position: relative;
+  }
+  
+  .square-button {
+    width: 150px;  /* Set the width and height to make it square */
+    height: 150px;
+    background-color: grey;  /* Change the background color */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid;  /* Border color */
+    border-radius: 8px;  /* Optional: Rounded corners */
+    cursor: pointer;
+    text-align: center;
+    font-size: 24px;
+  }
+  
+  /* .square-button:hover {
+    background-color: #0056b3;  }
+  .square-button:active {
+    background-color: #004085;  
+  } */
+  
+  .upload-icon {
+    font-size: 36px;  /* Icon size */
+    line-height: 0;
+  }
+  
+  /* Optional: Add a transition for smooth background color change */
+  .square-button {
+    transition: background-color 0.3s ease;
+  }
+  

@@ -4,11 +4,7 @@ import PropTypes from "prop-types";
 export const SecondForm = ({setStep}) => {
    
     return (
-        <>
-        <FormProvider>
             <FormRenderDynamic setStep={setStep}/>
-        </FormProvider>
-        </>
     )
 }
 
