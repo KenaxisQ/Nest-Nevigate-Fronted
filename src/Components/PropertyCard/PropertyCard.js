@@ -1,17 +1,26 @@
 // PropertyCard.js
-import React from 'react';
+import React, { useState } from 'react';
 import locationVector from '../../Assets/LocationVector.png';
 import bedImage from '../../Assets/bedIcon.svg';
 import washroomImage from '../../Assets/washroom.png';
 import areaImage from '../../Assets/area.png';
+import wish from '../../Assets/wish.svg';
+import wishheart from '../../Assets/wishheart.svg';
 import './PropertyCard.css';
 
 const PropertyCard = ({ type, title, location, price, beds, washrooms, area, height }) => {
+  const [isPropertyLiked,setIsPropertyLiked]= useState(false)
   return (
     <div className="card propertylistingcard" style={{height:height}}>
       <div className='propertyTags'>
-        <div className='propertyTag rent'>{type}</div>
-        <div className='propertyTag featured'>Featured</div>
+        <div className='PropertyTagWrapper'>
+          <div className='propertyTag rent'>{type}</div>
+          <div className='propertyTag featured'>Featured</div>
+        </div>
+        <div className='propertyTaglike'>
+        <div className='propertyTag wish'
+        ><img src={isPropertyLiked?wishheart:wish} alt= '' onClick={()=>setIsPropertyLiked(!isPropertyLiked)} /></div>
+      </div>
       </div>
       <div className='propertyInfo'>
         <div className='propertyTitle'>{title}</div>

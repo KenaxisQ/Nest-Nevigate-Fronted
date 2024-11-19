@@ -101,18 +101,38 @@
 }
 .propertyTags{
     display: flex;
+    justify-content: space-between;
 
 
 }
+.PropertyTagWrapper{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 15px;
+    margin-right: 10px;
+    height: 40px;
+}
+
+.propertyTaglike{
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 15px;
+    margin-left: 10px;
+    height: 40px;
+    width: 70px;
+    
+
+}
 .propertyTag{
-    padding: 10px;
+    padding: 8px 15px;
     border-radius: 30px ;
     color: white;
     margin-right: 10px;
-    width: 120px;
+    width: auto;
+    height: auto;
     text-transform:uppercase;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 10px;
 }
 .propertyTagsWrapper{
     display: flex;
@@ -120,6 +140,7 @@
 }
 .rent{
     background:#1F4B43;
+
 }
 .featured{
     background: #E7C873;
