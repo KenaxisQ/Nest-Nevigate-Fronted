@@ -1,12 +1,12 @@
-import "./FormRenderDynamic.css";
+// import "./FormRenderDynamic.css";
 import { useForm, FormProvider, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { object as yupObject, string as yupString } from "yup";
 import { useEffect } from "react";
 import PropTypes from "prop-types";
 const validationSchema = yupObject().shape({
-  propertyTitle: yupString().required("Required"),
-  bedroom: yupString().required("Required"),
+  // propertyTitle: yupString().required("Required"),
+  // bedroom: yupString().required("Required"),
 });
 export const FormRenderDynamic = ({ setStep }) => {
   const json = [
@@ -187,29 +187,28 @@ export const FormRenderDynamic = ({ setStep }) => {
   }, []);
 
   return (
-    <FormProvider>
-      <form onSubmit={onSubmit} novalidate className="container">
-        <div className="renderMainWrapper row">
-          <div className="renderWrapper col-lg-4">
+      <form onSubmit={onSubmit} novalidate className="mb-3">
+        <div className="row">
+          <div className="col-lg-4">
             <div className="row">
               {json.map((prop, index) => {
                 if (prop.componetName === "Dropdown") {
                   return (
                     <div
-                      className="col-lg-6"
+                      className="form-group col-sm-6"
                       style={{
                         display: "flex",
                         flexDirection: "column",
                         textAlign: "left",
                       }}
                     >
-                      <label for={prop.title} style={{ fontWeight: 500 }}>
+                      <label for={prop.title} style={{ fontWeight: 500}}>
                         {prop.title}
                       </label>
                       <select
                         placeholder={prop.placeHolder}
                         id={prop.title}
-                        className="renderDynamicComponents"
+                        className="form-control-sm"
                         {...register(prop?.fieldName)}
                         onChange={(event) => {
                           console.log(event);
@@ -227,7 +226,7 @@ export const FormRenderDynamic = ({ setStep }) => {
                 } else if (prop.componetName === "Input") {
                   return (
                     <div
-                      className=" col-lg-6"
+                      className="form-group col-sm-6"
                       style={{
                         display: "flex",
                         flexDirection: "column",
@@ -240,7 +239,7 @@ export const FormRenderDynamic = ({ setStep }) => {
                       <input
                         placeholder={prop.placeHolder}
                         id={prop.title}
-                        className="renderDynamicComponents"
+                        className="form-control-sm"
                         style={{ color: "black" }}
                         onChange={(event) =>
                           setValue(prop?.fieldName, event.target.value)
@@ -265,107 +264,130 @@ export const FormRenderDynamic = ({ setStep }) => {
               })}
             </div>
           </div>
-          <div className="renderWrapper col-lg-4">
-            <div className="container">
-              <div className="row">
-                <label for={"description"} className="col-lg-12">
-                  Enter Property Description
-                </label>
-                <textarea
-                  className="postContent col-lg-12"
-                  id={"description"}
-                  placeholder={"Enter Description"}
-                  rows={6}
-                  cols={40}
-                  onChange={(event) =>
-                    setValue("descriptionBox", event.target.value)
-                  }
-                />
-              </div>
-              <h6>Miscelleneous</h6>
-              <div>
-                {miscelleneousJson.map((prop, index) => {
-                  return (
-                    <div className="container" key={index}>
-                      <div className="row align-items-center">
-                        <div className="col-auto">
-                          <div className="form-check">
-                            <input
-                              type="checkbox"
-                              id={prop?.fieldName}
-                              {...register(prop.fieldName)}
-                              onChange={(event) => {
-                                setValue(prop.fieldName, event.target.checked);
-                              }}
-                            />
-                        <label for={prop?.fieldName}>{prop?.name}</label>
-                        </div>
-                        </div>
-                      </div>
+          <div className="col-lg-8">
+          <div className="row">
+                    <div className="col-lg-4">
+                        <p for="exampleFormControlTextarea1" class="text-start">Enter Property Description</p>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Enter Description" {...register('propertyDescription')}
+                        onChange={(event) => {
+                          console.log(event);
+                          setValue('propertyDescription', event?.target?.value);
+                        }}></textarea>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
+                    <div className="col-lg-8">
+                        <p for="exampleFormControlTextarea1" class="text-start">Amminities</p>
+                        {amminitiesJson.reduce((rows, amenity, index) => {
+                            if (index % 3 === 0) {
+                                rows.push([]);
+                            }
+                            rows[rows.length - 1].push(amenity);
+                            return rows;
+                        }, []).map((row, rowIndex) => {
+                            return (
+                                <div key={rowIndex} className="row">
+                                    {row.map(amenity => (
+                                        <div key={amenity.fieldName} className="col-lg-4">
+                                            <div className="form-check">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="checkbox"
+                                                    id={amenity.fieldName}
+                                                    name={amenity.fieldName}
+                                                    onChange={(event) =>
+                                                      setValue(amenity?.fieldName, event.target.value)
+                                                    }
+                                                    {...register(amenity?.fieldName)}
+                                                />
+                                                <label className="" htmlFor={amenity.fieldName}>
+                                                    {amenity.name}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )
+                        })}
+                    </div>
           </div>
-          <div className="renderWrapper  col-lg-4">
-            <h6>Amminities</h6>
-            {amminitiesJson.map((prop, index) => {
-              return (
-                <div className="container" key={index}>
-                  <div className="row">
-                    <div className="col-auto">
-                      <div className="form-check">
-                        <input
-                          type="checkbox"
-                          id={prop?.fieldName}
-                          {...register(prop.fieldName)}
-                          onChange={(event) => {
-                            setValue(prop.fieldName, event.target.checked);
-                          }}
-                        />
-                        &nbsp;
-                        <label for={prop?.fieldName}>{prop?.name}</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-            <h6>Near By Facilities</h6>
-            {nearByFacilitiesJson.map((prop, index) => {
-              return (
-                <div className="container" key={index}>
-                  <div className="row">
-                    <div className="col-auto">
-                      <div className="form-check">
-                        <input
-                          type="checkbox"
-                          id={prop?.fieldName}
-                          {...register(prop.fieldName)}
-                          onChange={(event) => {
-                            setValue(prop.fieldName, event.target.checked);
-                          }}
-                        />
-                        <label for={prop?.fieldName}>{prop?.name}</label>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-            <button
+          <div className="row">
+              <div className="col-lg-4">
+              <p for="exampleFormControlTextarea1" class="text-start">Miscelleneous</p>
+                  {miscelleneousJson.map((amenity, rowIndex) => {
+                      return (
+                                  <div key={amenity.fieldName} className="col-lg-12">
+                                      <div className="form-check">
+                                          <input
+                                              className="form-check-input"
+                                              type="checkbox"
+                                              id={amenity.fieldName}
+                                              name={amenity.fieldName}
+                                              onChange={(event) =>
+                                                setValue(amenity?.fieldName, event.target.value)
+                                              }
+                                              {...register(amenity?.fieldName)}
+                                          />
+                                          <label className="form-check-label" htmlFor={amenity.fieldName}>
+                                              {amenity.name}
+                                          </label>
+                                      </div>
+                              
+                          </div>
+                      )
+                  })}  
+              </div>
+              <div className="col-lg-8">
+                  <p for="exampleFormControlTextarea1" class="text-start">Near By Facilities</p>
+                  {nearByFacilitiesJson.reduce((rows, amenity, index) => {
+                      if (index % 3 === 0) {
+                          rows.push([]);
+                      }
+                      rows[rows.length - 1].push(amenity);
+                      return rows;
+                  }, []).map((row, rowIndex) => {
+                      return (
+                          <div key={rowIndex} className="row">
+                              {row.map(amenity => (
+                                  <div key={amenity.fieldName} className="col-lg-4">
+                                      <div className="form-check">
+                                          <input
+                                              className="form-check-input"
+                                              type="checkbox"
+                                              id={amenity.fieldName}
+                                              name={amenity.fieldName}
+                                              onChange={(event) =>
+                                                setValue(amenity?.fieldName, event.target.value)
+                                              }
+                                              {...register(amenity?.fieldName)}
+                                          />
+                                          <label className="form-check-label" htmlFor={amenity.fieldName}>
+                                              {amenity.name}
+                                          </label>
+                                      </div>
+                                  </div>
+                              ))}
+                          </div>
+                      )
+                  })}
+              </div>
+              
+          </div>
+          </div>
+          <div className="col-lg-4"></div>
+          <div className="col-lg-8">
+          <button
               onClick={() => {
                 setStep(2);
               }}
-              className="PropertyNextButton"
+              className="btn-lg btn-block"
+              style={{backgroundColor:"#1F4B43", color: "white", borderRadius: "6px"}}
             >
               Choose and Next
             </button>
-          </div>
+        </div>
         </div>
       </form>
-    </FormProvider>
+
+      
   );
 };
 
