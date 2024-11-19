@@ -7,19 +7,28 @@ import areaImage from '../../Assets/area.png';
 import wish from '../../Assets/wish.svg';
 import wishheart from '../../Assets/wishheart.svg';
 import './PropertyCard.css';
+import cardbg from '../../Assets/p1.jpg';
+import ShareIcon from '../../Assets/share.svg'
 
-const PropertyCard = ({ type, title, location, price, beds, washrooms, area, height }) => {
+const PropertyCard = ({ type, title, location, price, beds, washrooms, area, height,bg,like,share }) => {
   const [isPropertyLiked,setIsPropertyLiked]= useState(false)
   return (
-    <div className="card propertylistingcard" style={{height:height}}>
+    <div className="card propertylistingcard" style={{height:height,background:bg?`url(${bg})`:`url(${cardbg})`}}>
       <div className='propertyTags'>
         <div className='PropertyTagWrapper'>
           <div className='propertyTag rent'>{type}</div>
           <div className='propertyTag featured'>Featured</div>
         </div>
-        <div className='propertyTaglike'>
-        <div className='propertyTag wish'
+      <div className='likeAndShareBtnWrapper'>
+      {share&& <div className='propertyTaglike'>
+        <div className=' wish'
+        ><img src={ShareIcon} alt= ''  /></div>
+      </div>}
+       {like&& <div className='propertyTaglike'>
+        <div className=' wish'
         ><img src={isPropertyLiked?wishheart:wish} alt= '' onClick={()=>setIsPropertyLiked(!isPropertyLiked)} /></div>
+      </div>}
+      
       </div>
       </div>
       <div className='propertyInfo'>

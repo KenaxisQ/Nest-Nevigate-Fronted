@@ -1,0 +1,26 @@
+.userdashboard{
+    
+    margin-top: 60px;
+}
+
+.profile-header{
+    background-image: url('../../Assets/nn_bg2.png');
+    padding: 80px;
+
+}
+
+.usergreetings, .username{
+    font-family: Lexend;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 52px;
+    text-align: center;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    
+}
+
+/* .profile-info{
+    margin-bottom: 100px;
+} */
+
