@@ -11,7 +11,7 @@
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    width: fit-content;
+    width: 100%;
 
 }
 .propertyInfo{
@@ -116,10 +116,7 @@
 .propertyTaglike{
     display: flex;
     justify-content: space-between;
-    padding: 0px 15px;
-    margin-left: 10px;
-    height: 40px;
-    width: 70px;
+    width: auto;
     
 
 }
@@ -140,7 +137,7 @@
 }
 .rent{
     background:#1F4B43;
-
+    
 }
 .featured{
     background: #E7C873;
@@ -150,6 +147,28 @@
 .cardWrapper{
     margin-top: 50px;
     padding: 20px;
+    max-width: 400px;
+    min-width: 300px;
 
 
+}
+.likeAndShareBtnWrapper{
+    display: flex;
+}
+.wish{
+    margin: 0px 10px 0px 0px ;
+}
+@media(max-width:700px) {
+  
+    .propertyTaglike{
+        margin: 15px 0px;
+        width: auto;
+    }
+    .likeAndShareBtnWrapper{
+        display: block;
+    }
+
+    .wish{
+        margin: 0px 0px 0px 0px ;
+    }
 }

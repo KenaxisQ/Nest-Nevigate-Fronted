@@ -10,6 +10,8 @@ import React from 'react'
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
 import ScrollToTop from '../ScrollToTop';
 import { AdminDashboardHome } from '../AdminDashboard/AdminDashboardHome.js';
+import Userdashboard from '../Userdashboard/Userdashboard.js';
+
 export default function Landing() {
 
   const properties = [
@@ -72,6 +74,10 @@ export default function Landing() {
       {
         path: "admin",
         element: (<><AdminDashboardHome properties={properties}/></>)
+      },
+      {
+        path: "userdashboard",
+        element:(<><Userdashboard properties={properties}/></>)
       }
       ]
 

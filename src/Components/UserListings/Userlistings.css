@@ -1,0 +1,52 @@
+.listings:hover{
+    border-radius: 30px;    
+    background: black;
+    color: white;
+}
+
+.listings{
+    border-radius: 30px;
+    border: 1px solid black;
+    background: transparent;
+    margin-right: 20px;
+
+}
+.listings.logout{
+    background: #C35050;
+    color:white
+
+}
+
+.listings.logout:hover{
+    border: 1px solid #C35050;
+    background: transparent;
+    color: #C35050;
+}
+
+.profile-buttons{
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.logout-bt-wrapper{
+    margin-right: 30px;
+    
+}
+
+.listing_btn_wrapper{
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width:700px){
+    .profile-buttons{
+        display: block;
+        
+    }
+    .logout{
+        margin-top: 20px;
+    }
+
+}
