@@ -207,7 +207,7 @@ export const FormRenderDynamic = ({ setStep }) => {
                         display: "flex",
                         flexDirection: "column",
                         textAlign: "left",
-                      }}
+                        padding: "0 16px 4px"       }}
                     >
                       <label for={prop.title} style={{ fontWeight: 500}}>
                         {prop.title}
@@ -238,6 +238,8 @@ export const FormRenderDynamic = ({ setStep }) => {
                         display: "flex",
                         flexDirection: "column",
                         textAlign: "left",
+                        padding: "0 16px 4px"
+                         
                       }}
                     >
                       <label for={prop.title} style={{ fontWeight: 500 }}>
@@ -273,7 +275,7 @@ export const FormRenderDynamic = ({ setStep }) => {
           </div>
           <div className="col-lg-8">
           <div className="row">
-                    <div className={`col-${size}-4`}>
+                    <div className={`col-${size}-4`} style={{padding: "0px 16px 4px"}}>
                         <p for="exampleFormControlTextarea1" class="text-start">Enter Property Description</p>
                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Enter Description" {...register('propertyDescription')}
                         onChange={(event) => {
@@ -281,7 +283,7 @@ export const FormRenderDynamic = ({ setStep }) => {
                           setValue('propertyDescription', event?.target?.value);
                         }}></textarea>
                     </div>
-                    <div className={`col-${size}-8`}>
+                    <div className={`col-${size}-8`} style={{padding: "0 16px 4px"}}>
                     <p for="exampleFormControlTextarea1" class="text-start">Amminities</p>
                         {amminitiesJson.reduce((rows, amenity, index) => {
                             if (index % 3 === 0) {
@@ -317,7 +319,7 @@ export const FormRenderDynamic = ({ setStep }) => {
                     </div>
           </div>
           <div className="row">
-              <div className={`col-${size}-4`}>
+              <div className={`col-${size}-4`} style={{padding: "0 16px 4px"}}>
               <p for="exampleFormControlTextarea1" class="text-start">Miscelleneous</p>
                   {miscelleneousJson.map((amenity, rowIndex) => {
                       return (
@@ -342,7 +344,7 @@ export const FormRenderDynamic = ({ setStep }) => {
                       )
                   })}  
               </div>
-              <div className={`col-${size}-8`}>
+              <div className={`col-${size}-8`} style={{padding: "0 16px 4px"}}>
                   <p for="exampleFormControlTextarea1" class="text-start">Near By Facilities</p>
                   {nearByFacilitiesJson.reduce((rows, amenity, index) => {
                       if (index % 3 === 0) {

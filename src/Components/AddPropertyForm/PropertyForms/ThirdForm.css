@@ -1,5 +1,5 @@
 .form-control::placeholder{
-    color: #c4c4c4;
+    color: #080707;
 }
 .upload-section{
     display: flex;
@@ -56,8 +56,8 @@
   }
   
   .square-button {
-    width: 150px;  /* Set the width and height to make it square */
-    height: 150px;
+    width: 100px;  /* Set the width and height to make it square */
+    height: 100px;
     background-color: grey;  /* Change the background color */
     color: white;
     display: flex;
