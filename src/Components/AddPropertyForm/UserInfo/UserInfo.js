@@ -1,9 +1,18 @@
 import './UserInfo.css';
 import {IoMdMail} from "react-icons/io";
 import { FaPhone } from "react-icons/fa6";
-
-
+import React, { useState }from 'react';
+import { useRef } from "react";
+import {ChangePassword} from './Changepassword/ChangePassword';
 export const UserInfo = () => {
+    const modal1Ref = useRef(null);
+    const [changePasswordPageOpen, setChangePasswordPageOpen] = useState(false);
+    const changePassword = (event) => {
+        setChangePasswordPageOpen(true);
+        console.log('changePassword', event);
+        const modal = new window.bootstrap.Modal(modal1Ref?.current);
+        modal.show();
+    }
     return (
         <>
             <div className="profile-header">
@@ -19,11 +28,18 @@ export const UserInfo = () => {
                     </p>
                 </div>
                 <div className="profile-buttons">
-                    <button className="change-password">Change Password</button>
+                    <button className="change-password" onClick={changePassword}>Change Password</button>
                     <button className="view-listings">View Listings</button>
                     <button className="logout-account">Logout Account</button>
                 </div>
             </div>
+            <div>
+                <ChangePassword
+                    changePasswordPageOpen={changePasswordPageOpen}
+                    setChangePasswordPageOpen={setChangePasswordPageOpen}
+                    modal1Ref={modal1Ref}
+                />
+            </div> 
         </>
     );
 }
