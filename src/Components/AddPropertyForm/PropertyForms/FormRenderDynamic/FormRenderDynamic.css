@@ -15,28 +15,26 @@
  */
 
  /* Default label style */
-label {
-  font-size: 16px;  /* Default font size for large screens */
-  font-weight: 500;
-}
-
-/* For screens that are smaller than 1200px (tablets and below) */
-@media (max-width: 1200px) {
-  label {
-    font-size: 14px;  /* Slightly smaller font size */
-  }
-}
-
 /* For screens smaller than 992px (mobile devices) */
-@media (max-width: 992px) {
-  label {
-    font-size: 12px;  /* Smaller font size for mobile */
+@media (min-width: 992px) {
+  .wrapText label {
+    font-size: 16px;  /* Default font size for large screens */
+    font-weight: 500;
+  text-wrap: nowrap;  }
+}
+
+/* For very small screens (phones in portrait mode) */
+@media (max-width: 768px) {
+  .wrapText label {
+    font-size: 14px;  /* Much smaller font size */
+    text-wrap: nowrap;
   }
 }
 
 /* For very small screens (phones in portrait mode) */
 @media (max-width: 576px) {
-  label {
-    font-size: 10px;  /* Much smaller font size */
+  .wrapText label {
+    font-size: 12px;  /* Much smaller font size */
+    text-wrap: nowrap;
   }
 }

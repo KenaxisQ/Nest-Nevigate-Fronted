@@ -1,14 +1,21 @@
-// import "./FormRenderDynamic.css";
+import "./FormRenderDynamic.css";
 import { useForm, FormProvider, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { object as yupObject, string as yupString } from "yup";
 import { useEffect } from "react";
 import PropTypes from "prop-types";
+import { useMediaQuery } from 'react-responsive';
 const validationSchema = yupObject().shape({
   // propertyTitle: yupString().required("Required"),
   // bedroom: yupString().required("Required"),
 });
 export const FormRenderDynamic = ({ setStep }) => {
+  // Media query hooks
+  const isSmall = useMediaQuery({ query: '(min-width: 576px)' });
+  const isMedium = useMediaQuery({ query: '(min-width: 768px)' });
+  const isLarge = useMediaQuery({ query: '(min-width: 992px)' });
+  const size = isLarge ? 'lg' : isMedium ? 'md' : isSmall ? 'sm' : '';
+  console.log(size);
   const json = [
     {
       title: "Enter property title",
@@ -187,7 +194,7 @@ export const FormRenderDynamic = ({ setStep }) => {
   }, []);
 
   return (
-      <form onSubmit={onSubmit} novalidate className="mb-3">
+      <form onSubmit={onSubmit} novalidate className="mb-3 wrapText">
         <div className="row">
           <div className="col-lg-4">
             <div className="row">
@@ -266,7 +273,7 @@ export const FormRenderDynamic = ({ setStep }) => {
           </div>
           <div className="col-lg-8">
           <div className="row">
-                    <div className="col-lg-4">
+                    <div className={`col-${size}-4`}>
                         <p for="exampleFormControlTextarea1" class="text-start">Enter Property Description</p>
                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Enter Description" {...register('propertyDescription')}
                         onChange={(event) => {
@@ -274,8 +281,8 @@ export const FormRenderDynamic = ({ setStep }) => {
                           setValue('propertyDescription', event?.target?.value);
                         }}></textarea>
                     </div>
-                    <div className="col-lg-8">
-                        <p for="exampleFormControlTextarea1" class="text-start">Amminities</p>
+                    <div className={`col-${size}-8`}>
+                    <p for="exampleFormControlTextarea1" class="text-start">Amminities</p>
                         {amminitiesJson.reduce((rows, amenity, index) => {
                             if (index % 3 === 0) {
                                 rows.push([]);
@@ -286,10 +293,10 @@ export const FormRenderDynamic = ({ setStep }) => {
                             return (
                                 <div key={rowIndex} className="row">
                                     {row.map(amenity => (
-                                        <div key={amenity.fieldName} className="col-lg-4">
-                                            <div className="form-check">
+                                        <div key={amenity.fieldName} className={`col-${size}-4`}>
+                                            <div className="text-start">
                                                 <input
-                                                    className="form-check-input"
+                                                    className=""
                                                     type="checkbox"
                                                     id={amenity.fieldName}
                                                     name={amenity.fieldName}
@@ -299,8 +306,8 @@ export const FormRenderDynamic = ({ setStep }) => {
                                                     {...register(amenity?.fieldName)}
                                                 />
                                                 <label className="" htmlFor={amenity.fieldName}>
-                                                    {amenity.name}
-                                                </label>
+                                              &nbsp;{amenity.name}
+                                          </label>
                                             </div>
                                         </div>
                                     ))}
@@ -310,14 +317,14 @@ export const FormRenderDynamic = ({ setStep }) => {
                     </div>
           </div>
           <div className="row">
-              <div className="col-lg-4">
+              <div className={`col-${size}-4`}>
               <p for="exampleFormControlTextarea1" class="text-start">Miscelleneous</p>
                   {miscelleneousJson.map((amenity, rowIndex) => {
                       return (
-                                  <div key={amenity.fieldName} className="col-lg-12">
-                                      <div className="form-check">
+                                  <div key={amenity.fieldName} className={`col-${size}-12`}>
+                                      <div className="text-start">
                                           <input
-                                              className="form-check-input"
+                                              className=""
                                               type="checkbox"
                                               id={amenity.fieldName}
                                               name={amenity.fieldName}
@@ -326,8 +333,8 @@ export const FormRenderDynamic = ({ setStep }) => {
                                               }
                                               {...register(amenity?.fieldName)}
                                           />
-                                          <label className="form-check-label" htmlFor={amenity.fieldName}>
-                                              {amenity.name}
+                                          <label className="" htmlFor={amenity.fieldName}>
+                                              &nbsp;{amenity.name}
                                           </label>
                                       </div>
                               
@@ -335,7 +342,7 @@ export const FormRenderDynamic = ({ setStep }) => {
                       )
                   })}  
               </div>
-              <div className="col-lg-8">
+              <div className={`col-${size}-8`}>
                   <p for="exampleFormControlTextarea1" class="text-start">Near By Facilities</p>
                   {nearByFacilitiesJson.reduce((rows, amenity, index) => {
                       if (index % 3 === 0) {
@@ -347,10 +354,10 @@ export const FormRenderDynamic = ({ setStep }) => {
                       return (
                           <div key={rowIndex} className="row">
                               {row.map(amenity => (
-                                  <div key={amenity.fieldName} className="col-lg-4">
-                                      <div className="form-check">
+                                  <div key={amenity.fieldName} className={`col-${size}-4`}>
+                                      <div className="text-start">
                                           <input
-                                              className="form-check-input"
+                                              className=""
                                               type="checkbox"
                                               id={amenity.fieldName}
                                               name={amenity.fieldName}
@@ -359,8 +366,8 @@ export const FormRenderDynamic = ({ setStep }) => {
                                               }
                                               {...register(amenity?.fieldName)}
                                           />
-                                          <label className="form-check-label" htmlFor={amenity.fieldName}>
-                                              {amenity.name}
+                                          <label className="" htmlFor={amenity.fieldName}>
+                                              &nbsp;{amenity.name}
                                           </label>
                                       </div>
                                   </div>

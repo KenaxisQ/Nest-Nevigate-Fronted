@@ -6,8 +6,9 @@ import { ThirdForm } from '../AddPropertyForm/PropertyForms/ThirdForm';
 import { FourthForm } from '../AddPropertyForm/PropertyForms/FourthForm';
 export default function ProgressBar() {
   const [step, setStep] = useState(0);
+  
   return (   
-     <div className="p-5">
+     <div className="">
       <div className="progressBarWrapper">
       <ul className="progressbar">
         <li className="active" onClick={()=>setStep(0)}></li>
