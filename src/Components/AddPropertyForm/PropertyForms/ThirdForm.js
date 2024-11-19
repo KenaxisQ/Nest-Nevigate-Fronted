@@ -29,11 +29,11 @@ export const ThirdForm = ({ setStep }) => {
     return (
         <form className="container">
             <div className="row">
-                <div className="col-md-1"></div>
-                <div className="col-md-5 pb-4 pl-4">
+                <div className="col-lg-1"></div>
+                <div className="col-lg-5 pb-4 pl-4">
                     <div className="">
                         <p htmlFor="askingPrice" className="text-start fw-bold">Enter Asking Price</p>
-                        <input className="form-control-md" placeholder="Asking Price" type="text" style={{ color: "black", border: "1px solid #0000004f",borderRadius: "6px" }} />
+                        <input className="form-control-lg" placeholder="Asking Price" type="text" style={{ color: "black", border: "1px solid #0000004f",borderRadius: "6px" }} />
                         <p className="form-text text-start">
                             This Price is what is potentially told to Clients
                         </p>
@@ -43,15 +43,14 @@ export const ThirdForm = ({ setStep }) => {
                         <img alt="img-thumbnail" src={preview} style={{ cursor: 'pointer',width: '100%', height: '300px', objectFit: 'cover' }}/>
                     </div>
                 </div>
-                <div className="col-md-5 pb-4 pl-4">
-                    <p className="text-start fw-bold">Upload Additional Images</p>
-                    <div className="row g-3">
+                <div className="col-lg-6 pb-4 pl-4">
+                    <p className="text-center fw-bold ">Upload Additional Images</p>
+                    <div className="image-grid">
                     {selectedFiles.map((file, index) => (
-                        <div className="col-md-4" key={index}>
                             <img
                             src={file instanceof File ? URL.createObjectURL(file) : file}
                             alt={`preview-${index}`}
-                            className="img-thumbnail"
+                            className=""
                             onClick={() => handleImageClick(URL.createObjectURL(file))}
                             style={{
                                 cursor: 'pointer',
@@ -60,28 +59,21 @@ export const ThirdForm = ({ setStep }) => {
                                 objectFit: 'cover' // Ensure the image covers the div area
                             }}
                             />
-                        </div>
                         ))}
-                        {/* Square file upload button */}
-                        <div className="col-md-3">
-                            <input
-                            className="file-input"
+                        <div class="upload-placeholder">
+                            <i class="fas fa-image">
+                            </i>
+                            <input 
                             type="file"
                             multiple
                             accept="image/*"
                             onChange={handleChange}
-                            id="file-upload"
-                            style={{ cursor: 'pointer',width: '100px', height: '100px' }}
-                            />
-                            <label htmlFor="file-upload" className="square-button">
-                            <span className="upload-icon">+</span>
-                            </label>
+                            id="file-upload"/>
                         </div>
                         </div>
+                        <button className="btnUpload PropertyNextButton" type="button" onClick={handleUploadClick}>Upload Property</button>
                 </div>
-                <div className="col-md-1"></div>
             </div>
-            <button className="btnUpload PropertyNextButton" type="button" onClick={handleUploadClick}>Upload Property</button>
 
         </form>
     )
