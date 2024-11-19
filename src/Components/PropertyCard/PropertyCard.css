@@ -114,6 +114,10 @@
     font-weight: bold;
     font-size: 12px;
 }
+.propertyTagsWrapper{
+    display: flex;
+    justify-content: space-between;
+}
 .rent{
     background:#1F4B43;
 }

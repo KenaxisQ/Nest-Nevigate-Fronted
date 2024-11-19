@@ -12,10 +12,13 @@
     display: flex;
     flex-direction: column;
     background-color: #1f4b43;
-    /* height: 100vh; */
+    height: 100vh;
     position: relative;
     transition: width 0.3s ease;
     width: 70px;
+    position: fixed;
+    top: 0;
+    left: 0;
   }
 
 
@@ -114,6 +117,7 @@
   }
   .analyticsCardWrapper{
 
+    padding: 20px;
   }
   .analyticsCard{
     background: #F3F3F3;
@@ -153,7 +157,98 @@ letter-spacing: 0.02em;
   justify-content: space-between;
 
 }
+.adminDashboardContent{
+  padding: 10px;
+}
 .headingAndFilter select{
   border: none;
   outline: none;
+  border-radius: 30px;
+  padding: 10px 20px;
+}
+.contentHead{
+  padding: 10px;
+  font-family: Roboto;
+font-size: 22px;
+font-weight: 400;
+line-height: 25.78px;
+text-align: left;
+
+
+}
+.adminPropertiesViewWrapper{
+  padding: 20px;
+}
+.adminPropertiesView{
+  background: #F9F9FA;
+  padding: 20px;
+  border-radius: 20px;
+}
+.adminPropertySearch{
+  width: 100%;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  line-height:25px;
+  padding: 10px 20px;
+  margin-bottom: 30px;
+}
+.adminPropertySearch::placeholder{
+  color: #797979;
+}
+.datatableWrapper{
+  border-radius: 20px;
+  padding: 20px;
+  overflow-x: auto;
+  text-wrap: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+.alertBtn{
+  background-color: #f8deb2;
+  padding: 4px 8px;
+  border: none;
+  color: rgb(249, 169, 0);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 20px;
+
+}
+.alertBtn:hover {
+ border:1px solid orange;
+ color: orange;
+}
+.passResetBtn{
+  background-color:#F9F9FA;
+  padding: 4px 8px;
+  border: none;
+  color: black;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 20px;
+
+}
+.passResetBtn:hover {
+  border:1px solid black;
+ }
+.userBlockBtn{
+    background-color: #FFF3D9; /* Light cream/beige background */
+    color: #FF6B6B; /* Coral red text color */
+    padding: 4px 8px;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 20px;
+}
+.userBlockBtn:hover{
+  border: 1px solid #FF6B6B;
+  color: #FF6B6B;
+}
+.center-align{
+  text-align: center;
+}
+@media(max-width:600px)  {
+  .propforSaleAnalytics,.propforRentAnalytics{
+
+    margin-top: 20px;
+  }
 }

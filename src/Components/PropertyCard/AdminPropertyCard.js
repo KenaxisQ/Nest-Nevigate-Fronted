@@ -5,13 +5,28 @@ import bedImage from '../../Assets/bedIcon.svg';
 import washroomImage from '../../Assets/washroom.png';
 import areaImage from '../../Assets/area.png';
 import './PropertyCard.css';
+import './AdminPropertyCard.css';
+import { TiTick } from "react-icons/ti";
+import { MdOutlineCancel } from "react-icons/md";
+import adminAcceptIcon from '../../Assets/adminAccept.svg';
+import adminRejectIcon from '../../Assets/adminReject.svg';
 
-const PropertyCard = ({ type, title, location, price, beds, washrooms, area, height }) => {
+const AdminPropertyCard = ({ type, title, location, price, beds, washrooms, area, height}) => {
   return (
-    <div className="card propertylistingcard" style={{height:height}}>
-      <div className='propertyTags'>
-        <div className='propertyTag rent'>{type}</div>
-        <div className='propertyTag featured'>Featured</div>
+    <div className="card propertylistingcard" style={{height: '350px'}} >
+      <div className='propertyTagsWrapper'>
+        <div className="propertyTags" style={{marginTop:'5px'}}>
+        <div className='propertyTag rent' style={{height:'30px', width:'auto',padding:'5px 10px'}}>For {type}</div>
+        {/* <div className='propertyTag featured'style={{height:'30px', width:'auto',padding:'5px 10px'}}>Featured</div> */}
+        </div>
+        <div className="adminpropertyApprovals">
+          <div className="propertyAccept">
+          <img src={adminAcceptIcon}/>
+          </div>
+          <div className="propertyReject">
+         <img src={adminRejectIcon}/>
+          </div>
+        </div>
       </div>
       <div className='propertyInfo'>
         <div className='propertyTitle'>{title}</div>
@@ -40,4 +55,4 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area, hei
   );
 };
 
-export default PropertyCard;
+export default AdminPropertyCard;
