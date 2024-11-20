@@ -11,6 +11,7 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
 import ScrollToTop from '../ScrollToTop';
 import { AdminDashboardHome } from '../AdminDashboard/AdminDashboardHome.js';
 import Userdashboard from '../Userdashboard/Userdashboard.js';
+import AgentDashboard from '../AgentDashboard/AgentDashboard.js';
 
 export default function Landing() {
 
@@ -73,11 +74,15 @@ export default function Landing() {
       },
       {
         path: "admin",
-        element: (<><AdminDashboardHome properties={properties}/></>)
+        element: (<><ScrollToTop/><AdminDashboardHome properties={properties}/></>)
       },
       {
         path: "userdashboard",
-        element:(<><Userdashboard properties={properties}/></>)
+        element:(<><ScrollToTop/><Userdashboard properties={properties}/></>)
+      },
+      {
+        path: "agentdashboard",
+        element:(<><ScrollToTop/><AgentDashboard properties={properties}/></>)
       }
       ]
 
