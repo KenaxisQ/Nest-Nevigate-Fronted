@@ -1,5 +1,5 @@
 // PropertyCard.js
-import React, { useState } from 'react';
+import React, {useState, useRef} from 'react';
 import locationVector from '../../Assets/LocationVector.png';
 import bedImage from '../../Assets/bedIcon.svg';
 import washroomImage from '../../Assets/washroom.png';
@@ -9,10 +9,20 @@ import wishheart from '../../Assets/wishheart.svg';
 import './PropertyCard.css';
 import cardbg from '../../Assets/p1.jpg';
 import ShareIcon from '../../Assets/share.svg'
-
-const PropertyCard = ({ type, title, location, price, beds, washrooms, area, height,bg,like,share }) => {
+import adminRejectIcon from '../../Assets/adminReject.svg';
+import { AdminEditForm } from './EditForm/AdminEditForm';
+const PropertyCard = ({ type, title, location, price, beds, washrooms, area, height,bg,like,share, isEdit =false }) => {
   const [isPropertyLiked,setIsPropertyLiked]= useState(false)
+  const canEditRef = useRef(null);
+  const [canEdit, setCanEdit] = useState(false);
+  const onEditForm = (event) => {
+    setCanEdit(true);
+    console.log('changePassword', event);
+    const modal = new window.bootstrap.Modal(canEditRef?.current);
+    modal.show();
+}
   return (
+    <>
     <div className="card propertylistingcard" style={{height:height,background:bg?`url(${bg})`:`url(${cardbg})`}}>
       <div className='propertyTags'>
         <div className='PropertyTagWrapper'>
@@ -28,6 +38,9 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area, hei
         <div className=' wish'
         ><img src={isPropertyLiked?wishheart:wish} alt= '' onClick={()=>setIsPropertyLiked(!isPropertyLiked)} /></div>
       </div>}
+      {isEdit&&<div className="propertyAccept">
+         <img src={adminRejectIcon} onClick={onEditForm} alt='Edit Form'/>
+          </div>}
       
       </div>
       </div>
@@ -55,6 +68,8 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area, hei
         </div>
       </div>
     </div>
+    <AdminEditForm property={[]} canEditRef={canEditRef}/>
+</>
   );
 };
 
