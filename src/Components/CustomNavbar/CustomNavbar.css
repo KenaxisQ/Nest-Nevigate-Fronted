@@ -125,11 +125,54 @@ font-style: normal;
 .dropdown-menu[data-bs-popper]{
     left:auto;
     right: 130px;
+    width: 120px;
 }
 .dropdown-menu.userNavigation .btn{
     width:-webkit-fill-available;
 }
+.userIconWrapper{
+    padding: 2px 0px 0px 5px;
+    border: 1px solid black;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+}
+.userEditBtn{
+    border: 1px solid black;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    position: absolute;
+    top:29px;
+    left:51px;
 
+}
+.userNavigation{
+    text-align: center;
+    width: auto;
+}
+.userEditWrap{
+    align-content: center;
+    padding-left: calc(50% - 20px);
+}
+.user-name{
+font-family: Ropa Sans;
+font-size: 16px;
+font-weight: 400;
+line-height: 38.76px;
+text-align: center;
+text-underline-position: from-font;
+text-decoration-skip-ink: none;
+
+}
+.redirect-to-listed{
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 10px;
+    margin-bottom: 0px !important;
+}
 @media (max-width: 991.98px) {
     .nav_wrapper{
         width: fit-content;

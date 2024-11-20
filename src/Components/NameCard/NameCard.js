@@ -8,13 +8,15 @@ export default function NameCard({name,designation,avatar,userOptions}) {
   const[isUserOptionsOpen,setIsUserOptionsOpen] =useState(false);
   const navigate = useNavigate();
   return (
-    <div className="namecard">
+    <div className="namecard"  onClick={()=>
+      userOptions&&setIsUserOptionsOpen(!isUserOptionsOpen)
+    }
+    style={{cursor:userOptions?'pointer':'auto'}}>
     <img src={avatar} alt="" />
     <div className="agentspecs">
     <p className='col_black'>{name}</p>
     <p style={{marginTop: '0px',color:'#292D3270'}}>{designation}&nbsp;
       {userOptions&&<IoIosArrowDropdown
-      onClick={()=>setIsUserOptionsOpen(!isUserOptionsOpen)}
       // onMouseOver={()=>setIsUserOptionsOpen(true)}
       // onMouseLeave={()=>setIsUserOptionsOpen(false)}
       style={{cursor:"pointer",position:'relative'}}

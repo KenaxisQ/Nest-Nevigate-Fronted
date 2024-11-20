@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Phone, User,UserRound } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation} from 'react-router-dom';
 import './CustomNavbar.css';
 import { CiViewList } from "react-icons/ci";
+import { MdOutlineModeEditOutline } from "react-icons/md";
+import { CiUser } from "react-icons/ci";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const[userNavigation,setUserNavigation]=useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   return (
 
     <nav className="navbar navbar-expand-lg fixed-top" style={{borderBottom: '1px solid #97AABE'}}>
@@ -52,8 +55,15 @@ const Navbar = () => {
             <UserRound size={20} />
           </button>
     <ul class="dropdown-menu userNavigation">
-    <li><button className='btn btn-light m-2' onClick={()=>navigate(`/agentdashboard`)}><CiViewList/>&nbsp; Dashboard</button></li>
-    <li> <button className='btn btn-danger m-2'>Logout</button></li>
+    <li className='userEditWrap'>
+      <div className="userIconWrapper"> <CiUser size={'30px'} style={{position:'relative'}}/></div>
+     </li>
+    <div className="userEditBtn">
+    <MdOutlineModeEditOutline style={{ margin: "0px 0px 13px 2px"}} />
+    </div>
+    <span className='user-name'>Priyanka Arul Mohan</span>
+    <p className='redirect-to-listed' onClick={()=>navigate('/userdashboard')}>View Listed Properties</p>
+    <li> <button className='btn btn-danger m-2' style={{borderRadius:'30px'}}>Logout</button></li>
     </ul>
           <button className="btn rounded-pill px-4 add_property_btn" onClick={() => {navigate('/add-property', {state: { customData: 'additional data' },search : '?name=JohnDoe&age=30'});}}>
             Add Property<span></span>

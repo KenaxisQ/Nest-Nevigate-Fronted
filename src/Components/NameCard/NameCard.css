@@ -13,11 +13,12 @@
 }
 .userOptions{
     position: absolute;
-    padding: 10px;
+    padding: 5px;
+    width: 150px;
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 10px;
 }
 .userOptions .btn{
-    width: 100%;
+    width:120px;
 }
