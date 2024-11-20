@@ -17,15 +17,18 @@ const Navbar = () => {
         <div className='nav_wrapper'>
         <div className="d-none d-lg-flex nav_left">
           <ul className="navbar-nav me-auto">
-            <li className="nav-item">
-              <Link className="nav-link active" as={Link} to="/home" >Home</Link>
+          <li className="nav-item">
+              <Link className={`nav-link ${location.pathname=='/home'||location.pathname=='/'?'active':''}`} as={Link} to="/home" >Home</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" as={Link} to="/listings">Listing</Link>
+              <Link className={`nav-link ${location.pathname=='/listings'?'active':''}`} as={Link} to="/listings">Listing</Link>
             </li>
             <li className="nav-item">
+              <Link className={`nav-link ${location.pathname=='/userdashboard'?'active':''}`} as={Link} to="/userdashboard">Dashboard</Link>
+            </li>
+            {/* <li className="nav-item">
             <a className='nav-link' href='#footer'>Contact</a>
-            </li>
+            </li> */}
           </ul>
         </div>
 
@@ -84,29 +87,34 @@ const Navbar = () => {
         <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`}>
           <ul className="navbar-nav d-lg-none mt-3">
             <li className="nav-item">
-              <a className="nav-link" href="#">Home</a>
+              <Link className={`nav-link ${location.pathname=='/home'?'active':''}`} as={Link} to="/home" >Home</Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">Services</a>
+              <Link className={`nav-link ${location.pathname=='/listings'?'active':''}`} as={Link} to="/listings">Listing</Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">Contact</a>
+              <Link className={`nav-link ${location.pathname=='/userdashboard'?'active':''}`} as={Link} to="/userdashboard">Dashboard</Link>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <a className="nav-link" href="tel:+1234567890">
                 <Phone size={20} className="me-2" />
                 +123 456 7890
               </a>
-            </li>
-            <li className="nav-item">
+            </li> */}
+            {/* <li className="nav-item">
               <a className="nav-link" href="#">
                 <UserRound size={20} className="me-2" />
                 Account
               </a>
-            </li>
+            </li> */}
             <li className="nav-item mt-2">
               <button className="btn rounded-pill px-4 w-100 add_property_btn">
                 Add Property
+              </button>
+            </li>
+            <li className="nav-item mt-2">
+              <button className="btn  rounded-pill px-4 w-100 add_property_btn btn-danger">
+                Logout
               </button>
             </li>
           </ul>
