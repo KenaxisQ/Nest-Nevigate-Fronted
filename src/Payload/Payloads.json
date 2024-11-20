@@ -58,7 +58,10 @@
                 "accountNonExpired": true,
                 "accountNonLocked": true
             },
-            "advance": null
+            "advance": null,
+            "amenities":[],
+            "bedroom":"",
+            "washroom":""
         },
         {
             "id": "ba980d87-7e1c-4ccd-8d96-2d2760e2681e",

@@ -2,6 +2,8 @@ import PropTypes from "prop-types"
 import { useState, useRef } from "react";
 import './ThirdForm.css'
 import { PropertyUploadForm } from "../PropertyForms/PropertyUploadForm";
+import { FiUpload } from "react-icons/fi";
+import { BiSolidImageAdd } from "react-icons/bi";
 export const ThirdForm = ({ setStep }) => {
     const defaultPlaceholderImages = []//aceholder image URL
     const [selectedFiles, setSelectedFiles] = useState(defaultPlaceholderImages);
@@ -61,9 +63,8 @@ export const ThirdForm = ({ setStep }) => {
                             />
                         ))}
                         <div class="upload-placeholder">
-                            <i class="fas fa-image">
-                            </i>
-                            <input 
+                            <BiSolidImageAdd size={'30px'}/>
+                            <input
                             type="file"
                             multiple
                             accept="image/*"

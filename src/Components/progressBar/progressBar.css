@@ -12,8 +12,8 @@
   .progressbar li:before {
     content: counter(step);
     counter-increment: step;
-    width: 72px;
-    height: 72px;
+     width: 60px;
+    height: 60px;
     border: 1px solid #1F4B43;
     align-content: center;
     border-radius: 100%;
@@ -22,7 +22,7 @@
     margin: 0 auto 10px auto;
     background-color: #fff;
     font-family: Lexend;
-    font-size: 40px;    
+    font-size: 30px;
     font-weight: 500;
     line-height: 52px;
     text-align: center;
