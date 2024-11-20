@@ -30,7 +30,7 @@ import UserInfoEdit from '../Modals/UserInfo/UserInfoEdit';
 export const AdminDashboardHome = ({properties}) => {
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   const [isHamburgHovered, setIsHamburgHovered] = useState(false);
-  const [activeMenu, setActiveMenu] = useState('users');
+  const [activeMenu, setActiveMenu] = useState('dashboard');
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const columns=[
@@ -253,7 +253,8 @@ export const AdminDashboardHome = ({properties}) => {
         <div className="col" style={{marginLeft:!isSideNavOpen?'70px':'250px', width: activeMenu =='users'?'90%':'auto'}}>
           <div className="adminDashboardHeader">
             <h4 className='adminHeading'>Admin Dashboard</h4>
-            <NameCard name="priyanka Arul Mohan"  designation="Supervisor" avatar={Avatar}   />
+            <NameCard name="priyanka Arul Mohan"  designation="Supervisor" avatar={Avatar} userOptions={true}  />
+
           </div>
          {activeMenu=='dashboard'&&( <div className="adminDashboardContent">
           <div className="headingAndFilter" style={{margin:'20px 10px'}}>

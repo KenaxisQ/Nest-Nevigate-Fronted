@@ -27,7 +27,7 @@ import AdminPropertyCard from '../PropertyCard/AdminPropertyCard';
 export default function AgentDashboard({properties}) {
     const [isSideNavOpen, setIsSideNavOpen] = useState(false);
     const [isHamburgHovered, setIsHamburgHovered] = useState(false);
-    const [activeMenu, setActiveMenu] = useState('users');
+    const [activeMenu, setActiveMenu] = useState('dashboard');
     const handleMenuClick = (menu) => {
         setActiveMenu(menu);
         console.log(menu);
@@ -117,7 +117,7 @@ export default function AgentDashboard({properties}) {
             <div className="agent-content"  style={{marginLeft:!isSideNavOpen?'70px':'250px', width: activeMenu =='users'?'auto':'auto'}}>
             <div className="adminDashboardHeader">
             <h4 className='adminHeading'>Agent Dashboard</h4>
-            <NameCard name="priyanka Arul Mohan"  designation="Supervisor" avatar={Avatar}   />
+            <NameCard name="priyanka Arul Mohan"  designation="Supervisor" avatar={Avatar}  userOptions={true} />
           </div>
          {activeMenu=='dashboard'&&( <div className="adminDashboardContent">
           <div className="headingAndFilter" style={{margin:'20px 10px'}}>
@@ -248,7 +248,7 @@ export default function AgentDashboard({properties}) {
                   </div>
             </div>
           )}
-          
+
             </div>
             </div>
     </div>

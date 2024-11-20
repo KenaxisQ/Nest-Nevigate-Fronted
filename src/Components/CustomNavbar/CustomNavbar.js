@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Phone, User,UserRound } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import './CustomNavbar.css';
+import { CiViewList } from "react-icons/ci";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const[userNavigation,setUserNavigation]=useState(false);
   const navigate = useNavigate();
   return (
 
@@ -43,9 +45,16 @@ const Navbar = () => {
               <span>+68 685 88666</span>
             </div>
           </a>
-          <button className="btn text-dark me-3 user_icon">
+          <button className="btn text-dark me-3 user_icon dropdown-toggle-split"
+          data-bs-toggle="dropdown" aria-expanded="false"
+          style={{position:'relative'}}
+          onClick={()=>{setUserNavigation(!userNavigation)}}>
             <UserRound size={20} />
           </button>
+    <ul class="dropdown-menu userNavigation">
+    <li><button className='btn btn-light m-2' onClick={()=>navigate(`/agentdashboard`)}><CiViewList/>&nbsp; Dashboard</button></li>
+    <li> <button className='btn btn-danger m-2'>Logout</button></li>
+    </ul>
           <button className="btn rounded-pill px-4 add_property_btn" onClick={() => {navigate('/add-property', {state: { customData: 'additional data' },search : '?name=JohnDoe&age=30'});}}>
             Add Property<span></span>
           </button>
