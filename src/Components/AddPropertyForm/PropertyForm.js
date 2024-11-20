@@ -11,7 +11,7 @@ export const PropertyForm = () => {
         <>
             <Navbar />
             <div className="property-main">
-                <UserInfo />
+                {/* <UserInfo /> */}
             </div>
             <AddProperty />
         </>
