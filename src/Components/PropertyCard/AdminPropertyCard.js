@@ -16,7 +16,7 @@ const AdminPropertyCard = ({ type, title, location, price, beds, washrooms, area
     <div className="card propertylistingcard" style={{height: '350px'}} >
       <div className='propertyTagsWrapper'>
         <div className="propertyTags" style={{marginTop:'5px'}}>
-        <div className='propertyTag rent' style={{height:'30px', width:'auto',padding:'7px 10px'}}>For {type}</div>
+        <div className='propertyTag rent' style={{height:'30px', width:'auto',padding:'8px 10px 0px 10px'}}>For {type}</div>
         {/* <div className='propertyTag featured'style={{height:'30px', width:'auto',padding:'5px 10px'}}>Featured</div> */}
         </div>
         <div className="adminpropertyApprovals">

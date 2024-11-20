@@ -52,7 +52,7 @@
 .propertyPrice{
     text-align: left;
     color: #EB664E;
-    font-size: 20.16px;
+    font-size: 16px;
     font-weight: 600;
     line-height: 30.24px;
     text-align: left;
@@ -117,7 +117,7 @@
     display: flex;
     justify-content: space-between;
     width: auto;
-    
+
 
 }
 .propertyTag{
@@ -137,7 +137,7 @@
 }
 .rent{
     background:#1F4B43;
-    
+
 }
 .featured{
     background: #E7C873;
@@ -159,7 +159,7 @@
     margin: 0px 10px 0px 0px ;
 }
 @media(max-width:700px) {
-  
+
     .propertyTaglike{
         margin: 15px 0px;
         width: auto;
