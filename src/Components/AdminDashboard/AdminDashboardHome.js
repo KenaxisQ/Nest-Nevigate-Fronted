@@ -355,6 +355,7 @@ export const AdminDashboardHome = ({properties}) => {
               washrooms={property.washrooms}
               area={property.area}
               height={'350px'}
+              isEdit={true}
             />
           </div>
         ))}
