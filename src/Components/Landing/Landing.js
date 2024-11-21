@@ -12,6 +12,7 @@ import ScrollToTop from '../ScrollToTop';
 import { AdminDashboardHome } from '../AdminDashboard/AdminDashboardHome.js';
 import Userdashboard from '../Userdashboard/Userdashboard.js';
 import AgentDashboard from '../AgentDashboard/AgentDashboard.js';
+import SignIn from '../SignIn/SignIn.js';
 
 export default function Landing() {
 
@@ -83,6 +84,10 @@ export default function Landing() {
       {
         path: "agentdashboard",
         element:(<><ScrollToTop/><AgentDashboard properties={properties}/></>)
+      },
+      {
+        path :"signin",
+        element:(<><SignIn /></>)
       }
       ]
 
