@@ -5,11 +5,12 @@ import { object as yupObject, string as yupString } from "yup";
 import { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useMediaQuery } from 'react-responsive';
+import { DisplayBuyLandFields } from "../DisplayJsons/Buy/DisplayFields";
 const validationSchema = yupObject().shape({
   // propertyTitle: yupString().required("Required"),
   // bedroom: yupString().required("Required"),
 });
-export const FormRenderDynamic = ({ setStep }) => {
+export const FormRenderDynamic = ({ apiResponseData, setStep }) => {
   // Media query hooks
   const isSmall = useMediaQuery({ query: '(min-width: 576px)' });
   const isMedium = useMediaQuery({ query: '(min-width: 768px)' });
@@ -198,7 +199,7 @@ export const FormRenderDynamic = ({ setStep }) => {
         <div className="row">
           <div className="col-lg-4">
             <div className="row">
-              {json.map((prop, index) => {
+              {DisplayBuyLandFields.map((prop, index) => {
                 if (prop.componetName === "Dropdown") {
                   return (
                     <div
