@@ -5,172 +5,171 @@ import { object as yupObject, string as yupString } from "yup";
 import { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useMediaQuery } from 'react-responsive';
-import { DisplayBuyLandFields } from "../DisplayJsons/Buy/DisplayFields";
 const validationSchema = yupObject().shape({
   // propertyTitle: yupString().required("Required"),
   // bedroom: yupString().required("Required"),
 });
-export const FormRenderDynamic = ({ apiResponseData, setStep }) => {
+export const FormRenderDynamic = ({setStep, displayjson, miscelleneousJson, amminitiesJson, nearByFacilitiesJson}) => {
   // Media query hooks
   const isSmall = useMediaQuery({ query: '(min-width: 576px)' });
   const isMedium = useMediaQuery({ query: '(min-width: 768px)' });
   const isLarge = useMediaQuery({ query: '(min-width: 992px)' });
   const size = isLarge ? 'lg' : isMedium ? 'md' : isSmall ? 'sm' : '';
   console.log(size);
-  const json = [
-    {
-      title: "Enter property title",
-      placeHolder: "Enter property title",
-      componetName: "Input",
-      fieldName: "propertyTitle",
-      required: true,
-    },
-    {
-      title: "Select Bedroom",
-      placeHolder: "Enter property Loc",
-      componetName: "Dropdown",
-      fieldName: "bedroom",
-    },
-    {
-      title: "Enter property Loc",
-      placeHolder: "Enter property Loc",
-      componetName: "Input",
-      required: true,
-      fieldName: "propertyLoc",
-    },
-    {
-      title: "Select Bathroom",
-      placeHolder: "Enter property Loc",
-      componetName: "Dropdown",
-      fieldName: "bathroom",
-    },
-    {
-      title: "Enter property Age",
-      placeHolder: "Enter property Age",
-      componetName: "Input",
-      fieldName: "propertyAge",
-    },
-    {
-      title: "Select Balcony",
-      placeHolder: "Select Balcony",
-      componetName: "Dropdown",
-      required: true,
-      fieldName: "balcony",
-    },
-    {
-      title: "Select property Type",
-      placeHolder: "Select property Type",
-      componetName: "Dropdown",
-      fieldName: "propertyType",
-    },
-    {
-      title: "Enter Surface Area",
-      placeHolder: "Enter Surface Area",
-      componetName: "Input",
-      fieldName: "surfaceArea",
-    },
-    {
-      title: "Select Furnish Status",
-      placeHolder: "Select Furnish Status",
-      componetName: "Dropdown",
-      fieldName: "furnishStatus",
-    },
-    {
-      title: "Enter Carpet Area",
-      placeHolder: "Enter Carpet Area",
-      componetName: "Input",
-      fieldName: "carpetArea",
-    },
-    {
-      title: "Select Completion Status",
-      placeHolder: "Select Completion Status",
-      componetName: "Dropdown",
-      fieldName: "completionStatus",
-    },
-    {
-      title: "Encumberence Status",
-      placeHolder: "Encumberence Status",
-      componetName: "Dropdown",
-      fieldName: "encumberenceStatus",
-    },
-  ];
+  // const json = [
+  //   {
+  //     title: "Enter property title",
+  //     placeHolder: "Enter property title",
+  //     componetName: "Input",
+  //     fieldName: "propertyTitle",
+  //     required: true,
+  //   },
+  //   {
+  //     title: "Select Bedroom",
+  //     placeHolder: "Enter property Loc",
+  //     componetName: "Dropdown",
+  //     fieldName: "bedroom",
+  //   },
+  //   {
+  //     title: "Enter property Loc",
+  //     placeHolder: "Enter property Loc",
+  //     componetName: "Input",
+  //     required: true,
+  //     fieldName: "propertyLoc",
+  //   },
+  //   {
+  //     title: "Select Bathroom",
+  //     placeHolder: "Enter property Loc",
+  //     componetName: "Dropdown",
+  //     fieldName: "bathroom",
+  //   },
+  //   {
+  //     title: "Enter property Age",
+  //     placeHolder: "Enter property Age",
+  //     componetName: "Input",
+  //     fieldName: "propertyAge",
+  //   },
+  //   {
+  //     title: "Select Balcony",
+  //     placeHolder: "Select Balcony",
+  //     componetName: "Dropdown",
+  //     required: true,
+  //     fieldName: "balcony",
+  //   },
+  //   {
+  //     title: "Select property Type",
+  //     placeHolder: "Select property Type",
+  //     componetName: "Dropdown",
+  //     fieldName: "propertyType",
+  //   },
+  //   {
+  //     title: "Enter Surface Area",
+  //     placeHolder: "Enter Surface Area",
+  //     componetName: "Input",
+  //     fieldName: "surfaceArea",
+  //   },
+  //   {
+  //     title: "Select Furnish Status",
+  //     placeHolder: "Select Furnish Status",
+  //     componetName: "Dropdown",
+  //     fieldName: "furnishStatus",
+  //   },
+  //   {
+  //     title: "Enter Carpet Area",
+  //     placeHolder: "Enter Carpet Area",
+  //     componetName: "Input",
+  //     fieldName: "carpetArea",
+  //   },
+  //   {
+  //     title: "Select Completion Status",
+  //     placeHolder: "Select Completion Status",
+  //     componetName: "Dropdown",
+  //     fieldName: "completionStatus",
+  //   },
+  //   {
+  //     title: "Encumberence Status",
+  //     placeHolder: "Encumberence Status",
+  //     componetName: "Dropdown",
+  //     fieldName: "encumberenceStatus",
+  //   },
+  // ];
 
-  const miscelleneousJson = [
-    {
-      name: "Ownership documents provided",
-      fieldName: "ownershipDocuments",
-    },
-    {
-      name: "Ready to Move In",
-      fieldName: "readyToMoveIn",
-    },
-    {
-      name: "Financing Provided",
-      fieldName: "financingProvided",
-    },
-    {
-      name: "Pooja Room Available",
-      fieldName: "poojaRoomAvailable",
-    },
-  ];
+  // const miscelleneousJson = [
+  //   {
+  //     name: "Ownership documents provided",
+  //     fieldName: "ownershipDocuments",
+  //   },
+  //   {
+  //     name: "Ready to Move In",
+  //     fieldName: "readyToMoveIn",
+  //   },
+  //   {
+  //     name: "Financing Provided",
+  //     fieldName: "financingProvided",
+  //   },
+  //   {
+  //     name: "Pooja Room Available",
+  //     fieldName: "poojaRoomAvailable",
+  //   },
+  // ];
 
-  const amminitiesJson = [
-    {
-      name: "Gym Facility",
-      fieldName: "gymFacility",
-    },
-    {
-      name: "Elevatory",
-      fieldName: "elevator",
-    },
-    {
-      name: "Power Backup",
-      fieldName: "powerBackup",
-    },
-    {
-      name: "Swimming",
-      fieldName: "swimming",
-    },
-    {
-      name: "Security",
-      fieldName: "security",
-    },
-    {
-      name: "Parking",
-      fieldName: "parking",
-    },
-    {
-      name: "Wifi facility",
-      fieldName: "wifiFacility",
-    },
-    {
-      name: "Heating",
-      fieldName: "heating",
-    },
-  ];
+  // const amminitiesJson = [
+  //   {
+  //     name: "Gym Facility",
+  //     fieldName: "gymFacility",
+  //   },
+  //   {
+  //     name: "Elevatory",
+  //     fieldName: "elevator",
+  //   },
+  //   {
+  //     name: "Power Backup",
+  //     fieldName: "powerBackup",
+  //   },
+  //   {
+  //     name: "Swimming",
+  //     fieldName: "swimming",
+  //   },
+  //   {
+  //     name: "Security",
+  //     fieldName: "security",
+  //   },
+  //   {
+  //     name: "Parking",
+  //     fieldName: "parking",
+  //   },
+  //   {
+  //     name: "Wifi facility",
+  //     fieldName: "wifiFacility",
+  //   },
+  //   {
+  //     name: "Heating",
+  //     fieldName: "heating",
+  //   },
+  // ];
 
-  const nearByFacilitiesJson = [
-    {
-      name: "Taxi Stand",
-      fieldName: "taxiStand",
-    },
-    {
-      name: "Natural Park",
-      fieldName: "naturalPark",
-    },
-    {
-      name: "Shopping Complex",
-      fieldName: "shoppingComplex",
-    },
-    {
-      name: "Hospital",
-      fieldName: "hospital",
-    },
-    {
-      name: "Bus Stand",
-      fieldName: "busStand",
-    },
-  ];
+  // const nearByFacilitiesJson = [
+  //   {
+  //     name: "Taxi Stand",
+  //     fieldName: "taxiStand",
+  //   },
+  //   {
+  //     name: "Natural Park",
+  //     fieldName: "naturalPark",
+  //   },
+  //   {
+  //     name: "Shopping Complex",
+  //     fieldName: "shoppingComplex",
+  //   },
+  //   {
+  //     name: "Hospital",
+  //     fieldName: "hospital",
+  //   },
+  //   {
+  //     name: "Bus Stand",
+  //     fieldName: "busStand",
+  //   },
+  // ];
   const { control, formState, setValue, trigger, register } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -193,13 +192,13 @@ export const FormRenderDynamic = ({ apiResponseData, setStep }) => {
   useEffect(() => {
     trigger();
   }, []);
-
+debugger;
   return (
       <form onSubmit={onSubmit} novalidate className="mb-3 wrapText">
         <div className="row">
           <div className="col-lg-4">
             <div className="row">
-              {DisplayBuyLandFields.map((prop, index) => {
+              {displayjson.map((prop, index) => {
                 if (prop.componetName === "Dropdown") {
                   return (
                     <div
@@ -256,7 +255,7 @@ export const FormRenderDynamic = ({ apiResponseData, setStep }) => {
                         }
                         {...register(prop?.fieldName)}
                       />
-                      {errors?.[prop.fieldName]?.message && (
+                      {/* {errors?.[prop.fieldName]?.message && (
                         <p
                           className="error"
                           style={{
@@ -267,7 +266,7 @@ export const FormRenderDynamic = ({ apiResponseData, setStep }) => {
                         >
                           {errors?.[prop.fieldName]?.message}
                         </p>
-                      )}
+                      )} */}
                     </div>
                   );
                 }
