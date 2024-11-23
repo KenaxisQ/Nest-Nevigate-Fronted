@@ -1,4 +1,4 @@
-export const DisplayBuyLandFields = [
+export const DisplaySellLandFields = [
     {
       title: "Enter property title",
       placeHolder: "Enter property title",
@@ -146,9 +146,9 @@ export const DisplayBuyLandFields = [
     }
 ];
 
-export const DisplayBuyCommercialFields = [...DisplayBuyLandFields];
+export const DisplaySellCommercialFields = [...DisplaySellLandFields];
 
-export const DisplayBuyResidentialFields = [...DisplayBuyLandFields,
+export const DisplaySellResidentialFields = [...DisplaySellLandFields,
   {
   title: "No of BathRooms",
   placeHolder: "No of Bathrooms",

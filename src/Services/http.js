@@ -2,7 +2,8 @@
 const joinURL=(baseURL,url)=>{return `${baseURL}/${url}`;}
 class HttpService{
     constructor(){
-            this.domain=' http://localhost:8080/api/v1'
+            this.domain='http://localhost:8080/nestnavigate'
+            // this.domain = 'http://localhost:8010/nestNavigator-0.0.1-SNAPSHOT'
     }
     request(url,method='POST',data=null,formflag){
         if(formflag)

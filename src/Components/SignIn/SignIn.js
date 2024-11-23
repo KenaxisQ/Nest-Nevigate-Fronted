@@ -1,79 +1,190 @@
 import React, { useState } from 'react';
 import './SignIn.css';
+import { useForm, useWatch } from "react-hook-form";
+import HttpService from '../../Services/http';
 
 
 const Signin = () => {
-    const [isLogin, setIsLogin] = useState(true); // 'login' or 'register'
-
+    const [isLogin, setIsLogin] = useState(true); // Toggle between login and signup
+    const { register, handleSubmit, control } = useForm(); // useForm hook
+  
+    // Watching form field values
+    const xyz = useWatch({ control, defaultValue: "user" });
+    
+  
+    // Form submission handler
+    const onSubmit = (data) => {
+        const { confirmPassword, rememberMe, termsAccepted, ...filteredData } = data;
+        var https = new HttpService();
+      console.log("Form Submitted:", filteredData);
+      if (!isLogin && data.password !== data.confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+      console.log("Validated Data:", filteredData);
+      const response = https.post('register', filteredData);
+      alert(response);
+    };
+  
     return (
-        <div className='sign'> 
-            <div className='signform'>
-           <div>
-            <div className='signtitle'>
-                <h1 class='nn_title'>Nest Navigate</h1>
+      <div className="sign">
+        <div className="signform">
+          <div>
+            <div className="signtitle">
+              <h1 className="nn_title">Nest Navigate</h1>
+            </div>
+            <div className="btnWrapper" style={{ display: "flex" }}>
+              <button
+                className={`btn ${isLogin ? "loginButton" : "registerbtn"}`}
+                onClick={() => setIsLogin(true)}
+              >
+                Sign In
+              </button>
+              <button
+                className={`btn ${!isLogin ? "loginButton" : "registerbtn"}`}
+                onClick={() => setIsLogin(false)}
+              >
+                Sign Up
+              </button>
+            </div>
+            <div className="signforms">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                {/* Account Type (Sign Up only) */}
+                {!isLogin && (
+                  <div>
+                    <label>Account Type</label>
+                    <select
+                      className="formcontrols"
+                      {...register("role")}
+                    >
+                      <option value="USER">USER</option>
+                      <option value="AGENT">AGENT</option>
+                    </select>
+                  </div>
+                )}
+                {!isLogin && (
+                  <div>
+                    <label>First Name</label>
+                    <input
+                      className="formcontrols"
+                      type="text"
+                      placeholder="Enter your First name"
+                      {...register("firstname", { required: true })}
+                    />
+                  </div>
+                )}
+                {!isLogin && (
+                  <div>
+                    <label>Phone Number</label>
+                    <input
+                      className="formcontrols"
+                      type="text"
+                      placeholder="Enter your Phone Number"
+                      {...register("phone", { required: true })}
+                    />
+                  </div>
+                )}
+                {!isLogin && (
+                  <div>
+                    <label>Last Name</label>
+                    <input
+                      className="formcontrols"
+                      type="text"
+                      placeholder="Enter your Last name"
+                      {...register("lastname", { required: true })}
+                    />
+                  </div>
+                )}
+                {/* Username (Sign Up only) */}
+                {!isLogin && (
+                  <div>
+                    <label>Username</label>
+                    <input
+                      className="formcontrols"
+                      type="text"
+                      placeholder="Enter your full name"
+                      {...register("username", { required: true })}
+                    />
+                  </div>
+                )}
+                {/* Email */}
+                <div>
+                  <label>Email:</label>
+                  <input
+                    className="formcontrols"
+                    type="email"
+                    placeholder="Enter your email"
+                    {...register("email", { required: true })}
+                  />
                 </div>
-            <div className='btnWrapper' style={{display:'flex'}}>
-            <button className= {`btn ${isLogin?'loginButton':'registerbtn'}`} onClick={() => setIsLogin(true)}>Login</button>
-            <button className= {`btn ${!isLogin?'loginButton':'registerbtn'}`} onClick={() => setIsLogin(false)}>Register</button>
-           </div>
-                <div className='signforms'>            
-                <form>
-                {!isLogin &&<div>
-                        <label>Account Type</label>
-                        <select className="formcontrols" id="Account Type"   required >
-                            <option value="user">USER</option>
-                            <option value="agent">AGENT</option>
-                        </select>                        
-                    </div>}
-                   {!isLogin &&<div>
-                        <label>Username</label>
-                        <input className="formcontrols" type="text" placeholder="Enter your full name" required />
-                    </div>}
-                    <div>
-                        <label>Email:</label>
-                        <input className='formcontrols' type="email" placeholder="Enter your email" required />
-                    </div>
-                    <div>
-                        <label>Password</label>
-                        <input className='formcontrols' type="password" placeholder="Enter your password" required />
-                    </div>
-                    {!isLogin && <div>
-                        <label>Confirm Password</label>
-                        <input className='formcontrols' type="password" placeholder="Enter your password" required />
-                    </div>} 
-                    {isLogin && 
-                    <div>
-                        <div className='tog'>
-                    <label class="switch rememberme">
-                     <input type="checkbox"/>
-                    <span class="slider round"></span>
-
-                    </label>
-                    <p style={{marginBottom:'0px'}}>Remember me <br/></p>
-                    </div>
-                    <div className='forgotPassword'> <p>Forgot Password?</p></div>
-                    </div>
-                    }
-                    
-                    <button type="submit" className='btn loginButton' style={{width:'100%',margin:'20px 0px'}}>{isLogin?"Login":"Register"}</button>
-
-                    {!isLogin && <div className="signupcheckbox">
+                {/* Password */}
+                <div>
+                  <label>Password</label>
+                  <input
+                    className="formcontrols"
+                    type="password"
+                    placeholder="Enter your password"
+                    {...register("password", { required: true })}
+                  />
+                </div>
+                {/* Confirm Password (Sign Up only) */}
+                {!isLogin && (
+                  <div>
+                    <label>Confirm Password</label>
+                    <input
+                      className="formcontrols"
+                      type="password"
+                      placeholder="Confirm your password"
+                      {...register("confirmPassword", { required: true })}
+                    />
+                  </div>
+                )}
+                {/* Remember Me (Sign In only) */}
+                {isLogin && (
+                  <div>
+                    <div className="tog">
+                      <label className="switch rememberme">
                         <input
-                            class="me-2"
-                            type="checkbox"
-                            value=""
-                            id="registerCheck"
-                            aria-describedby="registerCheckHelpText"
+                          type="checkbox"
+                          {...register("rememberMe")}
                         />
-                        <label class="form-check-label" for="registerCheck">
-                          Accept Terms and Conditions
-                        </label>
-                    </div>}
-                </form>
-                </div>
+                        <span className="slider round"></span>
+                      </label>
+                      <p style={{ marginBottom: "0px" }}>
+                        Remember me <br />
+                      </p>
+                    </div>
+                    <div className="forgotPassword">
+                      <p>Forgot Password?</p>
+                    </div>
+                  </div>
+                )}
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  className="btn loginButton"
+                  style={{ width: "100%", margin: "20px 0px" }}
+                >
+                  {isLogin ? "Login" : "Register"}
+                </button>
+                {/* Terms and Conditions (Sign Up only) */}
+                {!isLogin && (
+                  <div className="signupcheckbox">
+                    <input
+                      className="me-2"
+                      type="checkbox"
+                      {...register("termsAccepted", { required: true })}
+                    />
+                    <label className="form-check-label">
+                      Accept Terms and Conditions
+                    </label>
+                  </div>
+                )}
+              </form>
             </div>
-            </div>
+          </div>
         </div>
+      </div>
     );
 };
 
