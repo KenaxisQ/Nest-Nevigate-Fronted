@@ -13,8 +13,8 @@ const Signin = () => {
                 <h1 class='nn_title'>Nest Navigate</h1>
                 </div>
             <div className='btnWrapper' style={{display:'flex'}}>
-            <button className= {`btn ${isLogin?'loginButton':'registerbtn'}`} onClick={() => setIsLogin(true)}>Sign In</button>
-            <button className= {`btn ${!isLogin?'loginButton':'registerbtn'}`} onClick={() => setIsLogin(false)}>Sign Up</button>
+            <button className= {`btn ${isLogin?'loginButton':'registerbtn'}`} onClick={() => setIsLogin(true)}>Login</button>
+            <button className= {`btn ${!isLogin?'loginButton':'registerbtn'}`} onClick={() => setIsLogin(false)}>Register</button>
            </div>
                 <div className='signforms'>            
                 <form>
