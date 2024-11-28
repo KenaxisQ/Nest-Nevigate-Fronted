@@ -1,4 +1,4 @@
-export const DisplaySellLandFields = [
+export const DisplayRentLandFields = [
     {
       title: "Enter property title",
       placeHolder: "Enter property title",
@@ -70,7 +70,7 @@ export const DisplaySellLandFields = [
     },
     {
         title: "Enter Price",
-        placeHolder: "Enter Pice",
+        placeHolder: "Enter Price",
         componetName: "Input",
         required: true,
         fieldName: "price",
@@ -146,9 +146,9 @@ export const DisplaySellLandFields = [
     }
 ];
 
-export const DisplaySellCommercialFields = [...DisplaySellLandFields];
+export const DisplayRentCommercialFields = [...DisplayRentLandFields];
 
-export const DisplaySellResidentialFields = [...DisplaySellLandFields,
+export const DisplayRentResidentialFields = [...DisplayRentLandFields,
   {
   title: "No of BathRooms",
   placeHolder: "No of Bathrooms",
@@ -175,3 +175,5 @@ export const DisplaySellResidentialFields = [...DisplaySellLandFields,
   fieldName: "poojaRooms",
 }
 ];
+
+export const DisplayRentPGFields = [...DisplayRentLandFields]

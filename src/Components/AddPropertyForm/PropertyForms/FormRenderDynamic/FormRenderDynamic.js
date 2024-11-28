@@ -198,7 +198,7 @@ debugger;
         <div className="row">
           <div className="col-lg-4">
             <div className="row">
-              {displayjson.map((prop, index) => {
+              {displayjson?.map((prop, index) => {
                 if (prop.componetName === "Dropdown") {
                   return (
                     <div
@@ -285,7 +285,7 @@ debugger;
                     </div>
                     <div className={`col-${size}-8`} style={{padding: "0 16px 4px"}}>
                     <p for="exampleFormControlTextarea1" class="text-start">Amminities</p>
-                        {amminitiesJson.reduce((rows, amenity, index) => {
+                        {amminitiesJson?.reduce((rows, amenity, index) => {
                             if (index % 3 === 0) {
                                 rows.push([]);
                             }
@@ -321,7 +321,7 @@ debugger;
           <div className="row">
               <div className={`col-${size}-4`} style={{padding: "0 16px 4px"}}>
               <p for="exampleFormControlTextarea1" class="text-start">Miscelleneous</p>
-                  {miscelleneousJson.map((amenity, rowIndex) => {
+                  {miscelleneousJson?.map((amenity, rowIndex) => {
                       return (
                                   <div key={amenity.fieldName} className={`col-${size}-12`}>
                                       <div className="text-start">
@@ -346,7 +346,7 @@ debugger;
               </div>
               <div className={`col-${size}-8`} style={{padding: "0 16px 4px"}}>
                   <p for="exampleFormControlTextarea1" class="text-start">Near By Facilities</p>
-                  {nearByFacilitiesJson.reduce((rows, amenity, index) => {
+                  {nearByFacilitiesJson?.reduce((rows, amenity, index) => {
                       if (index % 3 === 0) {
                           rows.push([]);
                       }

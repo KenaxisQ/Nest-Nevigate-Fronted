@@ -1,9 +1,10 @@
-export const CommonMiscellineousJson = [
-    { name: "Taxi Stand", fieldName: "taxiStand" },
-    { name: "Natural Park", fieldName: "naturalPark" },
-    { name: "Shopping Complex", fieldName: "shoppingComplex" },
-    { name: "Hospital", fieldName: "hospital" },
-    { name: "Bus Stand", fieldName: "busStand" },
-    { name: "Railway Station", fieldName: "railwayStation" },
+export const MiscellineousSellLandJson = [
+    { name: "Ownership Documents provided", fieldName: "ownershipDocumentsProvided" },
+    {name: 'Ready to Move In', fieldName: 'readyToMoveIn'},
+    { name: "Financing Provided", fieldName: "financingProvided" },
   ];
-  
+
+export const MiscellineousSellCommercialJson = [...MiscellineousSellLandJson]
+export const MiscellineousSellResidentialJson = [
+  ...MiscellineousSellLandJson
+]
