@@ -6,7 +6,6 @@ import { AddProperty } from "./Property/AddProperty";
 export const PropertyForm = () => {
     const location = useLocation();
     const { customData } = location.state || {}; // Accessing state
-    console.log('c', customData);
     return(
         <>
             <Navbar />

@@ -34,7 +34,7 @@ export default function Footer() {
        <div className='footerEmailAndSubscribeWrapper'>
             <p>Subscribe</p>
             <div className='footerEmailWrapper'>
-            <input type='email' placeholder='Your e-mail'/>
+            <input type='email' placeholder='Your e-mail' className='whitePlaceholder'/>
             <button className='btn sendBtn'>Send <IoIosArrowRoundForward/></button>
             </div>
             </div>
@@ -78,7 +78,7 @@ export default function Footer() {
             <div className='footerEmailAndSubscribeWrapper'>
             <p>Subscribe</p>
             <div className='footerEmailWrapper'>
-            <input type='email' placeholder='Your e-mail'/>
+            <input type='email' placeholder='Your e-mail' className='whitePlaceholder'/>
             <button className='btn sendBtn'>Send <IoIosArrowRoundForward/></button>
             </div>
             </div>

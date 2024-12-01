@@ -1,0 +1,35 @@
+.logins::placeholder{
+    font-style: normal;
+    color: black;
+}
+
+.GoogleloginButton{
+    color: green;
+}
+
+.forgotPassword{
+    text-align: right;
+  }
+  .forgotPassword p{
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+.registerHere{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+  .formcontrols {
+    padding: 10px;
+    border: 1px solid #BDC3C7;
+    border-radius: 10px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.otpCss{
+    box-sizing: content-box;
+  }

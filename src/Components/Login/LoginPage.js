@@ -5,7 +5,6 @@ import { Register } from './Register/Register';
 export const LoginPage = () => {
     const [displayTab, setDisplayTab] = useState(<Login />);
     const setTab = (tabname) =>{
-        debugger;
         if(tabname === 'Register')
         {
         setDisplayTab(<Register />);

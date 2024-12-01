@@ -5,11 +5,17 @@ import './CustomNavbar.css';
 import { CiViewList } from "react-icons/ci";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 import { CiUser } from "react-icons/ci";
+import { useAuth } from '../SignIn/AuthContext';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const[userNavigation,setUserNavigation]=useState(false);
+  const { setIsAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const logoutUser = () =>{
+    setIsAuthenticated(false); // Set authentication to false when logout
+    navigate('/')
+  }
   return (
 
     <nav className="navbar navbar-expand-lg fixed-top" style={{borderBottom: '1px solid #97AABE'}}>
@@ -66,7 +72,7 @@ const Navbar = () => {
     </div>
     <span className='user-name'>Priyanka Arul Mohan</span>
     <p className='redirect-to-listed' onClick={()=>navigate('/userdashboard')}>View Listed Properties</p>
-    <li> <button className='btn btn-danger m-2' style={{borderRadius:'30px'}}>Logout</button></li>
+    <li> <button className='btn btn-danger m-2' style={{borderRadius:'30px'}} onClick={logoutUser}>Logout</button></li>
     </ul>
           <button className="btn rounded-pill px-4 add_property_btn" onClick={() => {navigate('/add-property', {state: { customData: 'additional data' },search : '?name=JohnDoe&age=30'});}}>
             Add Property<span></span>
@@ -113,7 +119,7 @@ const Navbar = () => {
               </button>
             </li>
             <li className="nav-item mt-2">
-              <button className="btn  rounded-pill px-4 w-100 add_property_btn btn-danger">
+              <button className="btn  rounded-pill px-4 w-100 add_property_btn btn-danger" >
                 Logout
               </button>
             </li>

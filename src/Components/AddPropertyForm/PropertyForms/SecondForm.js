@@ -8,7 +8,7 @@ import { DisplayRentCommercialFields, DisplayRentLandFields, DisplayRentResident
 import { AmminitiesRentCommercialFields, AmminitiesRentLandFields, AmminitiesRentResidentialFields, AmminitiesRentPGFields } from "./DisplayJsons/Rent/Ammenities";
 import { MiscellineousRentCommercialJson, MiscellineousRentPGJson, MiscellineousRentLandJson, MiscellineousRentResidentialJson } from "./DisplayJsons/Rent/Miscellineous";
 import { CommonNearByServices } from "./DisplayJsons/Sell/NearByServices";
-export const SecondForm = ({setStep, propertytype, offerType}) => {
+export const SecondForm = ({setStep, propertytype, offerType, register, setValue}) => {
     const fields = {
         AmminitiesSellCommercialFields,
         AmminitiesSellLandFields,
@@ -32,7 +32,6 @@ export const SecondForm = ({setStep, propertytype, offerType}) => {
         MiscellineousRentLandJson, 
         MiscellineousRentResidentialJson
     };      
-    debugger;
     const amminitiesJson = `Amminities${offerType}${propertytype}Fields`;
 const displayJson = `Display${offerType}${propertytype}Fields`;
     var amminitieJson = fields[amminitiesJson];
@@ -40,8 +39,7 @@ const displayJson = `Display${offerType}${propertytype}Fields`;
     var miscelleneousJson = fields[`Miscellineous${offerType}${propertytype}Json`];
     var nearByFacilitiesJson = CommonNearByServices;
     return (
-            <FormRenderDynamic setStep={setStep} displayjson={displaJson} miscelleneousJson={miscelleneousJson} amminitiesJson={amminitieJson}
-            nearByFacilitiesJson={nearByFacilitiesJson}/>
+            <FormRenderDynamic setStep={setStep} displayjson={displaJson} register={register} setValue={setValue} propertytype={propertytype}/>
     )
 }
 

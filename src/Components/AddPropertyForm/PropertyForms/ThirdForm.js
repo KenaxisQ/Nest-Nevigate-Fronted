@@ -4,7 +4,7 @@ import './ThirdForm.css'
 import { PropertyUploadForm } from "../PropertyForms/PropertyUploadForm";
 import { FiUpload } from "react-icons/fi";
 import { BiSolidImageAdd } from "react-icons/bi";
-export const ThirdForm = ({ setStep }) => {
+export const ThirdForm = ({ setStep, setValue, register, onSubmit }) => {
     const defaultPlaceholderImages = []//aceholder image URL
     const [selectedFiles, setSelectedFiles] = useState(defaultPlaceholderImages);
     const [preview, setPreview] = useState("https://via.placeholder.com/150");
@@ -17,12 +17,14 @@ export const ThirdForm = ({ setStep }) => {
         const files = Array.from(event.target.files).slice(0, 8);
         const filePreviews = files.map(file => URL.createObjectURL(file));
         setSelectedFiles([...Array.from(files)]); //cahnge here for fixed 8 when uploadeed
+        setValue('media', JSON.stringify(filePreviews));
         setPreview(filePreviews[0]);
     }
 
     const handleUploadClick = () => {
         // inputRef.current.click();
-        setStep(3);
+        onSubmit();
+        //setStep(3);
     };
 
     const handleImageClick = (image) => {
@@ -35,7 +37,12 @@ export const ThirdForm = ({ setStep }) => {
                 <div className="col-lg-5 pb-4 pl-4">
                     <div className="">
                         <p htmlFor="askingPrice" className="text-start fw-bold">Enter Asking Price</p>
-                        <input className="form-control-lg" placeholder="Asking Price" type="text" style={{ color: "black", border: "1px solid #0000004f",borderRadius: "6px" }} />
+                        <input className="form-control-lg" placeholder="Asking Price" type="number" 
+                            style={{ color: "black", border: "1px solid #0000004f",borderRadius: "6px", width: "100%" }} 
+                            onChange={(event) =>
+                                setValue('price', event.target.value)
+                              }
+                            {...register('price')}/>
                         <p className="form-text text-start">
                             This Price is what is potentially told to Clients
                         </p>
@@ -72,7 +79,7 @@ export const ThirdForm = ({ setStep }) => {
                             id="file-upload"/>
                         </div>
                         </div>
-                        <button className="btnUpload PropertyNextButton" type="button" onClick={handleUploadClick}>Upload Property</button>
+                        <button className="btnUpload PropertyNextButton" type="button" onClick={() => onSubmit()}>Upload Property</button>
                 </div>
             </div>
 
