@@ -5,6 +5,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import './Login.css';
 import HttpService from '../../Services/http';
 import { jwtDecode } from 'jwt-decode';
+import { useAuth } from './AuthContext';
 export const Login = ({setIsAuthenticated}) => {
     const [otp, setOtp] = useState(new Array(6).fill(""));
     const [showOtp, setShowOtp] = useState(false);
@@ -15,6 +16,7 @@ export const Login = ({setIsAuthenticated}) => {
     const { register, handleSubmit, control, setValue } = useForm();
     const otpBoxReference = useRef([]);
     const values = useWatch({ control, defaultValue: "user" });
+    const {login } = useAuth();
     var decodedResponse;
 
     console.log(values);
@@ -60,10 +62,12 @@ export const Login = ({setIsAuthenticated}) => {
       }
       const googleVerify = async (credentialResponse) => {
         if (isLogin) {
+            decodedResponse = jwtDecode(credentialResponse?.credential);
           var https = new HttpService();
           const googleVerifiedToken = await https.post('auth/validateGoogleAuthLogin', {token:credentialResponse?.credential}, false, true);
           
           localStorage.setItem('AUTH_TOKEN', googleVerifiedToken?.data?.access_token);
+          login(decodedResponse?.email);
           setIsAuthenticated(true)
         }
         else {
@@ -96,6 +100,7 @@ export const Login = ({setIsAuthenticated}) => {
             // login with Otp and email
             
           var userLogin = await https.post('auth/validateEmailOtpLogin', {email: values?.email, verificationCode: otp.join("")}, false, true);
+          login(values?.email);
           setIsAuthenticated(true);
          // localStorage.setItem('AUTH_TOKEN', 'xy'); //get token and set in Localstorage
         }
@@ -104,11 +109,17 @@ export const Login = ({setIsAuthenticated}) => {
           var tokenData = await https.post('auth/login', {identifier: values?.email, password: values?.password}, false, true);
          localStorage.setItem('AUTH_TOKEN', tokenData?.data?.access_token); //get token and set in Localstorage
 
-        tokenData?.data?.access_token ? setIsAuthenticated(true) : setIsAuthenticated(false);
+         if (tokenData?.data?.access_token) {
+            setIsAuthenticated(true);
+            login(values?.email);
+        } else {
+            setIsAuthenticated(false);
+        }
         }
         else if(isLogin && newPassword){
             
             var changePassword = await https.put('auth/verifyAndResetPassword', {identifier: values?.email, password: values?.password, code: otp.join("")}, false, true);
+            login(values?.email);
             setIsAuthenticated(true);
         }
         else if(registerOtpSubmit){
@@ -119,6 +130,7 @@ export const Login = ({setIsAuthenticated}) => {
           }
           console.log("Validated Data:", filteredData);
           await https.post('auth/verify', {email: values?.email, verificationCode: otp.join("")}, false, true);
+          login(values?.email);
           setIsAuthenticated(true);
         }
         else{

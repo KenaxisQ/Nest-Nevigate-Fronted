@@ -9,11 +9,12 @@ import { useAuth } from '../SignIn/AuthContext';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const[userNavigation,setUserNavigation]=useState(false);
-  const { setIsAuthenticated } = useAuth();
+  const { setIsAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const logoutUser = () =>{
     setIsAuthenticated(false); // Set authentication to false when logout
+    logout();
     navigate('/')
   }
   return (

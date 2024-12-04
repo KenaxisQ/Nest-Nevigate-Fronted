@@ -12,13 +12,12 @@ export default function NameCard({name,designation,avatar,userOptions}) {
       userOptions&&setIsUserOptionsOpen(!isUserOptionsOpen)
     }
     style={{cursor:userOptions?'pointer':'auto'}}>
-    <img src={avatar} alt="" />
+    <img src={avatar} alt="" onMouseOver={()=>setIsUserOptionsOpen(true)}
+      onMouseLeave={()=>setIsUserOptionsOpen(false)} />
     <div className="agentspecs">
     <p className='col_black'>{name}</p>
     <p style={{marginTop: '0px',color:'#292D3270'}}>{designation}&nbsp;
       {userOptions&&<IoIosArrowDropdown
-      // onMouseOver={()=>setIsUserOptionsOpen(true)}
-      // onMouseLeave={()=>setIsUserOptionsOpen(false)}
       style={{cursor:"pointer",position:'relative'}}
       />}</p>
       <div className='userOptions' style={{display:isUserOptionsOpen?"block":'none'}}>

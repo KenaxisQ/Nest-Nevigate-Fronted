@@ -11,7 +11,7 @@ import cardbg from '../../Assets/p1.jpg';
 import ShareIcon from '../../Assets/share.svg'
 import adminRejectIcon from '../../Assets/adminReject.svg';
 import { AdminEditForm } from './EditForm/AdminEditForm';
-const PropertyCard = ({ type, title, location, price, beds, washrooms, area, height,bg,like,share, isEdit =false }) => {
+const PropertyCard = ({ type, title, location, price, beds, washrooms, area, isFeatured=true, height,bg,like,share, isEdit =false }) => {
   const [isPropertyLiked,setIsPropertyLiked]= useState(false)
   const canEditRef = useRef(null);
   const [canEdit, setCanEdit] = useState(false);
@@ -27,7 +27,7 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area, hei
       <div className='propertyTags'>
         <div className='PropertyTagWrapper'>
           <div className='propertyTag rent'>{type}</div>
-          <div className='propertyTag featured'>Featured</div>
+          {isFeatured && <div className='propertyTag featured'>{"Featured"}</div>}
         </div>
       <div className='likeAndShareBtnWrapper'>
       {share&& <div className='propertyTaglike'>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Userdashboard.css';
 import AdminDashboard from "../../Assets/AdminDashboard.svg";
 import AdminDashboardActive from "../../Assets/AdminDashboardActive.svg";
@@ -16,10 +16,28 @@ import Avatar from '../../Assets/agentavtar.jpg'
 import totalPropertiesForSaleIcon from '../../Assets/AdminTotalsale.svg';
 import totalPropertiesForRentIcon from '../../Assets/AdminTotalRent-icon.svg';
 import PropertyCard from '../PropertyCard/PropertyCard';
+import { useAuth } from '../SignIn/AuthContext';
+import { UserSettings } from '../UserSettings/UserSettings';
+import { userjson } from './userjson';
 export default function Userdashboard({properties}) {
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   const [isHamburgHovered, setIsHamburgHovered] = useState(false);
   const [activeMenu, setActiveMenu] = useState('dashboard');
+  const [imageURL, setImageURL] = useState('');
+  const {userData} = useAuth();
+  console.log('userData', userData);
+  useEffect(() => {
+    debugger;
+    if (userjson) {
+      const blob = new Blob([userjson?.data], { type: 'image/jpg' }); // Change 'image/jpeg' based on your image type
+      const url = `data:image/jpeg;base64,${userjson.data}`;
+      setImageURL(url);
+      return () => URL.revokeObjectURL(url);
+    }
+  }, [userjson]);
+  useEffect(() => {
+    
+  }, [])
   const handleSideNavToggle = () => {
 
     setIsSideNavOpen(!isSideNavOpen);
@@ -88,9 +106,10 @@ export default function Userdashboard({properties}) {
         <div className="col" style={{marginLeft:!isSideNavOpen?'70px':'250px', width: activeMenu =='users'?'90%':'auto'}}>
           <div className="adminDashboardHeader">
             <h4 className='adminHeading'>User Dashboard</h4>
-            <NameCard name="priyanka Arul Mohan"  designation="Supervisor" avatar={Avatar} userOptions={true}  />
+            <NameCard name={userData?.name}  designation="Supervisor" avatar={Avatar} userOptions={true}  />
 
           </div>
+
          {activeMenu=='dashboard'&&( <div className="adminDashboardContent">
           <div className="headingAndFilter" style={{margin:'20px 10px'}}>
             <h4>Overview</h4>
@@ -146,6 +165,8 @@ export default function Userdashboard({properties}) {
           </div>
             </div>
           </div>)}
+          {/* {imageURL ? <img src={imageURL} alt="Converted" /> : <p>Loading image...</p>} */}
+
           {activeMenu=='properties'&&(
             <div className="adminPropertiesViewWrapper">
                 <div className="adminPropertiesView">
@@ -180,11 +201,12 @@ export default function Userdashboard({properties}) {
           )}
           {activeMenu=='settings'&&(
             <div className='userProfileSettingsWrapper'>
-              User Profile Settings ....
+              <UserSettings />
             </div>
           )}
         </div>
       </div>
+
     </div>
   );
 };
