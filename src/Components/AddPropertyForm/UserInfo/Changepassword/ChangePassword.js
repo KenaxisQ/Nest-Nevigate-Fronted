@@ -1,3 +1,5 @@
+import { DisplayChangePasswordFields } from "./DisplayChangePasswordFields";
+
 export const ChangePassword = ({ changePasswordPageOpen, setChangePasswordPageOpen, modal1Ref }) => {
     const onChangePassword = (event) => {
         setChangePasswordPageOpen(false);
@@ -13,19 +15,7 @@ export const ChangePassword = ({ changePasswordPageOpen, setChangePasswordPageOp
                         </div>
                         <div class="modal-body">
                             <form>
-                            <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="floatingInput" placeholder="Current Password" />
-                                <label for="floatingPassword">Current Password</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" />
-                                <label for="floatingPassword">Password</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" />
-                                <label for="floatingPassword">Confirm Password</label>
-                                </div>
-                            
+                                <DisplayChangePasswordFields />
                             </form>
                         </div>
                         <div class="modal-footer">

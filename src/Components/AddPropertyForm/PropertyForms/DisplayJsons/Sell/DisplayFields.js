@@ -102,7 +102,7 @@ export const DisplaySellLandFields = [
     //     fieldName: "owner",
     // },
     {
-      title: "Enter Property Status",
+      title: "Select Property Status",
       placeHolder: "Select property Status",
       componetName: "Dropdown",
       required: true,
@@ -121,6 +121,7 @@ export const DisplaySellLandFields = [
       placeHolder: "Enter Primary Contact",
       componetName: "Input",
       fieldName: "primaryContact",
+      required: true
     },
     {
         title: "Enter Secondary Contact",
@@ -229,7 +230,7 @@ export const DisplaySellResidentialFields = [...DisplaySellLandFields,
         type: "number"
     },
   {
-  title: "No of BathRooms",
+  title: "Enter No of BathRooms",
   placeHolder: "No of Bathrooms",
   componetName: "Input",
   fieldName: "noOfBathrooms",
@@ -237,7 +238,7 @@ export const DisplaySellResidentialFields = [...DisplaySellLandFields,
   type: "number"
 },
 {
-    title: "No of BedRooms",
+    title: "Enter No of BedRooms",
     placeHolder: "No of BedRooms",
     componetName: "Input",
     fieldName: "noOfBedrooms",
@@ -245,21 +246,21 @@ export const DisplaySellResidentialFields = [...DisplaySellLandFields,
     type: "number"
   },
 {
-    title: "No of Balconies",
+    title: "Enter No of Balconies",
     placeHolder: "No of Balconies",
     componetName: "Input",
     fieldName: "noOfBalconies",
     type: "number"
 },
 {
-    title: "No of Rooms",
+    title: "Enter No of Rooms",
     placeHolder: "No of Rooms",
     componetName: "Input",
     fieldName: "noOfRooms",
     type: "number"
 },
 {
-  title: "Pooja Rooms",
+  title: "Enter Pooja Rooms",
   placeHolder: "Pooja Rooms",
   componetName: "Input",
   fieldName: "poojaRoom",
