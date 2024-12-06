@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import './Userdashboard.css';
 import AdminDashboard from "../../Assets/AdminDashboard.svg";
 import AdminDashboardActive from "../../Assets/AdminDashboardActive.svg";
@@ -19,6 +19,8 @@ import PropertyCard from '../PropertyCard/PropertyCard';
 import { useAuth } from '../SignIn/AuthContext';
 import { UserSettings } from '../UserSettings/UserSettings';
 import { userjson } from './userjson';
+import { DisplayChangePasswordFields } from '../AddPropertyForm/UserInfo/Changepassword/DisplayChangePasswordFields';
+import { ChangePassword } from '../AddPropertyForm/UserInfo/Changepassword/ChangePassword';
 export default function Userdashboard({properties}) {
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   const [isHamburgHovered, setIsHamburgHovered] = useState(false);
@@ -98,6 +100,14 @@ export default function Userdashboard({properties}) {
               label="Settings"
               onClick={() => handleMenuClick('settings')}
               isActive={activeMenu === 'settings'}
+              isSideNavOpen={isSideNavOpen}
+            />
+            <MenuItem
+              icon={AdminSettings}
+              activeIcon={AdminSettingsActive}
+              label="Change Password"
+              onClick={() => handleMenuClick('Change Password')}
+              isActive={activeMenu === 'Change Password'}
               isSideNavOpen={isSideNavOpen}
             />
          </div>
@@ -202,6 +212,11 @@ export default function Userdashboard({properties}) {
           {activeMenu=='settings'&&(
             <div className='userProfileSettingsWrapper'>
               <UserSettings />
+            </div>
+          )}
+          {activeMenu=='Change Password'&&(
+            <div className='userProfileSettingsWrapper'>
+             <DisplayChangePasswordFields />
             </div>
           )}
         </div>

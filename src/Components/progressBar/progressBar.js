@@ -21,7 +21,6 @@ export default function ProgressBar() {
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {},
-    resolver: yupResolver(validationSchema),
     shouldUnregister: false,
   });
   const values = useWatch({ control });
@@ -101,6 +100,8 @@ export default function ProgressBar() {
         offerType={offerType}
         register={register}
         setValue={setValue}
+        values={values}
+        errors={errors}
         />}
       {step === 2 && <ThirdForm setStep={setStep} register={register} setValue={setValue} onSubmit={onSubmit}/>}
       {/* {step === 3 && <FourthForm setStep={setStep} />} */}

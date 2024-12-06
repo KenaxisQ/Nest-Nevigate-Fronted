@@ -1,0 +1,9 @@
+.userUpdateFieldBoxes{
+    border: 1px solid rgba(233, 233, 233, 1) !important;
+    padding: 0px 20px;
+    border-radius: 6px !important;
+}
+.userUpdateImageBox{
+    border: 1px solid rgba(233, 233, 233, 1) !important;
+    border-radius: 6px !important;
+}

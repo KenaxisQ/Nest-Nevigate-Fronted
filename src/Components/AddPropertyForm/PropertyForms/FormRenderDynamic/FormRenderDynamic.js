@@ -10,8 +10,9 @@ const validationSchema = yupObject().shape({
   // propertyTitle: yupString().required("Required"),
   // bedroom: yupString().required("Required"),
 });
-export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, propertytype }) => {
+export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, propertytype, values, errors }) => {
   // Media query hooks
+  console.log("erros", errors);
   const [amminitiesJson, setAmminitiesJson] = useState([]);
   const [miscelleneousJson, setMiscelleneousJson] = useState([]);
   const [nearByFacilitiesJson, setNearByFacilitiesJson] = useState([]);
@@ -22,6 +23,7 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
   const size = isLarge ? 'lg' : isMedium ? 'md' : isSmall ? 'sm' : '';
   const onSubmit = (evt) => {
     evt.preventDefault();
+    setStep(2);
     // console.log("onSubmit", values);
   };
   useEffect(() => {
@@ -74,7 +76,7 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
     });
   };
   return (
-    <form onSubmit={onSubmit} novalidate className="mb-3 wrapText">
+    <form onSubmit={onSubmit} className="mb-3 wrapText">
       <div className="row">
         <div className="col-lg-4">
           <div className="row">
@@ -92,11 +94,13 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
                   >
                     <label for={prop.title} style={{ fontWeight: 500 }}>
                       {prop.title}
+
                     </label>
                     <select
                       placeholder={prop.placeHolder}
                       id={prop.title}
                       className="form-control-sm"
+                      required= {prop?.required}
                       {...register(prop?.fieldName)}
                       onChange={(event) => {
                         console.log(event);
@@ -109,6 +113,9 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
                       }
                       )}
                     </select>
+                    {values?.[prop?.fieldName] === "" & prop?.required && <span id="error-exampleField" class="error-message">
+                        {prop?.title?.split("Select")[1]} is required.
+                    </span>}
                   </div>
                 );
               } else if (prop.componetName === "Input") {
@@ -128,8 +135,9 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
                     <input
                       placeholder={prop.placeHolder}
                       id={prop.title}
-                      {...register(prop?.fieldName)}
                       type={prop?.type ? prop.type : "text"}
+                      required={prop?.required}
+                      {...register(prop?.fieldName)}
                       className="form-control-sm"
                       style={{
                         border: "1px solid", borderRadius: "4px", height: 0,
@@ -152,8 +160,10 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
 
                       setValue(prop?.fieldName, parsedValue);
                       }}
-
                     />
+                    {values?.[prop?.fieldName] === "" & prop?.required ? (<span id="error-exampleField" class="error-message">
+                        {prop?.title?.split("Enter")[1]} is required.
+                    </span>) : null}
                     {/* {errors?.[prop.fieldName]?.message && (
                         <p
                           className="error"
@@ -296,7 +306,8 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
         <div className="col-lg-8">
           <button
             onClick={() => {
-              setStep(2);
+              console.log(values);
+              
             }}
             className="btn-lg btn-block"
             style={{ backgroundColor: "#1F4B43", color: "white", borderRadius: "6px" }}
