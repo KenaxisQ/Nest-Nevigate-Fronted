@@ -47,11 +47,11 @@ const Signin = ({ setIsAuthenticated, isAuthenticated }) => {
 
   const googleVerify = async (credentialResponse) => {
     if (isLogin) {
+      
       var https = new HttpService();
       const googleVerifiedToken = await https.post('auth/validateGoogleAuthLogin', {token:credentialResponse?.credential});
-      
-      localStorage.setItem('AUTH_TOKEN', googleVerifiedToken?.data?.access_token);
       setIsAuthenticated(true)
+      localStorage.setItem('AUTH_TOKEN', googleVerifiedToken?.data?.access_token);
     }
     else {
       
@@ -82,7 +82,7 @@ const Signin = ({ setIsAuthenticated, isAuthenticated }) => {
     if (isLogin && showOtp && otp.length == 6 && !hidepassword) {
       const userLogin = await https.post('auth/validateEmailOtpLogin', {email: values?.email, verificationCode: otp.join("")});
       setIsAuthenticated(true);
-     // localStorage.setItem('AUTH_TOKEN', 'xy'); //get token and set in Localstorage
+      localStorage.setItem('AUTH_TOKEN', userLogin?.data?.access_token); //get token and set in Localstorage
     }
     else if (isLogin && showOtp && otp.length == 6 && hidepassword) {
       await https.post('auth/forgotPassword', {identifier: values?.email})

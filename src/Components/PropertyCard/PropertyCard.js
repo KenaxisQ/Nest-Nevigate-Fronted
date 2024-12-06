@@ -10,17 +10,44 @@ import './PropertyCard.css';
 import cardbg from '../../Assets/p1.jpg';
 import ShareIcon from '../../Assets/share.svg'
 import adminRejectIcon from '../../Assets/adminReject.svg';
+import { useAuth } from '../SignIn/AuthContext';
 import { AdminEditForm } from './EditForm/AdminEditForm';
-const PropertyCard = ({ type, title, location, price, beds, washrooms, area, isFeatured=true, height,bg,like,share, isEdit =false }) => {
-  const [isPropertyLiked,setIsPropertyLiked]= useState(false)
+import HttpService from '../../Services/http';
+const PropertyCard = ({ type, title, location, price, beds, washrooms, area, isFeatured=true, height,bg,like,share, isEdit =false, props }) => {
+  const {userData, setUserData} = useAuth();
+
+  const [isPropertyLiked,setIsPropertyLiked]= useState()
   const canEditRef = useRef(null);
   const [canEdit, setCanEdit] = useState(false);
+  console.log('isPropertyLiked', isPropertyLiked);
+  console.log('props', props);
+  console.log('userData', userData);
   const onEditForm = (event) => {
     setCanEdit(true);
     console.log('changePassword', event);
     const modal = new window.bootstrap.Modal(canEditRef?.current);
     modal.show();
 }
+  const addPropertyToWishList = async () =>{
+    const userFavourites = userData?.favourites;
+    var favouritesList = userFavourites.split(",").filter(Boolean);
+    const isFavourite = favouritesList.includes(props?.id);
+
+    if (!isFavourite) {
+      // Add props.id to the list if not already present
+      favouritesList.push(props?.id);
+  } else {
+      // Optionally, remove props.id if you want toggle-like behavior
+      favouritesList = favouritesList.filter(fav => fav !== props?.id);
+  }
+    const updatedFavourites = favouritesList.join(",");
+    userData.favourites = updatedFavourites;
+    setUserData(userData)
+    const https = new HttpService();
+    console.log('updatedFavourites', userFavourites)
+    await https.put(`user/addToFavourites/${userData?.id}`, userFavourites, true)
+
+  }
   return (
     <>
     <div className="card propertylistingcard" style={{height:height,background:bg?`url(${bg})`:`url(${cardbg})`}}>
@@ -36,7 +63,7 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area, isF
       </div>}
        {like&& <div className='propertyTaglike'>
         <div className=' wish'
-        ><img src={isPropertyLiked?wishheart:wish} alt= '' onClick={()=>setIsPropertyLiked(!isPropertyLiked)} /></div>
+        ><img src={isPropertyLiked?wishheart:wish} alt= '' onClick={()=>{setIsPropertyLiked(!isPropertyLiked); addPropertyToWishList()}} /></div>
       </div>}
       {isEdit&&<div className="propertyAccept">
          <img src={adminRejectIcon} onClick={onEditForm} alt='Edit Form'/>
@@ -50,7 +77,7 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area, isF
           <img alt="location" src={locationVector} /> &nbsp;{location}
         </div>
         <div className='priceAmenity'>
-          <div className='propertyPrice'>{price}</div>
+          <div className='propertyPrice'>{`Rs ${price}`}</div>
           <div className='amenities'>
             <div className='amenity'>
               <img src={bedImage} alt='beds' />

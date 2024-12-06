@@ -113,9 +113,9 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
                       }
                       )}
                     </select>
-                    {values?.[prop?.fieldName] === "" & prop?.required && <span id="error-exampleField" class="error-message">
+                    {values?.[prop?.fieldName] === "" & prop?.required ? <span id="error-exampleField" class="error-message">
                         {prop?.title?.split("Select")[1]} is required.
-                    </span>}
+                    </span> : null}
                   </div>
                 );
               } else if (prop.componetName === "Input") {

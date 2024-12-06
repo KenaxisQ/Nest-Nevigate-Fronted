@@ -2,29 +2,25 @@
 const joinURL = (baseURL, url) => { return `${baseURL}/${url}`; }
 class HttpService {
     constructor() {
-        // this.domain = 'http://localhost:8010/nestNavigator-0.0.1-SNAPSHOT'
-        this.domain = 'http://localhost:8080'
+         this.domain = 'http://103.127.31.155:8080/NN'
+        // this.domain = 'http://localhost:8080'
     }
     request(url, method = 'POST', data = null, formflag, islogin=false) {
-        if (formflag)
-            var headers = {}
-
-        else {
             // const token = localStorage.getItem('authToken');
+            // if(sessionStorage.getItem('AUTH_TOKEN'))
             var headers = {
                 'Accept': 'application/json',
                 'Content-type': 'application/json',
                 // 'Authorization': `Bearer ${token}`
             }
-        }
         url = joinURL(this.domain, url);
         const options = {
             headers,
             method,
             redirect: 'follow',
         }
-        if (localStorage.getItem('AUTH_TOKEN') && !islogin) {
-            headers.Authorization=`Bearer ${localStorage.getItem('AUTH_TOKEN')}`
+        if (!url.includes('auth')) {
+            headers.Authorization=`Bearer ${sessionStorage.getItem('AUTH_TOKEN')}`
         }
         if (data && formflag) {
             options.body = data;
@@ -32,7 +28,6 @@ class HttpService {
         else if (data)
             options.body=JSON.stringify({...data});       
          return fetch(url, options)
-
     }
     async post(url, data, formflag = false, islogin = false) {
         const method = 'POST';
@@ -47,9 +42,9 @@ class HttpService {
         const res = await this.request(url, method);
         return await res.json();
     }
-    async put(url, data) {
+    async put(url, data,formflag=false) {
         const method = 'PUT';
-        const res = await this.request(url, method, data);
+        const res = await this.request(url, method, data, formflag);
         return await res.json();
     }
     async delete(url, formflag = false) {

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React, { useState, useEffect, useRef } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { GoogleLogin } from "@react-oauth/google";
@@ -9,20 +10,30 @@ import SlideSwitch from "./SlideSwitch";
 import HttpService from "../../Services/http";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { OtpModal } from "./OtpModal";
+import { useAuth } from "./AuthContext";
 export const Login = ({ setIsAuthenticated }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [otpVerification, setOtpVerification] = useState(false);
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
+  const [formData, setFormData] = useState(null);
   const [googleData, setGoogleData] = useState(null);
   const [resendOtp, setResendOtp] = useState(false);
   const [timer, setTimer] = useState(300);
+  const [emailVerified, setEmailVerified] = useState(false);
   const [userAction, setUserAction] = useState({
     action: "Login",
     through: "Identifier/Password",
   });
-
+ const {login} = useAuth();
+  const modal1Ref = useRef(null);
+    const openOtpModal = (values) => {
+        
+        setFormData(values);
+        const modal = new window.bootstrap.Modal(modal1Ref?.current);
+        modal.show();
+    }
   const [resetPassword, setResetPassword] = useState(false);
   const [isRemembered, setIsRemembered] = useState(false);
 
@@ -120,9 +131,49 @@ export const Login = ({ setIsAuthenticated }) => {
   };
 
   const handleGoogleSuccess = (credentialResponse) => {
-    const decodedResponse = jwtDecode(credentialResponse?.credential);
-    setGoogleData(decodedResponse);
-    setIsLogin(false);
+    if(userAction.action === "Login" )
+    {
+        toast
+        .promise(
+            apicb.post('auth/validateGoogleAuthLogin', {token: credentialResponse?.credential}),
+          {
+            pending: "Logging In...",
+          }
+        ).then((response) => {
+            if (response.success) {
+              toast.success(response.message, {
+                position: "top-center",
+              });
+              setUserAction({
+                action: "Login",
+                through: "Google",
+              });
+              sessionStorage.setItem("AUTH_TOKEN", response?.data?.access_token);
+              setEmailVerified(true);
+              setIsAuthenticated(true);
+            } else {
+              toast.error(response.message, {
+                position: "top-center",
+              });
+            }
+            console.log(response);
+          });
+        console.log('decodedres', credentialResponse);
+
+        // const tokenFromApi = apicb.post('auth/validateGoogleAuthLogin', {token: credentialResponse?.credential});
+        // if(tokenFromApi?.success)
+        // {
+            
+        // }
+    } else{
+        const decodedResponse = jwtDecode(credentialResponse?.credential);
+        console.log('decodedres', decodedResponse);
+        return decodedResponse;
+        // setGoogleData(decodedResponse);
+        // setIsLogin(false);  
+        // console.log('googleData', googleData )
+    }
+    
   };
 
   const startTimer = () => {
@@ -132,7 +183,12 @@ export const Login = ({ setIsAuthenticated }) => {
 
   useEffect(() => {
     let interval;
+    // const localStorageToken = localStorage.getItem('AUTH_TOKEN');
+    // const decodedtoken = jwtDecode(localStorageToken);
+    // // login(decodedtoken?.sub);
+    console.log("ghfjdksjhg")
     if (timer > 0) {
+    
       interval = setInterval(() => {
         setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
@@ -178,6 +234,31 @@ export const Login = ({ setIsAuthenticated }) => {
     }
   };
 
+  const verifyOtp = () => {
+    toast
+        .promise(
+            apicb.post('auth/validateUserEmail', {identifier: formData?.email, verificationCode: otp}),
+          {
+            pending: "Sending OTP for Verification...",
+          }
+        ).then((response) => {
+            if (response.success) {
+              toast.success(response.message, {
+                position: "top-center",
+              });
+              setUserAction({
+                action: "Register",
+                through: "userDetails",
+              });
+              setEmailVerified(true);
+            } else {
+              toast.error(response.message, {
+                position: "top-center",
+              });
+            }
+            console.log(response);
+          });
+  }
   const handleSubmit = async (values, { setSubmitting }) => {
     console.log(values);
     console.log(userAction);
@@ -208,12 +289,7 @@ export const Login = ({ setIsAuthenticated }) => {
             toast.success(response.message, {
               position: "top-center",
             });
-            setUserAction({
-              action: "Verify",
-              through: "OTP",
-            });
-            setOtpSent(true);
-            startTimer();
+            setIsAuthenticated(true);
           } else {
             toast.error(response.message, {
               position: "top-center",
@@ -472,10 +548,41 @@ export const Login = ({ setIsAuthenticated }) => {
     else return "Register";
   };
 
-  useEffect(() => {
-    console.log(userAction);
-    console.log("OTP SENT: ", otpSent);
-  }, [userAction, setOtpSent]);
+  const sendOtpToUser = (values) => {
+    toast
+        .promise(
+        apicb.post('auth/verify', {identifier: values?.email}),
+          {
+            pending: "Sending OTP for Verification...",
+          }
+        )
+        .then((response) => {
+          if (response.success) {
+            toast.success(response.message, {
+              position: "top-center",
+            });
+            openOtpModal(values);
+            setUserAction({
+              action: "Verify",
+              through: "OTP",
+            });
+            setOtpSent(true);
+            startTimer();
+          } else {
+            toast.error(response.message, {
+              position: "top-center",
+            });
+          }
+          console.log(response);
+        });
+    // const isVerified = await apicb.post('auth/verify', {identifier: formData?.email});
+    // isVerified?.success && 
+
+  }
+//   useEffect(() => {
+//     console.log(userAction);
+//     console.log("OTP SENT: ", otpSent);
+//   }, [userAction, setOtpSent]);
 
   return (
     <div
@@ -546,6 +653,7 @@ export const Login = ({ setIsAuthenticated }) => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className="w-100 rounded-3"
+                    value={values.name}
                   />
                   {touched.name && errors.name && (
                     <div className="form-text text-danger error px-2">
@@ -569,7 +677,8 @@ export const Login = ({ setIsAuthenticated }) => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className="w-100 rounded-3"
-                    disabled={otpSent && userAction.action === "Verify"}
+                    disabled={(otpSent && userAction.action === "Verify") || emailVerified}
+                    value={values.email}
                   />
                   {touched.email && errors.email && (
                     <div className="form-text text-danger error px-2">
@@ -577,6 +686,9 @@ export const Login = ({ setIsAuthenticated }) => {
                     </div>
                   )}
                 </div>
+              )}
+              {((userAction.action === "Register") && (!errors.email) && (!emailVerified) && (values?.email)) && (
+                <a href="#" onClick={() => {sendOtpToUser(values);}} className="d-block text-end">Verify</a>
               )}
               {userAction.action === "Register" && (
                 <div className="inputboxWrapper d-block text-start">
@@ -759,7 +871,15 @@ export const Login = ({ setIsAuthenticated }) => {
                 <div className="googleSignin d-flex justify-content-center py-2 mt-1">
                   <GoogleLogin
                     className="w-100"
-                    onSuccess={handleGoogleSuccess}
+                    onSuccess={(credentialResponse) => {
+                        const response = handleGoogleSuccess(credentialResponse);
+                        console.log('respomse', response);
+                        setFieldValue(
+                            'name',`${response?.given_name} ${response?.family_name}`
+                          );
+                        setFieldValue('email',response?.email
+                        )
+                    }}
                     onError={() => {
                       console.log("Login Failed");
                     }}
@@ -802,6 +922,7 @@ export const Login = ({ setIsAuthenticated }) => {
             </Form>
           )}
         </Formik>
+        <OtpModal modal1Ref={modal1Ref} handleOtpComplete={handleOtpComplete} email={formData?.email} verifyOtp={verifyOtp}/>
         <ToastContainer />
       </div>
     </div>

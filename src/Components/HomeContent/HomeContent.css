@@ -50,7 +50,7 @@
     background: transparent;
     padding: 0px 10px
   }
-  input[type=text] {
+  .homeContentBody input[type=text] {
     border-radius: 20px;
     border: 1px solid #cccccc;
     color:black;
@@ -70,7 +70,7 @@
     display: flex;
     justify-content: flex-end;
 }
-  input[type=text]:focus{
+  .homeContentBody input[type=text]:focus{
     border: none;
     outline: none;
 

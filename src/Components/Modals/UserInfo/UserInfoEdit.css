@@ -6,7 +6,7 @@
 #phone,#properties_listed,#properties_listing_limit,#email{
     padding: 10px 20px;
 }
-.modal input{
+.userInfoEdit .modal input{
 color:black;
  font-family: Roboto;
 font-size: 12px;

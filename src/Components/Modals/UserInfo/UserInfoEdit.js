@@ -54,7 +54,7 @@ export default function UserInfoEdit({ showModal, setShowModal, userData, handle
 
   return (
     <div
-      className={`modal fade ${showModal ? 'show' : ''}`}
+      className={`userInfoEdit modal fade ${showModal ? 'show' : ''}`}
       id="staticBackdrop"
       data-bs-backdrop="static"
       data-bs-keyboard="false"

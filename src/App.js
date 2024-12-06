@@ -7,6 +7,7 @@ import { LoginPage } from './Components/Login/LoginPage';
 import Signin from './Components/SignIn/SignIn';
 import { Login } from './Components/SignIn/Login';
 import { useAuth, AuthProvider } from './Components/SignIn/AuthContext';
+import VideoComponent from './Components/VideoComponent/VideoComponent';
 function App() {
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to top of the page
@@ -24,7 +25,8 @@ function Main(){
   return(
 <div className="App">
           {!isAuthenticated && <Login setIsAuthenticated={setIsAuthenticated}/>}
-            {isAuthenticated && <Landing/>}
+            {/* {isAuthenticated && <Landing/>} */}
+            {isAuthenticated && <VideoComponent />}
       {/* <Landing/> */}
     </div>)
 }

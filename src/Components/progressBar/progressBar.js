@@ -7,6 +7,7 @@ import { FirstForm } from '../AddPropertyForm/PropertyForms/FirstForm';
 import { SecondForm } from '../AddPropertyForm/PropertyForms/SecondForm';
 import { ThirdForm } from '../AddPropertyForm/PropertyForms/ThirdForm';
 import HttpService from '../../Services/http';
+import { useAuth } from '../SignIn/AuthContext';
 const validationSchema = yupObject().shape({
   // propertyTitle: yupString().required("Required"),
   // bedroom: yupString().required("Required"),
@@ -23,6 +24,7 @@ export default function ProgressBar() {
     defaultValues: {},
     shouldUnregister: false,
   });
+  const {userData} = useAuth();
   const values = useWatch({ control });
   const formContext = {
     control,
@@ -80,7 +82,7 @@ export default function ProgressBar() {
     console.log("onSubmit", values);
     var https = new HttpService();
     var {selectedAmenities, ...without} = values;
-    const propertyPosted = await https.post('property/create?userId=c438627e-2f30-46dc-b507-86558b47019c', {...without});
+    const propertyPosted = await https.post(`property/create?userId=${userData?.id}`, {...without});
   };
   return (
      <div className="">

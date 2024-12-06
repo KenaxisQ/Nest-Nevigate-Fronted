@@ -29,7 +29,7 @@ export default function Userdashboard({properties}) {
   const {userData} = useAuth();
   console.log('userData', userData);
   useEffect(() => {
-    debugger;
+    
     if (userjson) {
       const blob = new Blob([userjson?.data], { type: 'image/jpg' }); // Change 'image/jpeg' based on your image type
       const url = `data:image/jpeg;base64,${userjson.data}`;
