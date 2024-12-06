@@ -133,32 +133,32 @@ export const Login = ({ setIsAuthenticated }) => {
   const handleGoogleSuccess = (credentialResponse) => {
     if(userAction.action === "Login" )
     {
-        toast
-        .promise(
-            apicb.post('auth/validateGoogleAuthLogin', {token: credentialResponse?.credential}),
-          {
-            pending: "Logging In...",
-          }
-        ).then((response) => {
-            if (response.success) {
-              toast.success(response.message, {
-                position: "top-center",
-              });
-              setUserAction({
-                action: "Login",
-                through: "Google",
-              });
-              sessionStorage.setItem("AUTH_TOKEN", response?.data?.access_token);
-              setEmailVerified(true);
-              setIsAuthenticated(true);
-            } else {
-              toast.error(response.message, {
-                position: "top-center",
-              });
-            }
-            console.log(response);
-          });
-        console.log('decodedres', credentialResponse);
+        // toast
+        // .promise(
+        //     apicb.post('auth/validateGoogleAuthLogin', {token: credentialResponse?.credential}),
+        //   {
+        //     pending: "Logging In...",
+        //   }
+        // ).then((response) => {
+        //     if (response.success) {
+        //       toast.success(response.message, {
+        //         position: "top-center",
+        //       });
+        //       setUserAction({
+        //         action: "Login",
+        //         through: "Google",
+        //       });
+        //       sessionStorage.setItem("AUTH_TOKEN", response?.data?.access_token);
+        //       setEmailVerified(true);
+        //     } else {
+        //       toast.error(response.message, {
+        //         position: "top-center",
+        //       });
+        //     }
+        //     console.log(response);
+        //   });
+        // console.log('decodedres', credentialResponse);
+        setIsAuthenticated(true);
 
         // const tokenFromApi = apicb.post('auth/validateGoogleAuthLogin', {token: credentialResponse?.credential});
         // if(tokenFromApi?.success)
@@ -217,20 +217,22 @@ export const Login = ({ setIsAuthenticated }) => {
             : toast.error(response.message);
         });
     } else if (userAction.action === "Login") {
-      apicb
-        .post(
-          "auth/loginWithOTP",
-          {
-            identifier: values?.emailOrPhone,
-          },
-          false,
-          true
-        )
-        .then((response) => {
-          response.success
-            ? toast.success(response.message)
-            : toast.error(response.message);
-        });
+                      setIsAuthenticated(true);
+
+    //   apicb
+    //     .post(
+    //       "auth/loginWithOTP",
+    //       {
+    //         identifier: values?.emailOrPhone,
+    //       },
+    //       false,
+    //       true
+    //     )
+    //     .then((response) => {
+    //       response.success
+    //         ? toast.success(response.message)
+    //         : toast.error(response.message);
+    //     });
     }
   };
 
@@ -301,46 +303,48 @@ export const Login = ({ setIsAuthenticated }) => {
       userAction.action === "Login" &&
       userAction.through === "Identifier/Password"
     ) {
-      toast
-        .promise(
-          apicb.post(
-            "auth/login",
-            { identifier: values?.emailOrPhone, password: values?.password },
-            false,
-            true
-          ),
-          { pending: "Logging in...", position: "top-center" }
-        )
-        .then((response) => {
-          if (response.success) {
-            toast.success(response.message, {
-              position: "top-center",
-            });
-            localStorage.removeItem("AUTH_TOKEN");
-            localStorage.removeItem("AUTH_TOKEN");
-            isRemembered
-              ? localStorage.setItem("AUTH_TOKEN", response.data.access_token)
-              : sessionStorage.setItem(
-                  "AUTH_TOKEN",
-                  response.data.access_token
-                );
-            isRemembered
-              ? localStorage.setItem(
-                  "REFRESH_TOKEN",
-                  response.data.refresh_token
-                )
-              : sessionStorage.setItem(
-                  "REFRESH_TOKEN",
-                  response.data.refresh_token
-                );
-            setIsAuthenticated(true);
-          } else {
-            toast.error("Username/password Incorrect", {
-              position: "top-center",
-            });
-            console.log(response.message);
-          }
-        });
+    //   toast
+    //     .promise(
+    //       apicb.post(
+    //         "auth/login",
+    //         { identifier: values?.emailOrPhone, password: values?.password },
+    //         false,
+    //         true
+    //       ),
+    //       { pending: "Logging in...", position: "top-center" }
+    //     )
+    //     .then((response) => {
+    //       if (response.success) {
+    //         toast.success(response.message, {
+    //           position: "top-center",
+    //         });
+    //         localStorage.removeItem("AUTH_TOKEN");
+    //         localStorage.removeItem("AUTH_TOKEN");
+    //         isRemembered
+    //           ? localStorage.setItem("AUTH_TOKEN", response.data.access_token)
+    //           : sessionStorage.setItem(
+    //               "AUTH_TOKEN",
+    //               response.data.access_token
+    //             );
+    //         isRemembered
+    //           ? localStorage.setItem(
+    //               "REFRESH_TOKEN",
+    //               response.data.refresh_token
+    //             )
+    //           : sessionStorage.setItem(
+    //               "REFRESH_TOKEN",
+    //               response.data.refresh_token
+    //             );
+    //         setIsAuthenticated(true);
+    //       } else {
+    //         toast.error("Username/password Incorrect", {
+    //           position: "top-center",
+    //         });
+    //         console.log(response.message);
+    //       }
+    //     });
+    setIsAuthenticated(true);
+
     } else if (
       userAction.action === "Login" &&
       userAction.through === "OTP" &&

@@ -27,7 +27,7 @@ class HttpService {
         }
         else if (data)
             options.body=JSON.stringify({...data});       
-         return fetch(url, options)
+        return fetch(url, options)
     }
     async post(url, data, formflag = false, islogin = false) {
         const method = 'POST';
