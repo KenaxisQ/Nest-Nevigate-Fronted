@@ -1,0 +1,74 @@
+.loginRegisterWrapper{
+    background-image: url("../../Assets/login_bg.png");
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size:cover;
+    padding: 10px;
+    font-family: Lexend;
+    min-height: fit-content;
+
+}
+.formContainer{
+    text-align: center;
+    padding :10px 30px 20px 30px;
+    background-color: white;
+    width: 470px;
+    border-radius: 20px;
+    overflow-y: auto;
+    min-height: fit-content;
+
+}
+.formContainer h4{
+    font-size: 27px;
+    font-weight: 600;
+    line-height: 45px;
+}
+.formContainer .logosection a,.forgotPassword{
+font-family: Roboto;
+font-size: 12px;
+font-weight: 400;
+line-height: 16px;
+text-decoration: none;
+cursor: pointer;
+}
+.formContainer .logosection h6{
+font-size: 20px;
+font-weight: 600;
+line-height: 28px;
+}
+.inputboxWrapper input{
+    background: rgba(242, 242, 242, 1);
+    padding: 5px 15px;
+    border-radius: 10px;
+    height: 48px;
+    border: 0.5px solid rgba(229, 229, 229, 1);
+
+}
+.inputboxWrapper input[type ="email"]{
+    color: black !important;
+}
+.inputboxWrapper #login_inputBox::placeholder, .inputboxWrapper #login_inputBox::-ms-input-placeholder{
+font-size: 15px;
+font-weight: 400;
+line-height: 20px;
+text-align: left;
+color: rgba(128, 128, 128, 1) !important;
+font-style:normal !important;
+font-size: 15px !important;
+font-weight: 400;
+line-height: 20px;
+}
+.googleSignin{
+    display: flex;
+    justify-content: center;
+}
+.googleSigninAndSignup .signuplink{
+    text-decoration: none;
+    font-size: 12px;
+    cursor: pointer;
+
+}
+.resendOTP{
+    text-decoration: none;
+    cursor: pointer;
+}

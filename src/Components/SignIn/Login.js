@@ -1,432 +1,809 @@
-import React, { useState, useEffect, useRef } from 'react';
-import image from '../../Assets/nn_bg3.svg'
-import { useForm, useWatch } from "react-hook-form";
-import { GoogleLogin } from '@react-oauth/google';
-import './Login.css';
-import HttpService from '../../Services/http';
-import { jwtDecode } from 'jwt-decode';
-import { useAuth } from './AuthContext';
-export const Login = ({setIsAuthenticated}) => {
-    const [otp, setOtp] = useState(new Array(6).fill(""));
-    const [showOtp, setShowOtp] = useState(false);
-    const [otpError, setOtpError] = useState(null);
-    const [isLogin, setIsLogin] = useState(true);
-    const [newPassword, setNewPassword] = useState(false);
-    const [registerOtp, setRegisterOtp] = useState(false);
-    const { register, handleSubmit, control, setValue } = useForm();
-    const otpBoxReference = useRef([]);
-    const values = useWatch({ control, defaultValue: "user" });
-    const {login } = useAuth();
-    var decodedResponse;
+import React, { useState, useEffect } from "react";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import { GoogleLogin } from "@react-oauth/google";
+import {jwtDecode} from "jwt-decode";
+import "./LoginRegister.css";
+import OtpInput from "./OtpInput";
+import SlideSwitch from "./SlideSwitch";
+import HttpService from "../../Services/http";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+export const Login = ({ setIsAuthenticated }) => {
+  const [isLogin, setIsLogin] = useState(true);
+  const [otpVerification, setOtpVerification] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [googleData, setGoogleData] = useState(null);
+  const [resendOtp, setResendOtp] = useState(false);
+  const [timer, setTimer] = useState(300);
+  const [userAction, setUserAction] = useState({
+    action: "Login",
+    through: "Identifier/Password",
+  });
+
+  const [resetPassword, setResetPassword] = useState(false);
+  const [isRemembered, setIsRemembered] = useState(false);
+
+  const handleToggle = (checked) => {
+    setIsRemembered(checked);
+    console.log(checked);
+  };
+
+  const apicb = new HttpService();
+  const initialValues = {
+    emailOrPhone: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+    name: "",
+    profilePicture: null,
+    otp: otp,
+    termsAccepted: false,
+  };
+
+  const getRequiredFields = () => {
+    if (userAction.action === "Register") {
+      return ["name", "email", "password", "confirmPassword", "phone"];
+    } else if (
+      userAction.action === "Register" &&
+      otpSent &&
+      userAction.through !== "OTP"
+    ) {
+      return ["email"];
+    } else if (
+      userAction.action === "Login" &&
+      userAction.through === "Identifier/Password"
+    ) {
+      return ["emailOrPhone", "password"];
+    } else if (
+      userAction.action === "Login" &&
+      userAction.through === "OTP" &&
+      !otpSent
+    ) {
+      return ["emailOrPhone"];
+    } else if (
+      userAction.action === "Login" &&
+      userAction.through === "OTP" &&
+      otpSent
+    ) {
+      return ["emailOrPhone"];
+    } else if (userAction.action === "ForgotPassword" && !otpSent) {
+      return ["emailOrPhone"];
+    } else if (userAction.action === "ForgotPassword" && otpSent) {
+      return ["email", "password", "confirmPassword"];
+    } else {
+      return ["name", "email", "password", "confirmPassword", "phone"];
+    }
+  };
+
+  const validationSchema = Yup.object().shape(
+    Object.entries({
+      emailOrPhone: Yup.string().test(
+        "email-or-phone",
+        "Invalid email or phone number format",
+        (value) => {
+          if (!value) return true;
+          const isEmail = Yup.string().email().isValidSync(value);
+          const isPhoneNumber = /^\d{10}$/.test(value);
+          return isEmail || isPhoneNumber;
+        }
+      ),
+      email: Yup.string().email("Invalid email format"),
+      phone: Yup.string().matches(/^\d{10}$/, "Must be a valid phone number"),
+      password: Yup.string().min(6, "Password must be at least 6 characters"),
+      confirmPassword: Yup.string().oneOf(
+        [Yup.ref("password")],
+        "Passwords must match"
+      ),
+      name: Yup.string(),
+      termsAccepted:
+        userAction.action === "Register"
+          ? Yup.boolean().oneOf([true], "You must accept the terms")
+          : Yup.boolean(),
+    }).reduce((acc, [field, validation]) => {
+      const requiredFields = getRequiredFields();
+      if (requiredFields.includes(field)) {
+        acc[field] = validation.required(`${field} is required`);
+      } else {
+        acc[field] = validation;
+      }
+      return acc;
+    }, {})
+  );
+
+  const handleOtpComplete = (otpValue) => {
+    setOtp(otpValue);
+    console.log(otpValue);
+  };
+
+  const handleGoogleSuccess = (credentialResponse) => {
+    const decodedResponse = jwtDecode(credentialResponse?.credential);
+    setGoogleData(decodedResponse);
+    setIsLogin(false);
+  };
+
+  const startTimer = () => {
+    setTimer(300);
+    setResendOtp(false);
+  };
+
+  useEffect(() => {
+    let interval;
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    } else {
+      setResendOtp(true);
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [timer]);
+
+  const resendOTP = (values) => {
+    if (userAction.action === "ForgotPassword") {
+      apicb
+        .post(
+          "auth/forgotPassword",
+          {
+            identifier: values?.emailOrPhone,
+          },
+          false,
+          true
+        )
+        .then((response) => {
+          response.success
+            ? toast.success(response.message)
+            : toast.error(response.message);
+        });
+    } else if (userAction.action === "Login") {
+      apicb
+        .post(
+          "auth/loginWithOTP",
+          {
+            identifier: values?.emailOrPhone,
+          },
+          false,
+          true
+        )
+        .then((response) => {
+          response.success
+            ? toast.success(response.message)
+            : toast.error(response.message);
+        });
+    }
+  };
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    console.log(values);
+    console.log(userAction);
+    if (
+      userAction.action === "Register" &&
+      userAction.through === "userDetails"
+    ) {
+      toast
+        .promise(
+          apicb.post(
+            "auth/register",
+            {
+              email: values?.email,
+              password: values?.password,
+              phone: values?.phone,
+              name: values?.name,
+              profilePicture: ":)",
+            },
+            false,
+            true
+          ),
+          {
+            pending: "Sending OTP for Verification...",
+          }
+        )
+        .then((response) => {
+          if (response.success) {
+            toast.success(response.message, {
+              position: "top-center",
+            });
+            setUserAction({
+              action: "Verify",
+              through: "OTP",
+            });
+            setOtpSent(true);
+            startTimer();
+          } else {
+            toast.error(response.message, {
+              position: "top-center",
+            });
+          }
+          console.log(response);
+        });
+    } else if (
+      userAction.action === "Login" &&
+      userAction.through === "Identifier/Password"
+    ) {
+      toast
+        .promise(
+          apicb.post(
+            "auth/login",
+            { identifier: values?.emailOrPhone, password: values?.password },
+            false,
+            true
+          ),
+          { pending: "Logging in...", position: "top-center" }
+        )
+        .then((response) => {
+          if (response.success) {
+            toast.success(response.message, {
+              position: "top-center",
+            });
+            localStorage.removeItem("AUTH_TOKEN");
+            localStorage.removeItem("AUTH_TOKEN");
+            isRemembered
+              ? localStorage.setItem("AUTH_TOKEN", response.data.access_token)
+              : sessionStorage.setItem(
+                  "AUTH_TOKEN",
+                  response.data.access_token
+                );
+            isRemembered
+              ? localStorage.setItem(
+                  "REFRESH_TOKEN",
+                  response.data.refresh_token
+                )
+              : sessionStorage.setItem(
+                  "REFRESH_TOKEN",
+                  response.data.refresh_token
+                );
+            setIsAuthenticated(true);
+          } else {
+            toast.error("Username/password Incorrect", {
+              position: "top-center",
+            });
+            console.log(response.message);
+          }
+        });
+    } else if (
+      userAction.action === "Login" &&
+      userAction.through === "OTP" &&
+      otpSent
+    ) {
+      if (otp.length < 6) {
+        toast.error("Please Enter Valid 6-DIGIT OTP");
+        return;
+      }
+      toast
+        .promise(
+          apicb.post(
+            "auth/validateEmailOtpLogin",
+            {
+              identifier: values?.emailOrPhone,
+              verificationCode: otp,
+            },
+            false,
+            true
+          ),
+          {
+            pending: "Validating User..",
+          }
+        )
+        .then((data) => {
+          if (data.success) {
+            toast.success(data.message, {
+              position: "top-center",
+            });
+            setIsAuthenticated(true);
+            sessionStorage.setItem("AUTH_TOKEN", data.data.access_token);
+            sessionStorage.setItem("REFRESH_TOKEN", data.data.refresh_token);
+          } else {
+            toast.error(data.message + " ,Enter Valid OTP!!! ", {
+              position: "top-center",
+            });
+          }
+          console.log(data);
+        });
+    } else if (userAction.action === "Login" && userAction.through === "OTP") {
+      toast
+        .promise(
+          apicb.post("auth/loginWithOTP", {
+            identifier: values?.emailOrPhone,
+          }),
+          {
+            pending: "Sending OTP ...",
+          }
+        )
+        .then((data) => {
+          if (data.success) {
+            setOtpSent(true);
+            toast.success(data.message, {
+              position: "top-center",
+            });
+            setOtpSent(true);
+            startTimer();
+          } else {
+            toast.error("Please Enter Valid Username, " + data.message, {
+              position: "top-center",
+            });
+          }
+        });
+    } else if (
+      userAction.action === "ForgotPassword" &&
+      userAction.through === "OTP" &&
+      !otpSent
+    ) {
+      toast
+        .promise(
+          apicb.post(
+            "auth/forgotPassword",
+            {
+              identifier: values?.emailOrPhone,
+            },
+            false,
+            true
+          ),
+          {
+            pending: "Sending OTP...",
+          }
+        )
+        .then((data) => {
+          if (data.success) {
+            toast.success(data.message, {
+              position: "top-center",
+            });
+            setOtpSent(true);
+            startTimer();
+          } else
+            toast.error(
+              "Please Enter Valid User Identifier(Email/Phone), " +
+                data.message,
+              {
+                position: "top-center",
+              }
+            );
+        });
+    } else if (
+      userAction.action === "ForgotPassword" &&
+      userAction.through === "OTP" &&
+      otpSent
+    ) {
+      if (otp.length < 6) {
+        toast.error("Please Enter Valid 6-DIGIT OTP");
+        return;
+      }
+      toast
+        .promise(
+          apicb.post(
+            "auth/verifyAndResetPassword",
+            {
+              identifier: values?.emailOrPhone,
+              code: otp,
+              password: values?.password,
+            },
+            false,
+            true
+          ),
+          {
+            pending: "Resetting Password..",
+          }
+        )
+        .then((data) => {
+          if (data.success) {
+            toast.success(data.message, {
+              position: "top-center",
+            });
+            setOtpSent(false);
+            setUserAction({
+              action: "Login",
+              through: "Identifier/Password",
+            });
+          } else
+            toast.error(
+              "Please Enter Valid User Identifier(Email/Phone), " +
+                data.message,
+              {
+                position: "top-center",
+              }
+            );
+        });
+      console.log("Password Reset Successful!");
+    }
+    else if(userAction.action==="Verify"&&userAction.through==="OTP"&&otpSent){
+        if (otp.length < 6) {
+          toast.error("Please Enter Valid 6-DIGIT OTP");
+          return;
+        }
+        toast
+          .promise(
+            apicb.post(
+              "auth/verify",
+              {
+                identifier: values?.email,
+                verificationCode: otp,
+              },
+              false,
+              true
+            ),
+            {
+              pending: "User Verification in Progress..",
+            }
+          )
+          .then((data) => {
+            if (data.success) {
+              toast.success(data.message, {
+                position: "top-center",
+              });
+              setOtpSent(false);
+              setUserAction({
+                action: "Login",
+                through: "Identifier/Password",
+              });
+            } else
+              toast.error(
+                "Please Enter Valid OTP, " +
+                  data.message,
+                {
+                  position: "top-center",
+                }
+              );
+          });
+    }
 
     console.log(values);
-    function handleChange(value, index) {
-        let newArr = [...otp];
-        newArr[index] = value;
-        setOtp(newArr);
-    
-        if (value && index < 6 - 1) {
-          otpBoxReference.current[index + 1].focus()
-        }
-      }
-    
-      function handleBackspaceAndEnter(e, index) {
-        if (e.key === "Backspace" && !e.target.value && index > 0) {
-          otpBoxReference.current[index - 1].focus()
-        }
-        if (e.key === "Enter" && e.target.value && index < 6 - 1) {
-          otpBoxReference.current[index + 1].focus()
-        }
-      }
-    
-      useEffect(() => {
-        if (otp.join("") !== "" && otp.join("") !== "212121") {
-          setOtpError("❌ Wrong OTP Please Check Again")
-        } else {
-          setOtpError(null)
-        }
-      }, [otp]);
+    setSubmitting(false);
+  };
 
-    const sendOtp =async (type, isForgot) =>{
-        
-        var https = new HttpService();
-        if(values?.email && type === 'SendOtp' && !isForgot && !newPassword){
-            setShowOtp(true)
-        const sendOtp = await https.post('auth/loginWithOTP', {email: values?.email}, false, true);
-        }
-        else if(values?.email && type === 'Forgot Password' && isForgot || newPassword){ //check this condition newPassword if anything wrong remove newpassword here and above
-            setShowOtp(true)
-            setNewPassword(true);
-            const sendOtp = await https.post('auth/forgotPassword', {identifier: values?.email}, false, true);
-            }
-      }
-      const googleVerify = async (credentialResponse) => {
-        if (isLogin) {
-            decodedResponse = jwtDecode(credentialResponse?.credential);
-          var https = new HttpService();
-          const googleVerifiedToken = await https.post('auth/validateGoogleAuthLogin', {token:credentialResponse?.credential}, false, true);
-          
-          localStorage.setItem('AUTH_TOKEN', googleVerifiedToken?.data?.access_token);
-          login(decodedResponse?.email);
-          setIsAuthenticated(true)
-        }
-        else {
-          
-          decodedResponse = jwtDecode(credentialResponse?.credential);
-          console.log(decodedResponse);
-          // Set values to the form inputs dynamically
-          const googleData = {
-            email: decodedResponse?.email,
-            firstname: decodedResponse?.given_name,
-            lastname: decodedResponse?.family_name,
-            username: decodedResponse?.name,
-          };
-    
-          setFormValues(googleData);
-        }
-      }
-      const setFormValues = (googleData) => {
-        for (const [key, value] of Object.entries(googleData)) {
-          setValue(key, value || ""); // Set value to form fields, defaulting to empty if the value is undefined or null
-        }
-      };
-      const onSubmit = async (data, registerOtpSubmit=false) => {
-          
-        const { confirmPassword, rememberMe, termsAccepted, ...filteredData } = data;
-        const { role, username, firstname, lastname, ...loginFilteredData } = filteredData;
-        loginFilteredData.name = firstname + lastname;
-        var https = new HttpService();
-        if (isLogin && showOtp && otp.length == 6 && !newPassword) {
-            // login with Otp and email
-            
-          var userLogin = await https.post('auth/validateEmailOtpLogin', {email: values?.email, verificationCode: otp.join("")}, false, true);
-          login(values?.email);
-          setIsAuthenticated(true);
-         // localStorage.setItem('AUTH_TOKEN', 'xy'); //get token and set in Localstorage
-        }
-        else if (isLogin && !showOtp) {
-        // login with username and password
-          var tokenData = await https.post('auth/login', {identifier: values?.email, password: values?.password}, false, true);
-         localStorage.setItem('AUTH_TOKEN', tokenData?.data?.access_token); //get token and set in Localstorage
-
-         if (tokenData?.data?.access_token) {
-            setIsAuthenticated(true);
-            login(values?.email);
-        } else {
-            setIsAuthenticated(false);
-        }
-        }
-        else if(isLogin && newPassword){
-            
-            var changePassword = await https.put('auth/verifyAndResetPassword', {identifier: values?.email, password: values?.password, code: otp.join("")}, false, true);
-            login(values?.email);
-            setIsAuthenticated(true);
-        }
-        else if(registerOtpSubmit){
-          console.log("Form Submitted:", filteredData);
-          if (!isLogin && data.password !== data.confirmPassword) {
-            alert("Passwords do not match!");
-            return;
-          }
-          console.log("Validated Data:", filteredData);
-          await https.post('auth/verify', {email: values?.email, verificationCode: otp.join("")}, false, true);
-          login(values?.email);
-          setIsAuthenticated(true);
-        }
-        else{
-            await https.post('auth/register', loginFilteredData, false, true);
-            setRegisterOtp(true);
-            //setIsAuthenticated(true);
-        }
-    
-      };
-    return (
-        <section className="vh-100" style={{ backgroundColor: "#9A616D;" }}>
-            <div className="container py-5 h-100">
-                <div className="row d-flex justify-content-center align-items-center h-100">
-                    <div className="col col-xl-12">
-                        <div className="card" style={{ borderRadius: "1rem;" }}>
-                            <div className="row g-0">
-                                <div className="col-md-8 col-lg-8 d-none d-md-block">
-                                    <img src={image}
-                                        alt="login form" className="img-fluid"
-                                        style={{
-                                            // borderRadius: "1rem 0 0 1rem", 
-                                            objectFit: "cover",
-                                            width: "100%",
-                                            height: "100%"
-                                        }}
-                                    />
-                                </div>
-                                {/* Login Page */}
-                                {isLogin && (<div className="col-md-4 col-lg-4 d-flex align-items-center">
-                                    <div className="card-body p-4 p-lg-5 text-black">
-                                        <form onSubmit={handleSubmit((data) => onSubmit(data, false))}>
-                                            <div className="d-flex align-items-center mb-3 pb-1">
-                                                <i className="fas fa-cubes fa-2x me-3" style={{ color: "#ff6219;" }}></i>
-                                                <span className="h1 fw-bold mb-0">Nest Navigate</span>
-                                            </div>
-                                            <h5 className="mb-3 pb-3" style={{}}>Sign into your account</h5>
-
-                                            <div data-mdb-input-init className="form-outline">
-                                                <div className='d-flex text-start flex-column'>
-                                                    <label>Email</label>
-                                                    <input
-                                                        className="formcontrols logins rounded-0 is-invalid"
-                                                        type="text"
-                                                        placeholder="Enter your email"
-                                                        style={{ color: "#BDC3C7", border: "solid 1px", lineHeight: "0px"
-                                                         }}
-                                                         required
-                                                         {...register("email", { required: true })} />
-                                                </div>
-                                            </div>
-                                            <div className='d-flex justify-content-between flex-row'>
-                                                <p onClick={() => {sendOtp('SendOtp', false)}}>{"Send Otp"}</p>
-                                                {showOtp && <p onClick={() => {setShowOtp(false); setNewPassword(false)}} className='text-end'>{"Login with password"}</p>}
-                                            </div>
-                                            {showOtp && (
-                                                <div className='d-flex justify-content-around mb-4'>
-                                                
-                                                {otp.map((digit, index) => (
-                                                    <input key={index} value={digit} maxLength={1}
-                                                    onChange={(e) => handleChange(e.target.value, index)}
-                                                    onKeyUp={(e) => handleBackspaceAndEnter(e, index)}
-                                                    ref={(reference) => (otpBoxReference.current[index] = reference)}
-                                                    className={`border w-5 h-auto text-black p-3 rounded-md block focus:border-2 focus:outline-none appearance-none box-border otpCss`}
-                                                    style={{ width: '10px' }} />
-                                                ))}
-                                                </div>
-                                            )}
-                                            {!showOtp &&(<><div data-mdb-input-init className="form-outline">
-                                                <div className='d-flex text-start flex-column'>
-                                                    <label>Password</label>
-                                                    <input
-                                                        className="formcontrols logins rounded-0"
-                                                        type="password"
-                                                        placeholder="Enter your password"
-                                                        style={{ color: "#BDC3C7", border: "solid 1px", lineHeight: "0px" }}
-                                                        {...register("password", { required: true })} />
-                                                </div>
-                                            </div><div className="forgotPassword small text-muted">
-                                                    <p onClick={() => {sendOtp('Forgot Password', true)}}>Forgot Password?</p>
-                                                </div></>)}
-                                            {
-                                                newPassword && (
-                                                    <><div data-mdb-input-init className="form-outline">
-                                                <div className='d-flex text-start flex-column'>
-                                                    <label>New Password</label>
-                                                    <input
-                                                        className="formcontrols logins rounded-0"
-                                                        type="password"
-                                                        placeholder="Enter your New password"
-                                                        style={{ color: "#BDC3C7", border: "solid 1px", lineHeight: "0px" }}
-                                                        {...register("password", { required: true })} />
-                                                </div>
-                                            </div></>
-                                                )
-                                            }
-                                            <div className="pt-1 mb-4">
-                                                <button className="PropertyNextButton" type="submit">{!newPassword ? "Login" : "Forgot Password"} </button>
-                                            </div>
-                                            <h5 className='text-center'>{true ? "or Sign In with" : "Register with"}</h5>
-                                            {(
-                                                <div >
-                                                    <GoogleLogin
-                                                        onSuccess={credentialResponse => {
-                                                            googleVerify(credentialResponse);
-                                                            console.log(credentialResponse);
-                                                        }}
-                                                        onError={() => {
-                                                            console.log('Login Failed');
-                                                        }}
-
-                                                    />
-                                                </div>
-                                            )}
-                                            <div className="mb-5 pb-lg-2" style={{ color: "#393f81;" }}>
-                                                Don't have an account?
-                                                <p className="registerHere"
-                                                    onClick={() => setIsLogin(false)}
-                                                >Register here</p>
-                                            </div>
-                                        </form>
-
-                                    </div>
-                                </div>)}
-                                {/* Register Page */}
-                                {!isLogin && !registerOtp && (<div className="col-md-4 col-lg-4 d-flex align-items-center">
-                                    <div className="card-body p-4 p-lg-5 text-black">
-                                        <form onSubmit={handleSubmit((data) => onSubmit(data, false))}>
-                                            <div className="d-flex align-items-center mb-3 pb-1">
-                                                <i className="fas fa-cubes fa-2x me-3" style={{ color: "#ff6219;" }}></i>
-                                                <span className="h1 fw-bold mb-0">Nest Navigate</span>
-                                            </div>
-                                            <h5 className="mb-3 pb-3" style={{}}>Register into your account</h5>
-
-                                            <div>
-                                            <div className='d-flex text-start flex-column'>
-
-                                                <label>Account Type</label>
-                                                <select
-                                                    className="formcontrols logins rounded-0"
-                                                    {...register("role")}
-                                                >
-                                                    <option value="USER">USER</option>
-                                                    <option value="AGENT">AGENT</option>
-                                                </select>
-                                            </div>
-                                            </div>
-                                            <div>
-                                                <div className='d-flex text-start flex-column'>
-                                                    <label>First Name</label>
-                                                    <input
-                                                        className="formcontrols logins rounded-0"
-                                                        type="text"
-                                                        placeholder="Enter your First Name"
-                                                        style={{ color: "#BDC3C7", border: "solid 1px", lineHeight: "0px" }}
-                                                        {...register("firstname", { required: true })}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div data-mdb-input-init className="form-outline">
-                                                <div className='d-flex text-start flex-column'>
-                                                    <label>Last Name</label>
-                                                    <input
-                                                        className="formcontrols logins rounded-0"
-                                                        type="text"
-                                                        placeholder="Enter your Last Name"
-                                                        style={{ color: "#BDC3C7", border: "solid 1px", lineHeight: "0px" }}
-                                                        {...register("lastname", { required: true })} />
-                                                </div>
-                                            </div>
-                                            <div data-mdb-input-init className="form-outline">
-                                                <div className='d-flex text-start flex-column'>
-                                                    <label>Phone Number</label>
-                                                    <input
-                                                        className="formcontrols logins rounded-0"
-                                                        type="text"
-                                                        placeholder="Enter your Phone Number"
-                                                        style={{ color: "#BDC3C7", border: "solid 1px", lineHeight: "0px" }}
-                                                        {...register("phone", { required: true })} />
-                                                </div>
-                                            </div>
-                                            <div data-mdb-input-init className="form-outline">
-                                                <div className='d-flex text-start flex-column'>
-                                                    <label>Username</label>
-                                                    <input
-                                                        className="formcontrols logins rounded-0"
-                                                        type="text"
-                                                        placeholder="Enter your Username"
-                                                        style={{ color: "#BDC3C7", border: "solid 1px", lineHeight: "0px" }}
-                                                        {...register("username", { required: true })}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div data-mdb-input-init className="form-outline">
-                                                <div className='d-flex text-start flex-column'>
-                                                    <label>Email:</label>
-                                                    <input
-                                                        className="formcontrols logins rounded-0"
-                                                        type="email"
-                                                        placeholder="Enter your email"
-                                                        style={{ color: "#BDC3C7", border: "solid 1px", lineHeight: "0px" }}
-                                                        value={decodedResponse?.email}
-                                                        {...register("email", { required: true })} 
-                                                    />
-                                                </div>
-                                            </div>
-                                            
-                                            <div data-mdb-input-init className="form-outline">
-                                                <div className='d-flex text-start flex-column'>
-                                                    <label>Password</label>
-                                                    <input
-                                                        className="formcontrols logins rounded-0"
-                                                        type="password"
-                                                        placeholder="Enter your password"
-                                                        style={{ color: "#BDC3C7", border: "solid 1px", lineHeight: "0px" }}
-                                                    {...register("password", { required: true })} 
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div data-mdb-input-init className="form-outline">
-                                                <div className='d-flex text-start flex-column'>
-                                                    <label>Confirm Password</label>
-                                                    <input
-                                                        className="formcontrols logins rounded-0"
-                                                        type="password"
-                                                        placeholder="Enter your password"
-                                                        style={{ color: "#BDC3C7", border: "solid 1px", lineHeight: "0px" }}
-                                                    {...register("confirmPassword", { required: true })} 
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="pt-1 mb-2">
-                                                <button className="PropertyNextButton" type="submit">Register</button>
-                                            </div>
-                                            <div className="text-start">
-                                            <input
-                                                className="me-2"
-                                                type="checkbox"
-                                                {...register("termsAccepted", { required: true })} 
-                                                />
-                                            <label className="form-check-label">
-                                                Accept Terms and Conditions
-                                            </label>
-                                            </div>
-                                            <h5 className='text-center'>{false ? "or Sign In with" : "Register with"}</h5>
-                                            {(
-                                                <div >
-                                                    <GoogleLogin
-                                                        onSuccess={credentialResponse => {
-                                                            googleVerify(credentialResponse);
-                                                            console.log(credentialResponse);
-                                                        }}
-                                                        onError={() => {
-                                                            console.log('Login Failed');
-                                                        }}
-
-                                                    />
-                                                </div>
-                                            )}
-                                            <div className="mb-5 pb-lg-2" style={{ color: "#393f81;" }}>
-                                                Already have an account?
-                                                <p className="registerHere"
-                                                    onClick={() => setIsLogin(true)}
-                                                >Login</p>
-                                            </div>
-                                        </form>
-
-                                    </div>
-                                </div>)}
-                                {registerOtp && (
-                                    <div className="col-md-4 col-lg-4 d-flex align-items-center">
-                                    <div className="card-body p-4 p-lg-5 text-black">
-                                    <form onSubmit={handleSubmit((data) => onSubmit(data, true))}>
-                                    <h3 className='d-flex text-start mb-4'>Enter OTP</h3>
-                                     <div className='d-flex justify-content-around mb-4'>
-                                     {otp.map((digit, index) => (
-                                         <input key={index} value={digit} maxLength={1}
-                                         onChange={(e) => handleChange(e.target.value, index)}
-                                         onKeyUp={(e) => handleBackspaceAndEnter(e, index)}
-                                         ref={(reference) => (otpBoxReference.current[index] = reference)}
-                                         className={`border w-5 h-auto text-black p-3 rounded-md block focus:border-2 focus:outline-none appearance-none box-border otpCss`}
-                                         style={{ width: '10px' }} />
-                                     ))}
-                                     </div>
-                                     <button type="submit" className="PropertyNextButton">
-                                        Submit OTP
-                                    </button>
-                                     </form>
-                                     </div>
-                                     </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </section>
+  const getSubmitButtonText = () => {
+    if (
+      (userAction.action === "Login" || 
+        userAction.action === "ForgotPassword") &&
+      userAction.through === "OTP" &&
+      otpSent
     )
-}
+      return "Verify OTP";
+    else if (
+      (userAction.action === "Login" || "ForgotPassword") &&
+      userAction.through === "OTP"
+    )
+      return "Send OTP";
+    else if (userAction.action === "Login") return "Login";
+    else if (userAction.action === "Verify") return "Verify and Register";
+    else return "Register";
+  };
+
+  useEffect(() => {
+    console.log(userAction);
+    console.log("OTP SENT: ", otpSent);
+  }, [userAction, setOtpSent]);
+
+  return (
+    <div
+      className={`loginRegisterWrapper d-flex justify-content-${
+        userAction.action === "Login" || userAction.action === "ForgotPassword"
+          ? "end"
+          : "start"
+      }`}
+    >
+      <div className="formContainer">
+        <div className="logosection">
+          <h4>Nest Navigate</h4>
+          {(userAction.action === "Login" ||
+            userAction.action === "ForgotPassword") && (
+            <div className="welcome_msg d-flex justify-content-between p-3 mt-10">
+              <h6>Nice to see you again 👋</h6>
+              <a
+                onClick={() => {
+                  setUserAction({
+                    action: "Login",
+                    through:
+                      userAction.through === "OTP"
+                        ? "Identifier/Password"
+                        : "OTP",
+                  });
+                  setOtpSent(false);
+                }}
+                className="py-2"
+                style={{ cursor: "pointer" }}
+              >
+                {userAction.through === "OTP"
+                  ? "Login with Password"
+                  : "Login with OTP"}
+              </a>
+            </div>
+          )}
+          {userAction.action === "Register" && (
+            <h6 className="welcome_register">Welcome to Nest Navigate</h6>
+          )}
+        </div>
+
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit} // Formik will handle form submission
+        >
+          {({
+            handleChange,
+            handleBlur,
+            touched,
+            errors,
+            isSubmitting,
+            setFieldValue,
+            values,
+          }) => (
+            <Form>
+              {userAction.action === "Register" && (
+                <div className="inputboxWrapper d-block text-start">
+                  <label htmlFor="name" className="p-2">
+                    Name
+                  </label>
+                  <input
+                    style={{ fontStyle: "normal" }}
+                    type="text"
+                    name="name"
+                    id="name"
+                    placeholder="Name"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-100 rounded-3"
+                  />
+                  {touched.name && errors.name && (
+                    <div className="form-text text-danger error px-2">
+                      {errors.name}
+                    </div>
+                  )}
+                </div>
+              )}
+              {(userAction.action === "Register" ||
+                userAction.action === "Verify") && (
+                <div className="inputboxWrapper d-block text-start">
+                  <label htmlFor="email" className="p-2">
+                    Email
+                  </label>
+                  <input
+                    style={{ fontStyle: "normal" }}
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="Email"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-100 rounded-3"
+                    disabled={otpSent && userAction.action === "Verify"}
+                  />
+                  {touched.email && errors.email && (
+                    <div className="form-text text-danger error px-2">
+                      {errors.email}
+                    </div>
+                  )}
+                </div>
+              )}
+              {userAction.action === "Register" && (
+                <div className="inputboxWrapper d-block text-start">
+                  <label htmlFor="phone" className="p-2">
+                    Phone Number
+                  </label>
+                  <input
+                    style={{ fontStyle: "normal" }}
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    placeholder="Phonenumber"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-100 rounded-3"
+                  />
+                  {touched.phone && errors.phone && (
+                    <div className="form-text text-danger error px-2">
+                      {errors.phone}
+                    </div>
+                  )}
+                </div>
+              )}
+              {(userAction.action === "Login" ||
+                userAction.action === "ForgotPassword") && (
+                <div className="inputboxWrapper d-block text-start">
+                  <label htmlFor="emailOrPhone" className="p-2">
+                    Username
+                  </label>
+                  <input
+                    style={{ fontStyle: "normal" }}
+                    type="text"
+                    name="emailOrPhone"
+                    id="emailOrPhone"
+                    placeholder="Email or Phonenumber"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-100"
+                    disabled={otpSent}
+                  />
+                  {touched.emailOrPhone && errors.emailOrPhone && (
+                    <div className="form-text text-danger error px-2">
+                      {errors.emailOrPhone}
+                    </div>
+                  )}
+                </div>
+              )}
+              {((userAction.action === "Login" &&
+                userAction.through === "Identifier/Password") ||
+                userAction.action === "Register" ||
+                (userAction.action === "ForgotPassword" && otpSent)) && (
+                <div className="inputboxWrapper d-block text-start">
+                  <label htmlFor="password" className="p-2">
+                    Password
+                  </label>
+                  <input
+                    style={{ fontStyle: "normal" }}
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="Password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-100"
+                  />
+                  {touched.password && errors.password && (
+                    <div className="form-text text-danger error px-2">
+                      {errors.password}
+                    </div>
+                  )}
+                </div>
+              )}
+              {(userAction.action === "Register" ||
+                (userAction.action === "ForgotPassword" && otpSent)) && (
+                <div className="inputboxWrapper d-block text-start">
+                  <label htmlFor="confirmPassword" className="p-2">
+                    Confirm Password
+                  </label>
+                  <input
+                    style={{ fontStyle: "normal" }}
+                    type="password"
+                    name="confirmPassword"
+                    id="confirmPassword"
+                    placeholder="Confirm password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="w-100"
+                  />
+                  {touched.confirmPassword && errors.confirmPassword && (
+                    <div className="form-text text-danger error px-2">
+                      {errors.confirmPassword}
+                    </div>
+                  )}
+                </div>
+              )}
+              {userAction.action === "Register" && (
+                <div className="termsAdConditions text-start pt-2 px-2">
+                  <input
+                    type="checkbox"
+                    name="termsAccepted"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />{" "}
+                  Accept terms & Conditions
+                </div>
+              )}
+              {touched.termsAccepted && errors.termsAccepted && (
+                <div className="form-text text-danger error px-2">
+                  {errors.termsAccepted}
+                </div>
+              )}
+              {(userAction.action === "Verify" ||
+                ((userAction.action === "Login" ||
+                  userAction.action === "ForgotPassword") &&
+                  userAction.through === "OTP" &&
+                  otpSent)) && (
+                <div className="inputboxWrapper d-block text-start mt-3">
+                  <label htmlFor="otp" className="p-2">
+                    OTP
+                  </label>
+                  <OtpInput onComplete={handleOtpComplete} />
+                  {!resendOtp ? (
+                    <div className="resendOTPWrapper d-flex justify-content-end">
+                      <span className="resendOTPTimer">
+                        Resend available in {Math.floor(timer / 60)}:
+                        {timer % 60 < 10 ? `0${timer % 60}` : timer % 60}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="resendOTPWrapper d-flex justify-content-end">
+                      <a
+                        className="resendOTP"
+                        onClick={() => {
+                          resendOTP(values);
+                          startTimer();
+                        }}
+                        style={{ cursor: "pointer" }}
+                      >
+                        Resend OTP
+                      </a>
+                    </div>
+                  )}
+                  {touched.otp && errors.otp && (
+                    <div className="form-text text-danger error px-2">
+                      {errors.otp}
+                    </div>
+                  )}
+                </div>
+              )}
+              {userAction.action === "Login" &&
+                userAction.through === "Identifier/Password" && (
+                  <div className="loginHelpers d-flex justify-content-between align-items-end">
+                    <SlideSwitch onToggle={handleToggle} />
+                    <a
+                      className="forgotPassword"
+                      onClick={() => {
+                        setUserAction({
+                          action: "ForgotPassword",
+                          through: "OTP",
+                        });
+                        setFieldValue("password", "");
+                        setFieldValue("confirmPassword", "");
+                      }}
+                    >
+                      Forgot Password?
+                    </a>
+                  </div>
+                )}
+              <button
+                className="text-white rounded mt-3 bg_1F4B43 w-100"
+                type="submit"
+                disabled={isSubmitting}
+                onClick={() => {
+                  console.log(errors);
+                }}
+              >
+                {getSubmitButtonText()}
+              </button>
+              <div className="googleSigninAndSignup">
+                <div className="googleSignin d-flex justify-content-center py-2 mt-1">
+                  <GoogleLogin
+                    className="w-100"
+                    onSuccess={handleGoogleSuccess}
+                    onError={() => {
+                      console.log("Login Failed");
+                    }}
+                  />
+                </div>
+                {(userAction.action === "Login" ||
+                  userAction.action === "ForgotPassword") && (
+                  <p>
+                    Don't have an account?{" "}
+                    <a
+                      className="signuplink"
+                      onClick={() =>
+                        setUserAction({
+                          action: "Register",
+                          through: "userDetails",
+                        })
+                      }
+                    >
+                      Signup now
+                    </a>
+                  </p>
+                )}
+                {userAction.action === "Register" && (
+                  <p>
+                    Already have an account?{" "}
+                    <a
+                      className="signuplink"
+                      onClick={() =>
+                        setUserAction({
+                          action: "Login",
+                          through: "Identifier/Password",
+                        })
+                      }
+                    >
+                      SignIn now
+                    </a>
+                  </p>
+                )}
+              </div>
+            </Form>
+          )}
+        </Formik>
+        <ToastContainer />
+      </div>
+    </div>
+  );
+};
