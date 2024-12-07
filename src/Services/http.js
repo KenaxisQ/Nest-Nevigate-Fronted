@@ -2,8 +2,9 @@
 const joinURL = (baseURL, url) => { return `${baseURL}/${url}`; }
 class HttpService {
     constructor() {
-         this.domain = 'http://103.127.31.155:8080/NN'
+         // this.domain = 'http://103.127.31.155:8080/NN'
         // this.domain = 'http://localhost:8080'
+        this.domain = 'http://localhost:8080/NN'
     }
     request(url, method = 'POST', data = null, formflag, islogin=false) {
             // const token = localStorage.getItem('authToken');
