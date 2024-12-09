@@ -150,15 +150,15 @@ export const Login = ({ setIsAuthenticated }) => {
               });
               sessionStorage.setItem("AUTH_TOKEN", response?.data?.access_token);
               setEmailVerified(true);
-              setIsAuthenticated(true);
-            } else {
-              toast.error(response.message, {
-                position: "top-center",
-              });
-            }
-            console.log(response);
-          });
-        console.log('decodedres', credentialResponse);
+        setIsAuthenticated(true);
+    } else {
+        toast.error(response.message, {
+          position: "top-center",
+        });
+      }
+      console.log(response);
+    });
+  console.log('decodedres', credentialResponse);
 
         // const tokenFromApi = apicb.post('auth/validateGoogleAuthLogin', {token: credentialResponse?.credential});
         // if(tokenFromApi?.success)
@@ -217,7 +217,7 @@ export const Login = ({ setIsAuthenticated }) => {
             : toast.error(response.message);
         });
     } else if (userAction.action === "Login") {
-      apicb
+                     apicb
         .post(
           "auth/loginWithOTP",
           {
@@ -370,9 +370,9 @@ export const Login = ({ setIsAuthenticated }) => {
             toast.success(data.message, {
               position: "top-center",
             });
-            setIsAuthenticated(true);
             sessionStorage.setItem("AUTH_TOKEN", data.data.access_token);
             sessionStorage.setItem("REFRESH_TOKEN", data.data.refresh_token);
+            setIsAuthenticated(true);
           } else {
             toast.error(data.message + " ,Enter Valid OTP!!! ", {
               position: "top-center",
@@ -562,10 +562,10 @@ export const Login = ({ setIsAuthenticated }) => {
               position: "top-center",
             });
             openOtpModal(values);
-            setUserAction({
-              action: "Verify",
-              through: "OTP",
-            });
+            // setUserAction({
+            //   action: "Verify",
+            //   through: "OTP",
+            // });
             setOtpSent(true);
             startTimer();
           } else {
@@ -687,9 +687,9 @@ export const Login = ({ setIsAuthenticated }) => {
                   )}
                 </div>
               )}
-              {((userAction.action === "Register") && (!errors.email) && (!emailVerified) && (values?.email)) && (
+              {((userAction.action === "Register") && (!errors.email) && (!emailVerified) && (values?.email)) ? (
                 <a href="#" onClick={() => {sendOtpToUser(values);}} className="d-block text-end">Verify</a>
-              )}
+            ) : null} 
               {userAction.action === "Register" && (
                 <div className="inputboxWrapper d-block text-start">
                   <label htmlFor="phone" className="p-2">
@@ -806,10 +806,9 @@ export const Login = ({ setIsAuthenticated }) => {
                   userAction.through === "OTP" &&
                   otpSent)) && (
                 <div className="inputboxWrapper d-block text-start mt-3">
-                  <label htmlFor="otp" className="p-2">
-                    OTP
-                  </label>
-                  <OtpInput onComplete={handleOtpComplete} />
+                  {userAction.action !== "Verify" && (<><label htmlFor="otp" className="p-2">
+                                      OTP
+                                  </label><OtpInput onComplete={handleOtpComplete} /></>)}
                   {!resendOtp ? (
                     <div className="resendOTPWrapper d-flex justify-content-end">
                       <span className="resendOTPTimer">
