@@ -8,6 +8,7 @@ import { SecondForm } from '../AddPropertyForm/PropertyForms/SecondForm';
 import { ThirdForm } from '../AddPropertyForm/PropertyForms/ThirdForm';
 import HttpService from '../../Services/http';
 import { useAuth } from '../SignIn/AuthContext';
+import { ToastContainer, toast } from "react-toastify";
 const validationSchema = yupObject().shape({
   // propertyTitle: yupString().required("Required"),
   // bedroom: yupString().required("Required"),
@@ -17,7 +18,7 @@ export default function ProgressBar() {
   const [step, setStep] = useState(0);
   const [propertyType, setPropertyType] = useState("Residential");
   const [offerType, setOfferType] = useState("Sell");
-  
+  const [errors, setErrors] = useState({});
   const { control, formState, setValue, trigger, register } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -30,7 +31,6 @@ export default function ProgressBar() {
     control,
     formState,
   };
-  const { errors } = formContext?.formState;
   useEffect(() => {
     trigger();
   }, []);
@@ -79,11 +79,41 @@ export default function ProgressBar() {
     if(values?.propertyCategory === 'PG'){
       values['facing'] = 'NOT_SPECIFIED'
     }
-    console.log("onSubmit", values);
+    const filteredValues = Object.fromEntries(
+      Object.entries(values).filter(([key]) => !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(key))
+    );
     var https = new HttpService();
     var {selectedAmenities, ...without} = values;
-    const propertyPosted = await https.post(`property/create?userId=${userData?.id}`, {...without});
+    console.log('selectedAmenities', selectedAmenities)
+    if(Object.keys(errors).length === 0){
+      const propertyPosted = await 
+      toast
+      .promise(
+        https.post(`property/create?userId=${userData?.id}`, {...filteredValues}),
+        {
+          pending: "Posting Property...",
+        }
+      ).then((response) => {
+          if (response.success) {
+            toast.success(response.message, {
+              position: "top-center",
+            });
+          } else {
+            toast.error(response.message, {
+              position: "top-center",
+            });
+          }
+          console.log(response);
+        });
+    }
+    else{
+      
+      toast.error('Some Fields need to be filled in second step', {
+        position: "top-center",
+      });
+    }
   };
+  console.log('ProgressBarErros', errors);
   return (
      <div className="">
       <div className="progressBarWrapper">
@@ -94,7 +124,7 @@ export default function ProgressBar() {
       </ul>
       </div>
       {step === 0 && <FirstForm setStep={setStep} setOfferType={setOfferType} setPropertyType = {setPropertyType}
-       propertyType={propertyType} offerType ={offerType}/>}
+       propertyType={propertyType} offerType ={offerType} setValue ={setValue}/>}
       {step === 1 && 
       <SecondForm 
         setStep={setStep} 
@@ -104,9 +134,11 @@ export default function ProgressBar() {
         setValue={setValue}
         values={values}
         errors={errors}
+        setErrors={setErrors}
         />}
       {step === 2 && <ThirdForm setStep={setStep} register={register} setValue={setValue} onSubmit={onSubmit}/>}
       {/* {step === 3 && <FourthForm setStep={setStep} />} */}
+      <ToastContainer />
     </div>
     )
 }

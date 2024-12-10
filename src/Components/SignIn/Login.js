@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { GoogleLogin } from "@react-oauth/google";
@@ -13,8 +14,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { OtpModal } from "./OtpModal";
 import { useAuth } from "./AuthContext";
 export const Login = ({ setIsAuthenticated }) => {
+  // useEffect(() => {
+  //   sessionStorage.clear();
+  //   localStorage.clear();
+  // }, []);
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [otpVerification, setOtpVerification] = useState(false);
+  const [userIdentifier, setUserIdentifier] = useState(null);
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [formData, setFormData] = useState(null);
@@ -29,14 +36,13 @@ export const Login = ({ setIsAuthenticated }) => {
  const {login} = useAuth();
   const modal1Ref = useRef(null);
     const openOtpModal = (values) => {
-        
+
         setFormData(values);
         const modal = new window.bootstrap.Modal(modal1Ref?.current);
         modal.show();
     }
   const [resetPassword, setResetPassword] = useState(false);
   const [isRemembered, setIsRemembered] = useState(false);
-
   const handleToggle = (checked) => {
     setIsRemembered(checked);
     console.log(checked);
@@ -84,7 +90,7 @@ export const Login = ({ setIsAuthenticated }) => {
     } else if (userAction.action === "ForgotPassword" && !otpSent) {
       return ["emailOrPhone"];
     } else if (userAction.action === "ForgotPassword" && otpSent) {
-      return ["email", "password", "confirmPassword"];
+      return ["emailOrPhone", "password", "confirmPassword"];
     } else {
       return ["name", "email", "password", "confirmPassword", "phone"];
     }
@@ -131,6 +137,7 @@ export const Login = ({ setIsAuthenticated }) => {
   };
 
   const handleGoogleSuccess = (credentialResponse) => {
+    
     if(userAction.action === "Login" )
     {
         toast
@@ -148,9 +155,13 @@ export const Login = ({ setIsAuthenticated }) => {
                 action: "Login",
                 through: "Google",
               });
+              localStorage.setItem("AUTH_TOKEN", response?.data?.access_token);
               sessionStorage.setItem("AUTH_TOKEN", response?.data?.access_token);
+              const decodedtoken = jwtDecode(credentialResponse?.credential);
+              setUserIdentifier(decodedtoken?.email);
+              login(decodedtoken?.email, () => navigate('/'),isRemembered, response?.data?.access_token);
               setEmailVerified(true);
-        setIsAuthenticated(true);
+              // setIsAuthenticated(true);
     } else {
         toast.error(response.message, {
           position: "top-center",
@@ -163,17 +174,17 @@ export const Login = ({ setIsAuthenticated }) => {
         // const tokenFromApi = apicb.post('auth/validateGoogleAuthLogin', {token: credentialResponse?.credential});
         // if(tokenFromApi?.success)
         // {
-            
+
         // }
     } else{
         const decodedResponse = jwtDecode(credentialResponse?.credential);
         console.log('decodedres', decodedResponse);
         return decodedResponse;
         // setGoogleData(decodedResponse);
-        // setIsLogin(false);  
+        // setIsLogin(false);
         // console.log('googleData', googleData )
     }
-    
+
   };
 
   const startTimer = () => {
@@ -183,12 +194,7 @@ export const Login = ({ setIsAuthenticated }) => {
 
   useEffect(() => {
     let interval;
-    // const localStorageToken = localStorage.getItem('AUTH_TOKEN');
-    // const decodedtoken = jwtDecode(localStorageToken);
-    // // login(decodedtoken?.sub);
-    console.log("ghfjdksjhg")
-    if (timer > 0) {
-    
+      if (timer > 0) {
       interval = setInterval(() => {
         setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
@@ -262,6 +268,8 @@ export const Login = ({ setIsAuthenticated }) => {
   const handleSubmit = async (values, { setSubmitting }) => {
     console.log(values);
     console.log(userAction);
+    
+    setUserIdentifier(values?.emailOrPhone);
     if (
       userAction.action === "Register" &&
       userAction.through === "userDetails"
@@ -316,8 +324,8 @@ export const Login = ({ setIsAuthenticated }) => {
             toast.success(response.message, {
               position: "top-center",
             });
-            localStorage.removeItem("AUTH_TOKEN");
-            localStorage.removeItem("AUTH_TOKEN");
+            // localStorage.removeItem("AUTH_TOKEN");
+            // localStorage.removeItem("AUTH_TOKEN");
             isRemembered
               ? localStorage.setItem("AUTH_TOKEN", response.data.access_token)
               : sessionStorage.setItem(
@@ -333,7 +341,9 @@ export const Login = ({ setIsAuthenticated }) => {
                   "REFRESH_TOKEN",
                   response.data.refresh_token
                 );
-            setIsAuthenticated(true);
+                login(values?.emailOrPhone, () => navigate('/'), isRemembered, response?.data?.access_token);
+
+            // setIsAuthenticated(true);
           } else {
             toast.error("Username/password Incorrect", {
               position: "top-center",
@@ -372,7 +382,8 @@ export const Login = ({ setIsAuthenticated }) => {
             });
             sessionStorage.setItem("AUTH_TOKEN", data.data.access_token);
             sessionStorage.setItem("REFRESH_TOKEN", data.data.refresh_token);
-            setIsAuthenticated(true);
+            login(values?.emailOrPhone, () => navigate('/'), isRemembered, data?.data?.access_token);
+            // setIsAuthenticated(true);
           } else {
             toast.error(data.message + " ,Enter Valid OTP!!! ", {
               position: "top-center",
@@ -450,7 +461,7 @@ export const Login = ({ setIsAuthenticated }) => {
       }
       toast
         .promise(
-          apicb.post(
+          apicb.put(
             "auth/verifyAndResetPassword",
             {
               identifier: values?.emailOrPhone,
@@ -474,6 +485,7 @@ export const Login = ({ setIsAuthenticated }) => {
               action: "Login",
               through: "Identifier/Password",
             });
+            login(userIdentifier, () => navigate('/'), isRemembered, data?.data?.access_token);
           } else
             toast.error(
               "Please Enter Valid User Identifier(Email/Phone), " +
@@ -532,7 +544,7 @@ export const Login = ({ setIsAuthenticated }) => {
 
   const getSubmitButtonText = () => {
     if (
-      (userAction.action === "Login" || 
+      (userAction.action === "Login" ||
         userAction.action === "ForgotPassword") &&
       userAction.through === "OTP" &&
       otpSent
@@ -576,7 +588,7 @@ export const Login = ({ setIsAuthenticated }) => {
           console.log(response);
         });
     // const isVerified = await apicb.post('auth/verify', {identifier: formData?.email});
-    // isVerified?.success && 
+    // isVerified?.success &&
 
   }
 //   useEffect(() => {
@@ -677,7 +689,7 @@ export const Login = ({ setIsAuthenticated }) => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className="w-100 rounded-3"
-                    disabled={(otpSent && userAction.action === "Verify") || emailVerified}
+                    disabled={(otpSent && userAction.action === "Verify")}
                     value={values.email}
                   />
                   {touched.email && errors.email && (
@@ -687,9 +699,38 @@ export const Login = ({ setIsAuthenticated }) => {
                   )}
                 </div>
               )}
-              {((userAction.action === "Register") && (!errors.email) && (!emailVerified) && (values?.email)) ? (
-                <a href="#" onClick={() => {sendOtpToUser(values);}} className="d-block text-end">Verify</a>
-            ) : null} 
+              {((userAction.action === "Register") && (!errors.email) && (!emailVerified) && (values?.email)) && (
+                <>
+                    <a href="#" onClick={() => {sendOtpToUser(values);}} className="d-block text-end">Verify</a>       
+                  </>
+                
+            )}
+            {(userAction.action === "Register") && (emailVerified &&  (((!resendOtp) ? (
+                        <div className="resendOTPWrapper d-flex justify-content-end">
+                          <span className="resendOTPTimer">
+                            Resend available in {Math.floor(timer / 60)}:
+                            {timer % 60 < 10 ? `0${timer % 60}` : timer % 60}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="resendOTPWrapper d-flex justify-content-end">
+                          <a
+                            className="resendOTP"
+                            onClick={() => {
+                              resendOTP(values);
+                              startTimer();
+                            }}
+                            style={{ cursor: "pointer" }}
+                          >
+                            Resend OTP
+                          </a>
+                        </div>
+                      ))))}
+                      {touched.otp && errors.otp && (
+                        <div className="form-text text-danger error px-2">
+                          {errors.otp}
+                        </div>
+                      )}
               {userAction.action === "Register" && (
                 <div className="inputboxWrapper d-block text-start">
                   <label htmlFor="phone" className="p-2">

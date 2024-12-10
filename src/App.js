@@ -21,12 +21,12 @@ function App() {
   )
 }
 function Main(){
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
+// const { isAuthenticated, setIsAuthenticated } = useAuth();
   return(
 <div className="App">
-          {!isAuthenticated && <Login setIsAuthenticated={setIsAuthenticated}/>}
-            {/* {isAuthenticated && <Landing/>} */}
-            {isAuthenticated && <VideoComponent />}
+          {/* {!isAuthenticated && <Login setIsAuthenticated={setIsAuthenticated}/>} */}
+            {<Landing/>}
+            {/* {isAuthenticated && <VideoComponent />} */}
       {/* <Landing/> */}
     </div>)
 }

@@ -31,7 +31,7 @@ export const MultiselectDropdown = ({options, selected, setSelected}) => {
         value={selected}
         onChange={setSelected}
         labelledBy='Select'
-        valueRenderer={() => customValueRenderer(selected, options)}
+        // valueRenderer={() => customValueRenderer(selected, options)}
       />
     </div>
   );

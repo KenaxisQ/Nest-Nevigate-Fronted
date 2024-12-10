@@ -6,16 +6,29 @@ import PropertyDetails from '../PropertyDetailsPage/PropertyDetailsPage.js';
 import Footer from '../Footer/Footer';
 import HomePage from '../Home/Home';
 import {LoginPage} from '../Login/LoginPage';
-import React from 'react'
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
+import React, {useState, useEffect} from 'react'
+import { createBrowserRouter, Outlet, RouterProvider, useNavigate } from "react-router-dom"
 import ScrollToTop from '../ScrollToTop';
 import { AdminDashboardHome } from '../AdminDashboard/AdminDashboardHome.js';
 import Userdashboard from '../Userdashboard/Userdashboard.js';
 import AgentDashboard from '../AgentDashboard/AgentDashboard.js';
 import SignIn from '../SignIn/SignIn.js';
-
+import { Login } from '../SignIn/Login.js';
+import ProtectedRoute from './ProtectedRoute.js';
 export default function Landing() {
-
+  // const isTokenValid = () => {
+  //   const token = sessionStorage.getItem("AUTH_TOKEN");
+  //   if (!token) return false;
+  
+  //   try {
+  //     const { exp } = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
+  //     return Date.now() < exp * 1000; // Compare expiration
+  //   } catch (error) {
+  //     console.error("Invalid token", error);
+  //     return false;
+  //   }
+  // };
+  // const isAuthenticated = isTokenValid();
   const properties = [
     { id: 1, type: 'Rent', title: 'Skyper Pool Apartment', location: '1800-1818 79th St', price: '₹3,95,000', beds: 2, washrooms: 6, area: 4 },
     { id: 2, type: 'Sale', title: 'Beachside Villa', location: '100 Ocean Blvd', price: '₹2,50,000', beds: 3, washrooms: 4, area: 5 },
@@ -33,13 +46,22 @@ export default function Landing() {
     { id: 14, type: 'Sale', title: 'Eco-Friendly House', location: '80 Green Rd', price: '₹4,20,000', beds: 3, washrooms: 3, area: 5 },
     { id: 15, type: 'Rent', title: 'Luxury Penthouse', location: '1000 Heights Rd', price: '₹6,00,000', beds: 3, washrooms: 4, area: 6 },
   ];
+  // const [token, setToken] = useState(
+  //   localStorage.getItem("token") || sessionStorage.getItem("token")
+  // );
+
+  // useEffect(() => {
+  //   // Check token on refresh
+  //   const storedToken = localStorage.getItem("token") || sessionStorage.getItem("token");
+  //   if (storedToken) setToken(storedToken);
+  // }, []);
 
   const router = createBrowserRouter([
     {
       path: "/",
       element: (
         <>
-          <Outlet />
+          <ProtectedRoute><Outlet /></ProtectedRoute>,
         </>
       ),
       children: [{
@@ -69,10 +91,10 @@ export default function Landing() {
         path:"detail",
         element:(<><ScrollToTop/><PropertyDetails properties={properties}/></>)
       },
-      {
-        path: "login",
-        element: (<><LoginPage /></>)
-      },
+      // {
+      //   path: "login",
+      //   element: (<ProtectedRoute><Login /></ProtectedRoute>)
+      // },
       {
         path: "admin",
         element: (<><ScrollToTop/><AdminDashboardHome properties={properties}/></>)

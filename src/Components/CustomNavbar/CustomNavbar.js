@@ -15,6 +15,7 @@ const Navbar = () => {
   const logoutUser = () =>{
     setIsAuthenticated(false); // Set authentication to false when logout
     localStorage.clear();
+    sessionStorage.clear();
     logout();
     navigate('/')
   }

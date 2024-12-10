@@ -2,12 +2,14 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import './FirstForm.css'
-export const FirstForm = ({ setStep, setOfferType, setPropertyType,propertyType, offerType  }) => {
+export const FirstForm = ({ setStep, setOfferType, setPropertyType,propertyType, offerType, setValue  }) => {
     const handlePropertyTypeChange = (event) => {
+        setValue('propertyCategory', event.target.value)
         setPropertyType(event.target.value);
     };
 
     const handleOfferTypeChange = (event) => {
+        setValue('propertyListingFor', event.target.value)
         setOfferType(event.target.value);
     };
     return (

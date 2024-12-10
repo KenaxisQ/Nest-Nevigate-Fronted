@@ -8,7 +8,7 @@ import { DisplayRentCommercialFields, DisplayRentLandFields, DisplayRentResident
 import { AmminitiesRentCommercialFields, AmminitiesRentLandFields, AmminitiesRentResidentialFields, AmminitiesRentPGFields } from "./DisplayJsons/Rent/Ammenities";
 import { MiscellineousRentCommercialJson, MiscellineousRentPGJson, MiscellineousRentLandJson, MiscellineousRentResidentialJson } from "./DisplayJsons/Rent/Miscellineous";
 import { CommonNearByServices } from "./DisplayJsons/Sell/NearByServices";
-export const SecondForm = ({setStep, propertytype, offerType, register, setValue, values, errors}) => {
+export const SecondForm = ({setStep, propertytype, offerType, register, setValue, values, errors, setErrors}) => {
     const fields = {
         AmminitiesSellCommercialFields,
         AmminitiesSellLandFields,
@@ -32,14 +32,11 @@ export const SecondForm = ({setStep, propertytype, offerType, register, setValue
         MiscellineousRentLandJson, 
         MiscellineousRentResidentialJson
     };      
-    const amminitiesJson = `Amminities${offerType}${propertytype}Fields`;
+    
 const displayJson = `Display${offerType}${propertytype}Fields`;
-    var amminitieJson = fields[amminitiesJson];
     var displaJson = fields[displayJson];
-    var miscelleneousJson = fields[`Miscellineous${offerType}${propertytype}Json`];
-    var nearByFacilitiesJson = CommonNearByServices;
     return (
-            <FormRenderDynamic setStep={setStep} displayjson={displaJson} register={register} setValue={setValue} propertytype={propertytype} values={values} errors={errors}/>
+            <FormRenderDynamic setStep={setStep} displayjson={displaJson} register={register} setValue={setValue} propertytype={propertytype} offerType={offerType} values={values} errors={errors} setErrors={setErrors}/>
     )
 }
 

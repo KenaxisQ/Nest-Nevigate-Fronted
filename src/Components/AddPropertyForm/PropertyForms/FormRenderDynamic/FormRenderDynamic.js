@@ -10,13 +10,14 @@ const validationSchema = yupObject().shape({
   // propertyTitle: yupString().required("Required"),
   // bedroom: yupString().required("Required"),
 });
-export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, propertytype, values, errors }) => {
+export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, propertytype, offerType,values, errors, setErrors }) => {
   // Media query hooks
   console.log("erros", errors);
   const [amminitiesJson, setAmminitiesJson] = useState([]);
   const [miscelleneousJson, setMiscelleneousJson] = useState([]);
   const [nearByFacilitiesJson, setNearByFacilitiesJson] = useState([]);
   const [selectedAmenities, setSelectedAmenities] = useState([]); // Track selected amenities in an array
+  const [formTwoErrors, setFormTwoErrors] = useState({});
   const isSmall = useMediaQuery({ query: '(min-width: 576px)' });
   const isMedium = useMediaQuery({ query: '(min-width: 768px)' });
   const isLarge = useMediaQuery({ query: '(min-width: 992px)' });
@@ -37,7 +38,7 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
         amenity.forEach(item => {
           const transformedItem = {
             name: item?.name,
-            fieldName: item?.name,
+            fieldName: item?.id,
           };
 
           if (item.subCategory === "Miscellaneous") {
@@ -48,7 +49,6 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
             nearByServices.push(transformedItem);
           }
         });
-
         // Update state with categorized data
         setMiscelleneousJson(miscellaneous);
         setAmminitiesJson(amenities);
@@ -61,8 +61,26 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
 
     fetchAmenity(); // Call the async function
   }, [propertytype]);
+  console.log('Seconform', propertytype);
+  console.log('secondformOffer', offerType);
+  useEffect(() => {
+    const initialErrors = {};
+    displayjson.forEach((prop) => {
+        if (prop?.required && !values[prop?.fieldName]) {
+            initialErrors[prop?.fieldName] = `${prop?.title?.split("Select")[1] || prop?.title?.split("Enter")[1]} is required`;
+        }
+    });
+    console.log('initialErrors', initialErrors);
+    if (values['description'] === "") {
+      // Remove the error if 'description' exists in initialValues
+      initialErrors['description'] = 'Property Description is required.';
+    }
+    setFormTwoErrors(initialErrors);
+    setErrors(initialErrors);
+}, [displayjson, values]);
 
   const handleCheckboxChange = (fieldName, isChecked) => {
+    
     setSelectedAmenities((prevSelected) => {
       // Update selected amenities array
       let updatedSelectedAmenities = isChecked
@@ -70,18 +88,34 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
         : prevSelected.filter(item => item !== fieldName);  // Remove fieldName if unchecked
 
       // Set the value for the selectedAmenities in react-hook-form
-      setValue("selectedAmenities", updatedSelectedAmenities);
+      setValue("selectedAmenities", JSON.stringify(updatedSelectedAmenities));
 
       return updatedSelectedAmenities; // Return the updated state
     });
   };
+  console.log('propertytype', propertytype);
+  const validateField = (fieldName, fieldValue, isRequired) => {
+    if (fieldValue === "" && isRequired) {
+      setFormTwoErrors((prevErrors) => ({
+            ...prevErrors,
+            [fieldName]: `${fieldName} is required`,
+        }));
+        setErrors(formTwoErrors);
+      } else {
+      setFormTwoErrors((prevErrors) => {
+            const { [fieldName]: _, ...remainingErrors } = prevErrors;
+            return remainingErrors;
+        });
+        setErrors(formTwoErrors);
+      }
+};
   return (
     <form onSubmit={onSubmit} className="mb-3 wrapText">
       <div className="row">
         <div className="col-lg-4">
           <div className="row">
             {displayjson?.map((prop, index) => {
-              if (prop.componetName === "Dropdown") {
+              if (prop?.componetName === "Dropdown") {
                 return (
                   <div
                     className="form-group col-sm-6"
@@ -92,22 +126,32 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
                       padding: "0 16px 4px"
                     }}
                   >
-                    <label for={prop.title} style={{ fontWeight: 500 }}>
-                      {prop.title}
+                    <label for={prop?.title} style={{ fontWeight: 500 }}>
+                      {prop?.title}
 
                     </label>
                     <select
-                      placeholder={prop.placeHolder}
-                      id={prop.title}
+                      placeholder={prop?.placeHolder}
+                      id={prop?.title}
                       className="form-control-sm"
+                      disabled={["propertyCategory", "propertyListingFor"].includes(prop?.fieldName)} // Disable for specific fields
                       required= {prop?.required}
                       {...register(prop?.fieldName)}
                       onChange={(event) => {
                         console.log(event);
                         setValue(prop?.fieldName, event?.target?.value);
+                        validateField(prop?.fieldName, event?.target?.value, prop?.required);
                       }}
                     >
-                      <option value="" disabled selected hidden>{"Select"}</option>
+                      <option value={prop?.fieldName === "propertyCategory"
+                          ? propertytype
+                          : prop?.fieldName === "propertyListingFor"
+                          ? offerType
+                          : ""} selected disabled hidden>{prop?.fieldName === "propertyCategory"
+                          ? propertytype
+                          : prop?.fieldName === "propertyListingFor"
+                          ? offerType
+                          : "Select"}</option>
                       {prop?.options?.map(opt => {
                         return <option value={opt}>{opt}</option>
                       }
@@ -118,7 +162,7 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
                     </span> : null}
                   </div>
                 );
-              } else if (prop.componetName === "Input") {
+              } else if (prop?.componetName === "Input") {
                 return (
                   <div
                     className="form-group col-sm-6"
@@ -129,13 +173,13 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
                       padding: "0 16px 4px",
                     }}
                   >
-                    <label for={prop.title} style={{ fontWeight: 500 }}>
-                      {prop.title}
+                    <label for={prop?.title} style={{ fontWeight: 500 }}>
+                      {prop?.title}
                     </label>
                     <input
-                      placeholder={prop.placeHolder}
-                      id={prop.title}
-                      type={prop?.type ? prop.type : "text"}
+                      placeholder={prop?.placeHolder}
+                      id={prop?.title}
+                      type={prop?.type ? prop?.type : "text"}
                       required={prop?.required}
                       {...register(prop?.fieldName)}
                       className="form-control-sm"
@@ -144,7 +188,7 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
                         color: "black"
                       }}
                       onChange={(event) => {
-                        const value = event.target.value;
+                        const value = event?.target?.value;
                         let parsedValue;
 
                       if (prop?.type === "number") {
@@ -159,23 +203,12 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
                       }
 
                       setValue(prop?.fieldName, parsedValue);
+                      validateField(prop?.fieldName, event?.target?.value, prop?.required);
                       }}
                     />
                     {values?.[prop?.fieldName] === "" & prop?.required ? (<span id="error-exampleField" class="error-message">
                         {prop?.title?.split("Enter")[1]} is required.
                     </span>) : null}
-                    {/* {errors?.[prop.fieldName]?.message && (
-                        <p
-                          className="error"
-                          style={{
-                            color: "White",
-                            background: "red",
-                            alignItems: "center",
-                          }}
-                        >
-                          {errors?.[prop.fieldName]?.message}
-                        </p>
-                      )} */}
                   </div>
                 );
               }
@@ -190,42 +223,48 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
                 onChange={(event) => {
                   console.log(event);
                   setValue('description', event?.target?.value);
+                  validateField('description', event?.target?.value, true);
                 }}></textarea>
+                {values?.['description'] === "" ? (<div id="error-exampleField" class="error-message text-start">
+                        {'Property Description is required.'}
+                    </div>) : null}
             </div>
             <div className={`col-${size}-8`} style={{ padding: "0 16px 4px" }}>
               <p for="exampleFormControlTextarea1" class="text-start">Amminities</p>
               {amminitiesJson?.reduce((rows, amenity, index) => {
+                console.log('amminitiesJson', amminitiesJson);
                 if (index % 3 === 0) {
-                  rows.push([]);
+                  rows?.push([]);
                 }
-                rows[rows.length - 1].push(amenity);
+                rows[rows?.length - 1]?.push(amenity);
                 return rows;
               }, []).map((row, rowIndex) => {
                 return (
                   <div key={rowIndex} className="row">
-                    {row.map(amenity => (
-                      <div key={amenity.fieldName} className={`col-${size}-4`}>
+                    {row?.map(amenity => {
+                    if (!amenity?.fieldName) {
+                      console.error('Missing fieldName for amenity:', amenity);
+                      return null;
+                    } return (  
+                      <div key={amenity?.fieldName} className={`col-${size}-4`}>
                         <div className="text-start">
                           <input
                             className=""
                             type="checkbox"
-                            id={amenity.fieldName}
-                            name={amenity.fieldName}
-                            // onChange={(event) =>
-                            //   setValue(amenity?.fieldName, event.target.value)
-                            // }
-                            // {...register(amenity?.fieldName)}
+                            id={amenity?.fieldName}
+                            name={amenity?.fieldName}
+                            {...register(amenity?.fieldName)}
                             onChange={(event) => {
                               console.log('checked', event);
-                              handleCheckboxChange(amenity.fieldName, event.target.checked)
+                              handleCheckboxChange(amenity?.fieldName, event?.target?.checked)
                             }}
                           />
-                          <label className="" htmlFor={amenity.fieldName}>
-                            &nbsp;{amenity.name}
+                          <label className="" htmlFor={amenity?.fieldName}>
+                            &nbsp;{amenity?.name}
                           </label>
                         </div>
                       </div>
-                    ))}
+                    )})}
                   </div>
                 )
               })}
@@ -236,24 +275,24 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
               <p for="exampleFormControlTextarea1" class="text-start">Miscelleneous</p>
               {miscelleneousJson?.map((amenity, rowIndex) => {
                 return (
-                  <div key={amenity.fieldName} className={`col-${size}-12`}>
+                  <div key={amenity?.fieldName} className={`col-${size}-12`}>
                     <div className="text-start">
                       <input
                         className=""
                         type="checkbox"
-                        id={amenity.fieldName}
-                        name={amenity.fieldName}
+                        id={amenity?.fieldName}
+                        name={amenity?.fieldName}
                         // onChange={(event) =>
                         //   setValue(amenity?.fieldName, event.target.value)
                         // }
-                        // {...register(amenity?.fieldName)}
+                        {...register(amenity?.fieldName)}
                         onChange={(event) => {
                           console.log('checked', event);
-                          handleCheckboxChange(amenity.fieldName, event.target.checked)
+                          handleCheckboxChange(amenity?.fieldName, event?.target?.checked)
                         }}
                       />
-                      <label className="" htmlFor={amenity.fieldName}>
-                        &nbsp;{amenity.name}
+                      <label className="" htmlFor={amenity?.fieldName}>
+                        &nbsp;{amenity?.name}
                       </label>
                     </div>
 
@@ -273,24 +312,24 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
                 return (
                   <div key={rowIndex} className="row">
                     {row.map(amenity => (
-                      <div key={amenity.fieldName} className={`col-${size}-4`}>
+                      <div key={amenity?.fieldName} className={`col-${size}-4`}>
                         <div className="text-start">
                           <input
                             className=""
                             type="checkbox"
-                            id={amenity.fieldName}
-                            name={amenity.fieldName}
+                            id={amenity?.fieldName}
+                            name={amenity?.fieldName}
                             // onChange={(event) =>
                             //   setValue(amenity?.fieldName, event.target.value)
                             // }
-                            // {...register(amenity?.fieldName)}
+                            {...register(amenity?.fieldName)}
                             onChange={(event) => {
                               console.log('checked', event);
-                              handleCheckboxChange(amenity.fieldName, event.target.checked)
+                              handleCheckboxChange(amenity?.fieldName, event?.target?.checked)
                             }}
                           />
-                          <label className="" htmlFor={amenity.fieldName}>
-                            &nbsp;{amenity.name}
+                          <label className="" htmlFor={amenity?.fieldName}>
+                            &nbsp;{amenity?.name}
                           </label>
                         </div>
                       </div>
