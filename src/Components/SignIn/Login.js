@@ -297,7 +297,8 @@ export const Login = ({ setIsAuthenticated }) => {
             toast.success(response.message, {
               position: "top-center",
             });
-            setIsAuthenticated(true);
+            //setIsAuthenticated(true);
+            login(values?.email, () => navigate('/'), isRemembered, response?.data?.access_token);
           } else {
             toast.error(response.message, {
               position: "top-center",
