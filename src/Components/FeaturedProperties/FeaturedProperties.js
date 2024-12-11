@@ -34,7 +34,7 @@ export default function FeaturedProperties({ properties}) {
 
       {/* Loop through properties, showing 12 or all based on showAll state */}
       <div className='propertyList row'>
-        {properties.slice(0, showAll ? properties.length : 12).map((property) => (
+        {properties?.slice(0, showAll ? properties?.length : 4).map((property) => (
           <div className='col-lg-3 cardWrapper' key={property.id}>
             <PropertyCard
               type={property.type}
@@ -53,7 +53,7 @@ export default function FeaturedProperties({ properties}) {
       {/* DB Properties */}
       <div className='propertyList row'>
         <p>{"feature"}</p>
-        {featuredProperties?.slice(0, showAll ? featuredProperties.length : 12).map((property) => (
+        {featuredProperties?.slice(0, showAll ? featuredProperties.length : 4).map((property) => (
           <div className='col-lg-3 cardWrapper' key={property.id}>
             <PropertyCard
               type={property.propertyListingFor}

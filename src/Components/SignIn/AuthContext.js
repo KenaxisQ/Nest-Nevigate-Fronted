@@ -29,7 +29,18 @@ export const AuthProvider = ({ children }) => {
     console.log('Ui' ,userInfo)
     setUserData(userInfo?.data);  // Set the user data when logged in
   };
-
+  // const fetchUserData = async (identifier) =>{
+  //   var https = new HttpService();
+  //   var userInfo = await https.get(`user/emailOrPhone/${identifier}`)
+  //   // if(userInfo.success)
+  //   // {
+  //   //     setIsAuthenticated(true);
+  //   //     // navigate('/');
+  //   // }
+    
+  //   console.log('Ui' ,userInfo)
+  //   setUserData(userInfo?.data);
+  // }
   const logout = () => {
     setUserData(null);  // Clear user data on logout
   };

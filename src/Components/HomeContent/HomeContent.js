@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import './HomeContent.css'
-export default function HomeContent() {
-  const filters = ['Buy', 'Rent', 'PG/Coliving', 'Commercial', 'Plot/Land'];
+import HttpService from '../../Services/http';
+export default function HomeContent({setFilteredProperties, setIsListingsPage}) {
+  const filters = ['Buy', 'Rent', 'PG', 'Commercial', 'Land', 'Residential'];
   const [selectedFilter, setSelectedFilter] = useState('Buy'); // Default selected filter
   const [type, setType] = useState('All'); // For second dropdown
   const [keywords, setKeywords] = useState(''); // For search input
   const [category, setCategory] = useState('Buy'); // For first dropdown
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     const apiData = {
-      selectedFilter,
-      category,
-      type,
-      keywords,
+      //category, for mobile
+      // propertyCategory: selectedFilter,
+      // type: type,
+      searchKeyword: keywords
     };
     console.log('API Call Data:', apiData);
+    const https = new HttpService();
+    const propertyResponse = await https.post('property/filter', {...apiData})
+    setFilteredProperties(propertyResponse?.data)
+    setIsListingsPage(true);
     // Make your API call here, e.g., axios.post('/api/endpoint', apiData);
   };
   return (
@@ -45,13 +50,14 @@ export default function HomeContent() {
             <option>PG/Coliving</option>
             <option>Commercial</option>
             <option>Plot/Land</option>
+            <option>Residential</option>
           </select>
         </div>
         <div className='selectWrapper col-lg-3'>
         <select
             className='selectBox'
             value={type}
-            onChange={(e) => setType(e.target.value)}
+            onChange={(e) => setType(e.target.value === 'All' ? "*" : e.target.value)}
           >
             <option>All</option>
             <option>Land</option>

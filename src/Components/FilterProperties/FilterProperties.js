@@ -10,10 +10,10 @@ import Footer from '../Footer/Footer';
 import { BsSearch } from "react-icons/bs";
 import HttpService from '../../Services/http';
 import { MultiselectDropdown } from '../MultiselectDropdown/MultiselectDropdown';
-export default function FilterProperties({ properties,isFindPropertyByCityRequired}) {
+export default function FilterProperties({ properties,isListingsPage=false,isFindPropertyByCityRequired}) {
   const [leaseValue, setLeaseValue] = useState(50); // Default value
   const [budget, setBudget] = useState(70); // Default value
-  const [isFilterOpen, setIsFilterOpen] = useState(false); // Track whether the filter is open
+  const [isFilterOpen, setIsFilterOpen] = useState(isListingsPage ? true : false); // Track whether the filter is open
   const [showAllProperties, setShowAllProperties] = useState(false); // Toggle between showing 12 and all properties
   const [searchKeyword, setSearchKeyword] = useState("");
   const [Listings, setListings] = useState([]);
@@ -23,20 +23,20 @@ export default function FilterProperties({ properties,isFindPropertyByCityRequir
   const [miscelleneousJson, setMiscelleneousJson] = useState([]);
   const [nearByFacilitiesJson, setNearByFacilitiesJson] = useState([]);
 
-  useEffect(() =>{
-    const getAllListings = async () => {
-      try{
-    var https = new HttpService();
-    var allListings = await https.get('property');
-    setListings(allListings.data);
-    }
-    catch(error) {
-      console.log('Error fetching All Listing', error);
-    }
-  }
-    getAllListings();
+  // useEffect(() =>{
+  //   const getAllListings = async () => {
+  //     try{
+  //   var https = new HttpService();
+  //   var allListings = await https.get('property');
+  //   setListings(allListings.data);
+  //   }
+  //   catch(error) {
+  //     console.log('Error fetching All Listing', error);
+  //   }
+  // }
+  //   getAllListings();
 
-  }, [])
+  // }, [])
   // Handle slider changes
   const handleLeaseChange = (newValue) => setLeaseValue(newValue);
   const handleBudgetChange = (newValue) => setBudget(newValue);
@@ -95,7 +95,7 @@ export default function FilterProperties({ properties,isFindPropertyByCityRequir
     { id: 3, label: "Subletting Permission" },
   ];
 
-  const propertiesToShow = showAllProperties ? Listings : Listings.slice(0, 12);
+  const propertiesToShow = showAllProperties ? properties : properties?.slice(0, 12);
 
   return (
     <div className="SearchContent">
@@ -106,7 +106,7 @@ export default function FilterProperties({ properties,isFindPropertyByCityRequir
       <button className='btn search_button'>Search&nbsp;&nbsp;<BsSearch /></button>
       </div>
       <div className="filterButtonWrapper">
-      <button className='btn filterbtn bg_1F4B43' onClick={()=>{setIsFilterOpen(!isFilterOpen); getAmenities();}}>{!isFilterOpen?<MdFilterAlt size="30px" />:< MdFilterAltOff size="30px"/>}<span className='hideFilterText'>{!isFilterOpen?"Show Filter":"Hide Filter"}</span></button>
+      {!isListingsPage && (<button className='btn filterbtn bg_1F4B43' onClick={()=>{setIsFilterOpen(!isFilterOpen); getAmenities();}}>{!isFilterOpen?<MdFilterAlt size="30px" />:< MdFilterAltOff size="30px"/>}<span className='hideFilterText'>{!isFilterOpen?"Show Filter":"Hide Filter"}</span></button>)}
       </div>
      </div>
      {searchKeyword!=""&&searchKeyword.length>5&&

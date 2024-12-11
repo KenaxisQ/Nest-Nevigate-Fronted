@@ -21,15 +21,16 @@ import { UserSettings } from '../UserSettings/UserSettings';
 import { userjson } from './userjson';
 import { DisplayChangePasswordFields } from '../AddPropertyForm/UserInfo/Changepassword/DisplayChangePasswordFields';
 import { ChangePassword } from '../AddPropertyForm/UserInfo/Changepassword/ChangePassword';
+import HttpService from '../../Services/http';
 export default function Userdashboard({properties}) {
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   const [isHamburgHovered, setIsHamburgHovered] = useState(false);
   const [activeMenu, setActiveMenu] = useState('dashboard');
+  const [listedProperties, setListedPropertied] = useState(properties);
   const [imageURL, setImageURL] = useState('');
   const {userData} = useAuth();
   console.log('userData', userData);
   useEffect(() => {
-    
     if (userjson) {
       const blob = new Blob([userjson?.data], { type: 'image/jpg' }); // Change 'image/jpeg' based on your image type
       const url = `data:image/jpeg;base64,${userjson.data}`;
@@ -38,8 +39,23 @@ export default function Userdashboard({properties}) {
     }
   }, [userjson]);
   useEffect(() => {
-    
-  }, [])
+    const fetchProperties = async () => {
+      const https = new HttpService();
+      try {
+        const allProperties = await https.get('property');
+        setListedPropertied(allProperties?.data); //set Listed properties here
+      } catch (error) {
+        console.error('Error fetching properties:', error);
+      }
+    };
+  
+    fetchProperties();
+  
+    // Cleanup function (if needed)
+    return () => {
+    };
+  }, []);
+  
   const handleSideNavToggle = () => {
 
     setIsSideNavOpen(!isSideNavOpen);
@@ -191,10 +207,10 @@ export default function Userdashboard({properties}) {
             </select>
             </div>
                   <div className="row AdminPropertyListing">
-                  {properties.slice(0,10).map((property) => (
+                  {listedProperties?.slice(0,1).map((property) => (
           <div className={`cardWrapper${isSideNavOpen?' col-lg-4':' col-lg-3'}`} key={property.id}>
             <PropertyCard
-              type={property.type}
+              type={property.propertyListingFor}
               title={property.title}
               location={property.location}
               price={property.price}
@@ -202,6 +218,8 @@ export default function Userdashboard({properties}) {
               washrooms={property.washrooms}
               area={property.area}
               height={'350px'}
+              isEdit={true}
+              props={property}
             />
           </div>
         ))}

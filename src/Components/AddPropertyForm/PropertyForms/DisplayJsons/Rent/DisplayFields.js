@@ -216,6 +216,12 @@ export const DisplayRentResidentialFields = [...DisplayRentLandFields,
         required: true,
     },
     {
+        title: "Select Furniture Status Description",
+        placeHolder: "Select Furniture Status Description",
+        componetName: "Input",
+        fieldName: "furnitureStatusDescription",
+    },
+    {
         title: "Enter Carpet Area",
         placeHolder: "Enter Carpet Area",
         componetName: "Input",

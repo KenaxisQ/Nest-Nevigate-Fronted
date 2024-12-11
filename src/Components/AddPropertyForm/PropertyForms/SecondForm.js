@@ -1,4 +1,5 @@
 import { useForm, FormProvider, useWatch } from "react-hook-form";
+import { useEffect } from "react";
 import { FormRenderDynamic } from "./FormRenderDynamic/FormRenderDynamic";
 import PropTypes from "prop-types";
 import { AmminitiesSellCommercialFields, AmminitiesSellLandFields,AmminitiesSellResidentialFields } from "./DisplayJsons/Sell/Ammenities";
@@ -8,7 +9,7 @@ import { DisplayRentCommercialFields, DisplayRentLandFields, DisplayRentResident
 import { AmminitiesRentCommercialFields, AmminitiesRentLandFields, AmminitiesRentResidentialFields, AmminitiesRentPGFields } from "./DisplayJsons/Rent/Ammenities";
 import { MiscellineousRentCommercialJson, MiscellineousRentPGJson, MiscellineousRentLandJson, MiscellineousRentResidentialJson } from "./DisplayJsons/Rent/Miscellineous";
 import { CommonNearByServices } from "./DisplayJsons/Sell/NearByServices";
-export const SecondForm = ({setStep, propertytype, offerType, register, setValue, values, errors, setErrors}) => {
+export const SecondForm = ({setStep, propertytype, offerType, register, setValue, values, errors, setErrors,reset}) => {
     const fields = {
         AmminitiesSellCommercialFields,
         AmminitiesSellLandFields,

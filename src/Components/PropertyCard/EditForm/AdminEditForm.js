@@ -1,5 +1,8 @@
 import { AddProperty } from "../../AddPropertyForm/Property/AddProperty";
-export const AdminEditForm = ({ property, canEditRef }) => {
+export const AdminEditForm = ({ property, canEditRef, propertyDetails }) => {
+    console.log('propertyDetails', propertyDetails);
+    console.log('property', property);
+
   return (
 <div>
             <div class="modal fade" id="exampleModalToggle" ref={canEditRef} aria-labelledby="exampleModalToggleLabel" tabindex="-1">
@@ -10,7 +13,7 @@ export const AdminEditForm = ({ property, canEditRef }) => {
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <AddProperty />
+                            <AddProperty propertyDetails={propertyDetails} isEdit={true}/>
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Save Changes</button>

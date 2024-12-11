@@ -13,6 +13,8 @@ const validationSchema = yupObject().shape({
 export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, propertytype, offerType,values, errors, setErrors }) => {
   // Media query hooks
   console.log("erros", errors);
+  const [touchedFields, setTouchedFields] = useState({});
+  const [showAllErrors, setShowAllErrors] = useState(false);
   const [amminitiesJson, setAmminitiesJson] = useState([]);
   const [miscelleneousJson, setMiscelleneousJson] = useState([]);
   const [nearByFacilitiesJson, setNearByFacilitiesJson] = useState([]);
@@ -26,6 +28,9 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
     evt.preventDefault();
     setStep(2);
     // console.log("onSubmit", values);
+  };
+  const handleBlur = (fieldName) => {
+    setTouchedFields((prev) => ({ ...prev, [fieldName]: true }));
   };
   useEffect(() => {
     const miscellaneous = [];
@@ -65,8 +70,8 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
   console.log('secondformOffer', offerType);
   useEffect(() => {
     const initialErrors = {};
-    displayjson.forEach((prop) => {
-        if (prop?.required && !values[prop?.fieldName]) {
+    displayjson?.forEach((prop) => {
+        if (prop?.required && values[prop?.fieldName] === "") {
             initialErrors[prop?.fieldName] = `${prop?.title?.split("Select")[1] || prop?.title?.split("Enter")[1]} is required`;
         }
     });
@@ -88,7 +93,7 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
         : prevSelected.filter(item => item !== fieldName);  // Remove fieldName if unchecked
 
       // Set the value for the selectedAmenities in react-hook-form
-      setValue("selectedAmenities", JSON.stringify(updatedSelectedAmenities));
+      setValue("amenities", JSON.stringify(updatedSelectedAmenities));
 
       return updatedSelectedAmenities; // Return the updated state
     });
@@ -142,6 +147,7 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
                         setValue(prop?.fieldName, event?.target?.value);
                         validateField(prop?.fieldName, event?.target?.value, prop?.required);
                       }}
+                      onBlur={() => handleBlur(prop?.fieldName)}
                     >
                       <option value={prop?.fieldName === "propertyCategory"
                           ? propertytype
@@ -157,7 +163,7 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
                       }
                       )}
                     </select>
-                    {values?.[prop?.fieldName] === "" & prop?.required ? <span id="error-exampleField" class="error-message">
+                    {((touchedFields[prop?.fieldName] && prop?.required && values?.[prop?.fieldName] === "") ||( showAllErrors && values?.[prop?.fieldName] === "" || values?.[prop?.fieldName] == null) )? <span id="error-exampleField" class="error-message">
                         {prop?.title?.split("Select")[1]} is required.
                     </span> : null}
                   </div>
@@ -205,8 +211,9 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
                       setValue(prop?.fieldName, parsedValue);
                       validateField(prop?.fieldName, event?.target?.value, prop?.required);
                       }}
+                      onBlur={() => handleBlur(prop?.fieldName)}
                     />
-                    {values?.[prop?.fieldName] === "" & prop?.required ? (<span id="error-exampleField" class="error-message">
+                    {((touchedFields[prop?.fieldName] && prop?.required && values?.[prop?.fieldName] === "") ||( showAllErrors && values?.[prop?.fieldName] === "" || values?.[prop?.fieldName] == null) )? (<span id="error-exampleField" class="error-message">
                         {prop?.title?.split("Enter")[1]} is required.
                     </span>) : null}
                   </div>
@@ -232,7 +239,6 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
             <div className={`col-${size}-8`} style={{ padding: "0 16px 4px" }}>
               <p for="exampleFormControlTextarea1" class="text-start">Amminities</p>
               {amminitiesJson?.reduce((rows, amenity, index) => {
-                console.log('amminitiesJson', amminitiesJson);
                 if (index % 3 === 0) {
                   rows?.push([]);
                 }
@@ -346,7 +352,7 @@ export const FormRenderDynamic = ({ setStep, displayjson, register, setValue, pr
           <button
             onClick={() => {
               console.log(values);
-              
+              setShowAllErrors(true);
             }}
             className="btn-lg btn-block"
             style={{ backgroundColor: "#1F4B43", color: "white", borderRadius: "6px" }}

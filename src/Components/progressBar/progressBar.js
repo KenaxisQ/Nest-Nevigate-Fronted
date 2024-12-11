@@ -9,20 +9,22 @@ import { ThirdForm } from '../AddPropertyForm/PropertyForms/ThirdForm';
 import HttpService from '../../Services/http';
 import { useAuth } from '../SignIn/AuthContext';
 import { ToastContainer, toast } from "react-toastify";
+import {v4 as uuidv4} from 'uuid';
 const validationSchema = yupObject().shape({
   // propertyTitle: yupString().required("Required"),
   // bedroom: yupString().required("Required"),
 });
 
-export default function ProgressBar() {
+export default function ProgressBar({propertyDetails, isEdit}) {
   const [step, setStep] = useState(0);
   const [propertyType, setPropertyType] = useState("Residential");
   const [offerType, setOfferType] = useState("Sell");
   const [errors, setErrors] = useState({});
-  const { control, formState, setValue, trigger, register } = useForm({
+  console.log('isEdit', isEdit);
+  const { control, formState, setValue, trigger, register, reset } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    defaultValues: {},
+    defaultValues: isEdit ? propertyDetails || {} : {id: uuidv4(), propertyListingFor: "Sell", propertyCategory: "Residential"},
     shouldUnregister: false,
   });
   const {userData} = useAuth();
@@ -33,8 +35,9 @@ export default function ProgressBar() {
   };
   useEffect(() => {
     trigger();
+    reset();
   }, []);
-  console.log("values", values);
+  console.log("formState", formState);
   function parseBool(value) {
     if (value === "True" || value === true) {
       return true;
@@ -84,7 +87,7 @@ export default function ProgressBar() {
     );
     var https = new HttpService();
     var {selectedAmenities, ...without} = values;
-    console.log('selectedAmenities', selectedAmenities)
+    console.log('errors', errors)
     if(Object.keys(errors).length === 0){
       const propertyPosted = await 
       toast
@@ -98,6 +101,7 @@ export default function ProgressBar() {
             toast.success(response.message, {
               position: "top-center",
             });
+            reset({ id: uuidv4() });
           } else {
             toast.error(response.message, {
               position: "top-center",
@@ -135,8 +139,9 @@ export default function ProgressBar() {
         values={values}
         errors={errors}
         setErrors={setErrors}
+        reset={reset}
         />}
-      {step === 2 && <ThirdForm setStep={setStep} register={register} setValue={setValue} onSubmit={onSubmit}/>}
+      {step === 2 && <ThirdForm setStep={setStep} register={register} setValue={setValue} onSubmit={onSubmit} values={values}/>}
       {/* {step === 3 && <FourthForm setStep={setStep} />} */}
       <ToastContainer />
     </div>

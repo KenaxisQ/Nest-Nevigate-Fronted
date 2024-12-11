@@ -29,24 +29,25 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area, isF
     modal.show();
 }
   const addPropertyToWishList = async () =>{
+    
     const userFavourites = userData?.favourites;
-    var favouritesList = userFavourites.split(",").filter(Boolean);
-    const isFavourite = favouritesList.includes(props?.id);
+    var favouritesList = userFavourites?.split(",").filter(Boolean) ?? [];
+    const isFavourite = favouritesList?.includes(props?.id);
 
     if (!isFavourite) {
       // Add props.id to the list if not already present
-      favouritesList.push(props?.id);
+      favouritesList?.push(props?.id);
   } else {
       // Optionally, remove props.id if you want toggle-like behavior
-      favouritesList = favouritesList.filter(fav => fav !== props?.id);
+      favouritesList = favouritesList?.filter(fav => fav !== props?.id);
   }
-    const updatedFavourites = favouritesList.join(",");
+    const updatedFavourites = favouritesList?.join(",") || " ";
     userData.favourites = updatedFavourites;
     setUserData(userData)
     const https = new HttpService();
-    console.log('updatedFavourites', userFavourites)
-    await https.put(`user/addToFavourites/${userData?.id}`, userFavourites, true)
-
+    console.log('updatedFavourites', updatedFavourites)
+    const response = await https.put(`user/addToFavourites/${userData?.id}`,updatedFavourites, true)
+  console.log('favresponse', response);
   }
   return (
     <>
@@ -63,7 +64,7 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area, isF
       </div>}
        {like&& <div className='propertyTaglike'>
         <div className=' wish'
-        ><img src={isPropertyLiked?wishheart:wish} alt= '' onClick={()=>{setIsPropertyLiked(!isPropertyLiked); addPropertyToWishList()}} /></div>
+        ><img src={userData?.favourites.split(',').includes(props?.id)?wishheart:wish} alt= '' onClick={()=>{setIsPropertyLiked(!isPropertyLiked); addPropertyToWishList()}} /></div>
       </div>}
       {isEdit&&<div className="propertyAccept">
          <img src={adminRejectIcon} onClick={onEditForm} alt='Edit Form'/>
@@ -95,7 +96,7 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area, isF
         </div>
       </div>
     </div>
-    <AdminEditForm property={[]} canEditRef={canEditRef}/>
+    <AdminEditForm property={props} canEditRef={canEditRef} propertyDetails={props}/>
 </>
   );
 };

@@ -1,5 +1,4 @@
-/* eslint-disable no-restricted-globals */
-import { useState } from "react";
+import { useEffect } from "react";
 import PropTypes from "prop-types";
 import './FirstForm.css'
 export const FirstForm = ({ setStep, setOfferType, setPropertyType,propertyType, offerType, setValue  }) => {
@@ -9,6 +8,11 @@ export const FirstForm = ({ setStep, setOfferType, setPropertyType,propertyType,
     };
 
     const handleOfferTypeChange = (event) => {
+        
+        if(event?.target?.value === 'Sell'){
+            setValue('propertyCategory', 'Residential')
+            setPropertyType('Residential');
+        }
         setValue('propertyListingFor', event.target.value)
         setOfferType(event.target.value);
     };
@@ -20,7 +24,7 @@ export const FirstForm = ({ setStep, setOfferType, setPropertyType,propertyType,
                 <option value="Rent">Rent</option>
             </select>
             <h4 className="Propertyh2">Select Property Type</h4>
-            <select value={propertyType} onChange={handlePropertyTypeChange} className="PropertySelectBox">
+            <select value={propertyType} onChange={(event) => {handlePropertyTypeChange(event)}} className="PropertySelectBox">
                 <option value="Residential">Residential</option>
                 <option value="Commercial">Commercial</option>
                 <option value="Land">Land</option>

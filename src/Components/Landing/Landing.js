@@ -46,6 +46,8 @@ export default function Landing() {
     { id: 14, type: 'Sale', title: 'Eco-Friendly House', location: '80 Green Rd', price: '₹4,20,000', beds: 3, washrooms: 3, area: 5 },
     { id: 15, type: 'Rent', title: 'Luxury Penthouse', location: '1000 Heights Rd', price: '₹6,00,000', beds: 3, washrooms: 4, area: 6 },
   ];
+  const [filteredProperties, setFilteredProperties] = useState(null);
+  const [isListingsPage, setIsListingsPage] = useState(false);
   // const [token, setToken] = useState(
   //   localStorage.getItem("token") || sessionStorage.getItem("token")
   // );
@@ -55,7 +57,7 @@ export default function Landing() {
   //   const storedToken = localStorage.getItem("token") || sessionStorage.getItem("token");
   //   if (storedToken) setToken(storedToken);
   // }, []);
-
+  console.log('filteredProperties', filteredProperties);
   const router = createBrowserRouter([
     {
       path: "/",
@@ -67,7 +69,8 @@ export default function Landing() {
       children: [{
         index: true,
         element: (
-          <><ScrollToTop/><HomePage /><FeaturedProperties   properties={properties} /><FindPropertyByCity/><Footer/></>
+          <><ScrollToTop/><HomePage setFilteredProperties={setFilteredProperties} setIsListingsPage={setIsListingsPage} />
+          {isListingsPage ? <FilterProperties properties={filteredProperties} isListingsPage= {isListingsPage} /> :<FeaturedProperties properties={filteredProperties} />}<FindPropertyByCity/><Footer/></>
         )
       },
       {

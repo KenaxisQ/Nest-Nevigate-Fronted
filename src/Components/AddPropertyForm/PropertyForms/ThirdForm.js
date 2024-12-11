@@ -4,12 +4,10 @@ import './ThirdForm.css'
 import { PropertyUploadForm } from "../PropertyForms/PropertyUploadForm";
 import { FiUpload } from "react-icons/fi";
 import { BiSolidImageAdd } from "react-icons/bi";
-import {v4 as uuidv4} from 'uuid';
 import HttpService from "../../../Services/http";
-export const ThirdForm = ({ setStep, setValue, register, onSubmit }) => {
+export const ThirdForm = ({ setStep, setValue, register, onSubmit, values }) => {
     const defaultPlaceholderImages = []//aceholder image URL
     const [selectedFiles, setSelectedFiles] = useState(defaultPlaceholderImages);
-    const propertyIdentifier = uuidv4();
     const [preview, setPreview] = useState("https://via.placeholder.com/150");
     var thumbnailFile = useRef();
     const inputRef = useRef(null);
@@ -37,7 +35,7 @@ export const ThirdForm = ({ setStep, setValue, register, onSubmit }) => {
         });
     
         formData.append('isProperty', "true");
-        formData.append('identifier', propertyIdentifier);
+        formData.append('identifier', values?.id);
     
         // Debugging output
         console.log('Processed Files:', processedFiles);
@@ -70,7 +68,6 @@ export const ThirdForm = ({ setStep, setValue, register, onSubmit }) => {
     console.log('preview', thumbnailFile);
 
     const handleUploadClick = () => {
-        setValue('id', propertyIdentifier);
         onSubmit();
         //setStep(3);
     };
