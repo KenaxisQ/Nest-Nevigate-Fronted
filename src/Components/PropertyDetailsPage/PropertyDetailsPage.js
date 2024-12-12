@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../CustomNavbar/CustomNavbar';
 import propertyImg1 from '../../Assets/propertyImg1.jpg';
 import propertyImg2 from '../../Assets/propertyImg2.jpg';
@@ -35,47 +35,116 @@ import taxiStandIcon from '../../Assets/taxistand.svg';
 import PropertyCarousel from '../PropertyCarousel/PropertyCarousel';
 import Footer from '../Footer/Footer';
 import NameCard from '../NameCard/NameCard';
+import { useLocation, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import HttpService from '../../Services/http';
+import { ToastContainer, toast} from 'react-toastify';
+import placeholder_img from '../../Assets/place_holder_avatar.jpg'
+import { appendErrors } from 'react-hook-form';
 
 // Image items for the gallery
-const images = [
-  {
-    original: propertyImg1,
-    thumbnail: propertyImg1,
-  },
-  {
-    original: propertyImg2,
-    thumbnail: propertyImg2,
-  },
-  {
-    original: propertyImg1,
-    thumbnail: propertyImg1,
-  },
-  {
-    original: propertyImg1,
-    thumbnail: propertyImg1,
-  },
-  {
-    original: propertyImg2,
-    thumbnail: propertyImg2,
-  },
-  {
-    original: propertyImg1,
-    thumbnail: propertyImg1,
-  },
-];
+
 
 export default function PropertyDetails({properties}) {
+  // debugger;
+  const location = useLocation(); 
+  const navigate = useNavigate(); 
+  const apicb = new HttpService();
+  const params = useParams();
+  const[loading,setLoading]=useState(true);
+  
+  const propertyImages = [
+    {
+      original: propertyImg1,
+      thumbnail: propertyImg1,
+    },
+    {
+      original: propertyImg2,
+      thumbnail: propertyImg2,
+    },
+    {
+      original: propertyImg1,
+      thumbnail: propertyImg1,
+    },
+    {
+      original: propertyImg1,
+      thumbnail: propertyImg1,
+    },
+    {
+      original: propertyImg2,
+      thumbnail: propertyImg2,
+    },
+    {
+      original: propertyImg1,
+      thumbnail: propertyImg1,
+    },
+  ]
+  
+  // console.log("From Details",propertyid)
+  const [property, setProperty] = useState(location.state);
+  const [images, setImages] = useState([]);
+  
+  // Helper to create image objects from Base64
+  const createImageObjects = (data) => {
+    return data.map((byteArray) => {
+      const url = `data:image/jpeg;base64,${byteArray}`;
+      return {
+        original: url,
+        thumbnail: url,
+      };
+    });
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    if (!property) {
+      apicb.get(`property/${params.id}`).then((response) => {
+        if (response.success) {
+          setProperty(response.data);
+
+          // Fetch images associated with the property
+          apicb.post("file/read", {
+            identifier: response?.data.id,
+            isProperty: true,
+          }).then((fileResponse) => {
+            const apiImages = createImageObjects(fileResponse?.data || []);
+            if (apiImages.length > 0) {
+              setImages(apiImages);
+              setLoading(false);
+            } else {
+              setImages(propertyImages); 
+              
+              // Fallback to static images
+            }
+          }
+        );
+        } else {
+          toast.error("Invalid PropertyId");
+          navigate(-1);
+        }
+      });
+    } else {
+      setProperty(property.data);
+    }
+   
+  },[ ]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  
+  const [isResidential, setIsResidential] = useState(false);
+  const [isCommercial, setIsCommercial] = useState(false);
+  const [isLand, setIsLand] = useState(false);
+  const [isPg, setIsPg] =useState(false);
+  
+  // console.log("From Details",data);
   // Updated handler to receive the current index
   const handleImageClick = (event) => {
     const currentImage = images[currentIndex];
     if (currentImage && currentImage.original) {
       setSelectedImage(currentImage.original);
       setModalVisible(true);
-    }
+    } 
   };
 
   const handleSlide = (index) => {
@@ -86,21 +155,42 @@ export default function PropertyDetails({properties}) {
     setModalVisible(false);
     setSelectedImage(null);
   };
+  const getAmenities = () => {
+      
+}
+const setPropertyType =()=>{
+  if(property?.propertyCategory?.toUpperCase()==="RESIDENTIAL")
+    setIsResidential(true)
+  else if(property?.propertyCategory?.toUpperCase()==="COMMERCIAL")
+    setIsCommercial(true)
+  else if(property?.propertyCategory?.toUpperCase()==="LAND")
+    setIsLand(true)
+  else
+    setIsPg(true)
+}
+const getOwnerRole=()=>{ 
+ return property?.owner?.role
+  ? property.owner.role.charAt(0).toUpperCase() + property.owner.role.slice(1).toLowerCase()
+  : "Unknown role"
+}
+useEffect(()=>{
+  setPropertyType()
+})
 
-  return (
+  return (loading?<div>Loading...</div>:
     <div className="propertyDetailsPage">
       <Navbar />
       <div className="propertyImagesDisplay">
         <ImageGallery
           items={images}
           thumbnailPosition="right"
-          showPlayButton={false}
+          showPlayButton={true}
           autoPlay={false}
           useTranslate3D={true}
           showBullets={true}
           lazyLoad={true}
-          showNav={false}
-          // showFullscreenButton={false}
+          showNav={true}
+          showFullscreenButton={true}
           onClick={handleImageClick}
           onSlide={handleSlide}  // Add this to track current slide index
           startIndex={currentIndex}  // Add this to control the starting index
@@ -144,28 +234,29 @@ export default function PropertyDetails({properties}) {
       )}
 <div className="propertyDetails row" style={{marginRight:'0px'}}>
   <div className="PropertyDetailDescription col-lg-9">
-        <h2 className='col_black'>The Modern Moreland House</h2>
-        <p><img src={locationVector} style={{margin:'0px 4px 4px 0px'}}/>2742 Westemeier Road, Bronx , New Your City</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit animcommodo  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint `occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est ....</p>
+        <h2 className='col_black'>{property?.title}</h2>
+        <p><img src={locationVector} style={{margin:'0px 4px 10px 0px'}}/>{property?.address}</p>
+        <p>{property?.projectName}</p>
+        <p>{property?.description}</p>
         <h4 className='col_black'>Property Details</h4>
         <div className="propertydetailsIcons row">
           <div className="propertydetailsIconscol col-lg-3">
-          <p><img src={bedImage}></img>&nbsp; 4 Rooms / Spaces </p>
-          <p><img src={parking}></img>&nbsp; 5 Parking </p>
-          <p><img src={washroomImg}></img>&nbsp; 2 Bathroom</p>
+          {isResidential&&<p><img src={bedImage}></img>&nbsp; {property?.noOfRooms} Rooms / Spaces </p>}
+          <p><img src={parking}></img>&nbsp; Parking</p>
+          {isResidential&&<p><img src={washroomImg}></img>&nbsp; {property?.noOfBathrooms} Bathroom</p>}
           <p><img src={legalDocuments}></img>&nbsp; Subletting Permission</p>
           </div>
           <div className="propertydetailsIconscol col-lg-3">
           <p><img src={conditions}></img>&nbsp; Conditions </p>
           <p><img src={conditions}></img>&nbsp; Possession : <span style={{fontWeight:400}}>Ready to move</span> </p>
-          <p><img src={areaImg}></img>&nbsp; 1200m<sup>2</sup> Carpet Area </p>
-          <p><img src={smokingImg}></img>&nbsp; Smoking Area</p>
+          {!isLand&&<p><img src={areaImg}></img>&nbsp; 1200m<sup>2</sup> Carpet Area </p>}
+          {!isLand&&<p><img src={smokingImg}></img>&nbsp; Smoking Area</p>}
           </div>
           <div className="propertydetailsIconscol col-lg-3">
           <p><img src={legalDocuments}></img>&nbsp; No Encumberence</p>
           <p><img src={ownershipImg}/>&nbsp; Ownership : <span style={{fontWeight:400}}>Ready to move</span></p>
-          <p><img src={balconyImg}></img>&nbsp; 2 Balcony</p>
-          <p><img src={ownershipImg}></img>&nbsp; Maintainance Responsibility : <span style={{fontWeight:400}}>Tenant</span> </p>
+          {isResidential&&<p><img src={balconyImg}></img>&nbsp; 2 Balcony</p>}
+          {!isLand&&<p><img src={ownershipImg}></img>&nbsp; Maintainance Responsibility : <span style={{fontWeight:400}}>Tenant</span> </p>}
           </div>
         </div>
 
@@ -176,24 +267,26 @@ export default function PropertyDetails({properties}) {
           <div className="headtag">
           <p>Property Type</p>
           <p>Offer Type</p>
-          <p>Floor Level</p>
-          <p>Furnishing</p>
+          {!isLand&&<p>Floor Level</p>}
+          {!isLand&&<p>Furnishing</p>}
           <p>Surface Area</p>
-          <p>Status</p>
-          <p>Asking Price:</p>
+          {!isLand&&<p>Status</p>}
+          <p>Advance:</p>
+          <p className='askingPrice'>Asking Price:</p>
           </div>
           <div className="answertag">
-          <p>Office</p>
-          <p>Sale</p>
-          <p>4</p>
-          <p>Semi Furnished</p>
-          <p>1800 m<sup>2</sup></p>
-          <p>Ready to moveIn</p>
-          <p>$ 7,64,345</p>
+          <p>{property?.type}</p>
+          <p>{property?.propertyListingFor}</p>
+         {!isLand&&<p>4</p>}
+        {!isLand&&<p>Semi Furnished</p>}
+          <p>{property?.superBuiltupArea} m<sup>2</sup></p>
+          {!isLand&&<p>Ready to moveIn</p>}
+          <p>&#8377;{property?.advance}</p>
+          <p className='askingPrice'>&#8377;{property?.price}0</p>
           </div>
           </div>
           <div className="agentDetails">
-          <h4 className='agentDetails col_black'>Agent Detail</h4>
+          <h4 className='agentDetails col_black'>{getOwnerRole()} Detail</h4>
           {/* <div className="namecard">
             <img src={agentAvatar} alt="" />
             <div className="agentspecs">
@@ -201,9 +294,9 @@ export default function PropertyDetails({properties}) {
             <p style={{marginTop: '0px'}}>Supervisor</p>
             </div>
           </div> */}
-           <NameCard name="priyanka Arul Mohan"  designation="Supervisor" avatar={agentAvatar}   />
+           <NameCard name={property?.owner?.name}  designation={getOwnerRole()} avatar={placeholder_img}   />
           <button className='btn contactAgentBtn bg_0B132A color_white' style={{margin:'20px 0px'}}>
-            <FaPhoneAlt />&nbsp;&nbsp;&nbsp;Contact Agent & View Property Listings</button>
+            <FaPhoneAlt />&nbsp;&nbsp;&nbsp;Contact {getOwnerRole()} & View Property Listings</button>
           </div>
         </div>
        </div>
@@ -241,6 +334,7 @@ export default function PropertyDetails({properties}) {
 
         <PropertyCarousel properties={properties} isFindPropertyByCityRequired ={false}/>
         <Footer/>
+        <ToastContainer/>
       </div>
   );
 }
