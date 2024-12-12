@@ -41,6 +41,7 @@ import HttpService from '../../Services/http';
 import { ToastContainer, toast} from 'react-toastify';
 import placeholder_img from '../../Assets/place_holder_avatar.jpg'
 import { appendErrors } from 'react-hook-form';
+import loading_place_holder from '../../Assets/spinner.svg';
 
 // Image items for the gallery
 
@@ -177,7 +178,7 @@ useEffect(()=>{
   setPropertyType()
 })
 
-  return (loading?<div>Loading...</div>:
+  return (loading?<div><img src={loading_place_holder}></img><p>Loading...</p>.</div>:
     <div className="propertyDetailsPage">
       <Navbar />
       <div className="propertyImagesDisplay">
