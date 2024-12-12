@@ -97,15 +97,33 @@ export default function PropertyDetails({properties}) {
   };
 
   useEffect(() => {
-    setLoading(true);
-    if (!property) {
-      apicb.get(`property/${params.id}`).then((response) => {
+    setLoading(false);
+    if(property){
+      apicb.post("file/read", {
+        identifier: location?.state?.data.id,    
+        isProperty: true,
+      }).then((fileResponse) => {
+        const apiImages = createImageObjects(fileResponse?.data || []);
+        if (apiImages.length > 0) {
+          setImages(apiImages);
+          setLoading(false);
+        } else {
+          setImages(propertyImages); 
+          
+        }
+      }
+    );
+
+    }
+    else if (!property) {
+      debugger; 
+      apicb.get("property/"+ params.id.replace(/%7D/g, "")).then((response) => {
         if (response.success) {
           setProperty(response.data);
-
+          setLoading(false)
           // Fetch images associated with the property
           apicb.post("file/read", {
-            identifier: response?.data.id,
+            identifier: response?.data.id,    
             isProperty: true,
           }).then((fileResponse) => {
             const apiImages = createImageObjects(fileResponse?.data || []);
@@ -115,7 +133,6 @@ export default function PropertyDetails({properties}) {
             } else {
               setImages(propertyImages); 
               
-              // Fallback to static images
             }
           }
         );
