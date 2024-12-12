@@ -27,7 +27,7 @@ const Navbar = () => {
         <div className="d-none d-lg-flex nav_left">
           <ul className="navbar-nav me-auto">
           <li className="nav-item">
-              <Link className={`nav-link ${location.pathname=='/home'||location.pathname=='/'?'active':''}`} as={Link} to="/home" >Home</Link>
+              <Link className={`nav-link ${location.pathname=='/'?'active':''}`} as={Link} to="/" >Home</Link>
             </li>
             <li className="nav-item">
               <Link className={`nav-link ${location.pathname=='/listings'?'active':''}`} as={Link} to="/listings">Listing</Link>
@@ -96,7 +96,7 @@ const Navbar = () => {
         <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`}>
           <ul className="navbar-nav d-lg-none mt-3">
             <li className="nav-item">
-              <Link className={`nav-link ${location.pathname=='/home'?'active':''}`} as={Link} to="/home" >Home</Link>
+              <Link className={`nav-link ${location.pathname=='/'?'active':''}`} as={Link} to="/home" >Home</Link>
             </li>
             <li className="nav-item">
               <Link className={`nav-link ${location.pathname=='/listings'?'active':''}`} as={Link} to="/listings">Listing</Link>

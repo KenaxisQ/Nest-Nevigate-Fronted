@@ -73,11 +73,11 @@ export default function Landing() {
           {isListingsPage ? <FilterProperties properties={filteredProperties} isListingsPage= {isListingsPage} /> :<FeaturedProperties properties={filteredProperties} />}<FindPropertyByCity/><Footer/></>
         )
       },
-      {
-        path: "home",
-        element: (<><ScrollToTop/><HomePage /><FeaturedProperties properties={properties}/><FindPropertyByCity/><Footer/></>
-        )
-      },
+      // {
+      //   path: "home",
+      //   element: (<><ScrollToTop/><HomePage /><FeaturedProperties properties={properties}/><FindPropertyByCity/><Footer/></>
+      //   )
+      // },
       {
         path: "listings",
         element: (<><ScrollToTop/><FilterProperties properties={properties}/></>)
@@ -91,7 +91,7 @@ export default function Landing() {
         element: (<><ScrollToTop/><FilterProperties   properties={properties}/></>)
       },
       {
-        path:"detail",
+        path:"detail/:id",
         element:(<><ScrollToTop/><PropertyDetails properties={properties}/></>)
       },
       // {
