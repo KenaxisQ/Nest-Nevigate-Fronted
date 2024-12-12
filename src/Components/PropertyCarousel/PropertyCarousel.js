@@ -58,6 +58,7 @@ export default function PropertyCarousel({properties}) {
               beds={property.beds}
               washrooms={property.washrooms}
               area={property.area}
+              props={property}
             />
           </div>
         ))}

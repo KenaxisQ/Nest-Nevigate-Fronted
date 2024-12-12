@@ -13,6 +13,7 @@ import adminRejectIcon from '../../Assets/adminReject.svg';
 import { useAuth } from '../SignIn/AuthContext';
 import { AdminEditForm } from './EditForm/AdminEditForm';
 import HttpService from '../../Services/http';
+import { useNavigate } from 'react-router-dom';
 const PropertyCard = ({ type, title, location, price, beds, washrooms, area, isFeatured=true, height,bg,like,share, isEdit =false, props }) => {
   const {userData, setUserData} = useAuth();
 
@@ -28,6 +29,8 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area, isF
     const modal = new window.bootstrap.Modal(canEditRef?.current);
     modal.show();
 }
+  const navigate = useNavigate();
+  
   const addPropertyToWishList = async () =>{
     
     const userFavourites = userData?.favourites;
@@ -47,11 +50,10 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area, isF
     const https = new HttpService();
     console.log('updatedFavourites', updatedFavourites)
     const response = await https.put(`user/addToFavourites/${userData?.id}`,updatedFavourites, true)
-  console.log('favresponse', response);
   }
   return (
     <>
-    <div className="card propertylistingcard" style={{height:height,background:bg?`url(${bg})`:`url(${cardbg})`}}>
+    <div className="card propertylistingcard" style={{height:height,background:bg?`url(${bg})`:`url(${cardbg})`}} onClick={()=>{navigate(`/detail/${props.id}}`,{state: {data:props}})}}>
       <div className='propertyTags'>
         <div className='PropertyTagWrapper'>
           <div className='propertyTag rent'>{type}</div>
@@ -64,7 +66,7 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area, isF
       </div>}
        {like&& <div className='propertyTaglike'>
         <div className=' wish'
-        ><img src={userData?.favourites.split(',').includes(props?.id)?wishheart:wish} alt= '' onClick={()=>{setIsPropertyLiked(!isPropertyLiked); addPropertyToWishList()}} /></div>
+        ><img src={userData?.favourites?.split(',').includes(props?.id)?wishheart:wish} alt= '' onClick={()=>{setIsPropertyLiked(!isPropertyLiked); addPropertyToWishList()}} /></div>
       </div>}
       {isEdit&&<div className="propertyAccept">
          <img src={adminRejectIcon} onClick={onEditForm} alt='Edit Form'/>

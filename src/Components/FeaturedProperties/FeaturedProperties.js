@@ -45,6 +45,7 @@ export default function FeaturedProperties({ properties}) {
               washrooms={property.washrooms}
               area={property.area}
               like ={ true}
+              props={property}
             />
           </div>
         ))}

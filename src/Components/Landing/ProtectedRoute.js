@@ -33,7 +33,7 @@ const ProtectedRoute = ({ children }) => {
     const navigate = useNavigate();
     const isAuthenticated = isTokenValid();
     useEffect(() => {
-      debugger;
+      // debugger;
       fetchUserData(setUserData, sessionStorage.getItem('identifier') || localStorage.getItem('identifier'))
     }, [setUserData])
     if(!isAuthenticated)
