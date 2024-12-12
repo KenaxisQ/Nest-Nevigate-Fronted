@@ -1,10 +1,11 @@
 import MultiRangeSlider from "multi-range-slider-react";
 import React, { useState } from "react";
 import './MultiRangeSlider.css'
-const CustomRangeSlider = () => {
+const CustomRangeSlider = ({min, max, value, onChange}) => {
   const [rangeValues, setRangeValues] = useState({ min: 10, max: 90 });
 
   const handleSliderChange = (e) => {
+    onChange({ min: e.minValue, max: e.maxValue });
     setRangeValues({ min: e.minValue, max: e.maxValue });
   };
 

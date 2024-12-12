@@ -98,7 +98,7 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area, isF
         </div>
       </div>
     </div>
-    <AdminEditForm property={props} canEditRef={canEditRef} propertyDetails={props}/>
+    {isEdit && <AdminEditForm property={props} canEditRef={canEditRef} propertyDetails={props}/>}
 </>
   );
 };

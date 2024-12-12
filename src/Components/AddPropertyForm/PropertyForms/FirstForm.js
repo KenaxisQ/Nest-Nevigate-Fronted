@@ -1,7 +1,13 @@
 import { useEffect } from "react";
 import PropTypes from "prop-types";
 import './FirstForm.css'
-export const FirstForm = ({ setStep, setOfferType, setPropertyType,propertyType, offerType, setValue  }) => {
+export const FirstForm = ({ setStep, setOfferType, setPropertyType,propertyType, offerType, setValue, reset, setShowSecondFormErrors  }) => {
+    useEffect(() => {
+        //reset(); //remove reset if you want to reset form between one and two
+        setShowSecondFormErrors(false);
+        setValue('propertyCategory', propertyType)
+        setValue('propertyListingFor', offerType)
+    }, [propertyType, offerType]);
     const handlePropertyTypeChange = (event) => {
         setValue('propertyCategory', event.target.value)
         setPropertyType(event.target.value);

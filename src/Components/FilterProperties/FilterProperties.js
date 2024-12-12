@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import './FilterProperties.css';
+import { useWatch, useForm } from 'react-hook-form';
 import Navbar from '../CustomNavbar/CustomNavbar';
 import PropertyCard from '../PropertyCard/PropertyCard';
 import CustomRangeSlider from '../Slider/MultiRangeSlider';
@@ -10,10 +11,13 @@ import Footer from '../Footer/Footer';
 import { BsSearch } from "react-icons/bs";
 import HttpService from '../../Services/http';
 import { MultiselectDropdown } from '../MultiselectDropdown/MultiselectDropdown';
+import { useLocation } from 'react-router-dom';
+import _ from 'lodash';
+
 export default function FilterProperties({ properties,isListingsPage=false,isFindPropertyByCityRequired}) {
   const [leaseValue, setLeaseValue] = useState(50); // Default value
   const [budget, setBudget] = useState(70); // Default value
-  const [isFilterOpen, setIsFilterOpen] = useState(isListingsPage ? true : false); // Track whether the filter is open
+  const [isFilterOpen, setIsFilterOpen] = useState(false); // Track whether the filter is open
   const [showAllProperties, setShowAllProperties] = useState(false); // Toggle between showing 12 and all properties
   const [searchKeyword, setSearchKeyword] = useState("");
   const [Listings, setListings] = useState([]);
@@ -23,21 +27,36 @@ export default function FilterProperties({ properties,isListingsPage=false,isFin
   const [miscelleneousJson, setMiscelleneousJson] = useState([]);
   const [nearByFacilitiesJson, setNearByFacilitiesJson] = useState([]);
 
-  // useEffect(() =>{
-  //   const getAllListings = async () => {
-  //     try{
-  //   var https = new HttpService();
-  //   var allListings = await https.get('property');
-  //   setListings(allListings.data);
-  //   }
-  //   catch(error) {
-  //     console.log('Error fetching All Listing', error);
-  //   }
-  // }
-  //   getAllListings();
+   // Handle slider changes
+   const location = useLocation();
+   const { listingsData } = location.state || {}; // Handle undefined state
 
-  // }, [])
-  // Handle slider changes
+  useEffect(() =>{
+    const getAllListings = async () => {
+      try{
+        const https = new HttpService();
+        const propertyResponse = await https.post('property/filter', {...listingsData})
+    setListings(propertyResponse.data);
+    }
+    catch(error) {
+      console.log('Error fetching All Listing', error);
+    }
+  }
+    getAllListings();
+
+  }, [listingsData])
+ 
+  useEffect(() => {
+    if (listingsData?.searchKeyword) {
+      setSearchKeyword(listingsData.searchKeyword);
+    }
+  }, [listingsData?.searchKeyword]);
+
+  const fetchSearchResults= async (event) =>{
+    const https = new HttpService();
+        const propertyResponse = await https.post('property/filter', {searchKeyword})
+        setListings(propertyResponse.data);
+  }
   const handleLeaseChange = (newValue) => setLeaseValue(newValue);
   const handleBudgetChange = (newValue) => setBudget(newValue);
   const getAmenities = async () => {
@@ -95,25 +114,67 @@ export default function FilterProperties({ properties,isListingsPage=false,isFin
     { id: 3, label: "Subletting Permission" },
   ];
 
-  const propertiesToShow = showAllProperties ? properties : properties?.slice(0, 12);
+  const defaultValues = {
+    propertyCategory: listingsData?.propertyCategory || 'Buy',
+    budget: [0, 100],
+    selectedBedrooms: [],
+    selectedFurnishing: [],
+    selectedOthers: [],
+    selectedAmenities: [],
+    selectedMiscellaneous: [],
+    selectedNearbyServices: [],
+  };
+
+  const propertiesToShow = showAllProperties ? Listings : Listings?.slice(0, 12);
+  const { control, setValue, register, handleSubmit } = useForm({
+    defaultValues: defaultValues
+  });
+
+ 
+
+  const formValues = useWatch({ control });
+
+  const handleCategoryChange = (category) => {
+    setValue('propertyCategory', category);
+  };
+
+  const handleCheckboxChange = (key, value) => {
+    const updatedValues = formValues[key].includes(value)
+      ? formValues[key].filter((v) => v !== value)
+      : [...formValues[key], value];
+    setValue(key, updatedValues);
+  };
+
+  const handleRangeChange = (value) => {
+    setValue('budget', value);
+  };
+
+  const onSubmit = async (data) => {
+    console.log('Form Data:', data);
+    const https = new HttpService();
+    const propertyResponse = await https.post('property/filter', {propertyCategory: data?.propertyCategory});
+    setListings(propertyResponse?.data);
+  };
+  console.log('formValues', formValues);
+  const isFormModified = !_.isEqual(formValues, defaultValues);
 
   return (
     <div className="SearchContent">
       <Navbar/>
      <div className="filterOptionsWrapper">
      <div className="filterSearchWrapper">
-	    <input id="search" className='searchProperties' placeholder='Search Properties...' type="search" onChange={(e)=>setSearchKeyword(e.target.value)}/>
-      <button className='btn search_button'>Search&nbsp;&nbsp;<BsSearch /></button>
+	    <input id="search" className='searchProperties' value={searchKeyword} placeholder={'Search Properties...'} type="search" onChange={(e)=>setSearchKeyword(e.target.value)}/>
+      <button className='btn search_button' onClick={fetchSearchResults}>Search&nbsp;&nbsp;<BsSearch /></button>
       </div>
       <div className="filterButtonWrapper">
       {!isListingsPage && (<button className='btn filterbtn bg_1F4B43' onClick={()=>{setIsFilterOpen(!isFilterOpen); getAmenities();}}>{!isFilterOpen?<MdFilterAlt size="30px" />:< MdFilterAltOff size="30px"/>}<span className='hideFilterText'>{!isFilterOpen?"Show Filter":"Hide Filter"}</span></button>)}
       </div>
      </div>
-     {searchKeyword!=""&&searchKeyword.length>5&&
+     {
      (
       <div className="searchInfo">
-      <h4>Showing Results"{searchKeyword}"</h4>
-      <p>{Math.floor(Math.random() * (100 - 1 + 1)) +1  } Properties found</p>
+      <h4>Showing Results for "{searchKeyword === "" && !isFormModified  ? 'All' : searchKeyword}"</h4>
+      <p>{Listings?.length} Properties found</p>
       </div>
       )}
 
@@ -122,56 +183,122 @@ export default function FilterProperties({ properties,isListingsPage=false,isFin
         <div className="col-lg-3" style={{padding:'20px'}}>
           <div className="filterComponent">
             <div className="filterOptions">
-              <button className="rentOrBuybtn bg_1F4B43 color_white">Buy</button>
-              <button className="rentOrBuybtn bg_E9E9E9">Rent</button>
+      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* Buy/Rent Buttons */}
+      <button
+        type="button"
+        className={`rentOrBuybtn ${formValues.propertyCategory === 'Buy' ? 'bg_1F4B43 color_white' : 'bg_E9E9E9 color_black'}`}
+        onClick={() => handleCategoryChange('Buy')}
+      >
+        Buy
+      </button>
+      <button
+        type="button"
+        className={`rentOrBuybtn ${formValues.propertyCategory === 'Rent' ? 'bg_1F4B43 color_white' : 'bg_E9E9E9 color_black'}`}
+        onClick={() => handleCategoryChange('Rent')}
+      >
+        Rent
+      </button>
 
-              <p className="selectRealestateType">Real Estate Type</p>
-              <div className="filterOptionsForRealestateType">
-                {realestateOptions.map((opt) => (
-                  <p key={opt.id}>
-                    <input type="checkbox" /> &nbsp;{opt.label}
-                  </p>
-                ))}
-              </div>
+      {/* Real Estate Type */}
+      <p className="selectRealestateType">Real Estate Type</p>
+      <div className="filterOptionsForRealestateType">
+        {realestateOptions.map((opt) => (
+          <p key={opt.id}>
+            <input
+              type="checkbox"
+              value={opt.label}
+              checked={formValues.selectedRealEstate?.includes(opt.label)}
+              onChange={() => handleCheckboxChange('selectedRealEstate', opt.label)}
+            />{' '}
+            &nbsp;{opt.label}
+          </p>
+        ))}
+      </div>
 
-              <p className="selectRealestateType">Budget</p>
-              <CustomRangeSlider min={0} max={100} value={budget} onChange={handleBudgetChange} />
+      {/* Budget */}
+      <p className="selectRealestateType">Budget</p>
+      <CustomRangeSlider
+        min={0}
+        max={100}
+        value={formValues.budget}
+        onChange={handleRangeChange}
+      />
 
-              <p className="selectRealestateType">Bedroom</p>
-              <div className="filterOptionsForBedRooms">
-                {bedroomOptions.map((opt) => (
-                  <p key={opt.id}>
-                    <input type="checkbox" /> &nbsp;{opt.label}
-                  </p>
-                ))}
-              </div>
+      {/* Bedroom */}
+      <p className="selectRealestateType">Bedroom</p>
+      <div className="filterOptionsForBedRooms">
+        {bedroomOptions.map((opt) => (
+          <p key={opt.id}>
+            <input
+              type="checkbox"
+              value={opt.label}
+              checked={formValues.selectedBedrooms?.includes(opt.label)}
+              onChange={() => handleCheckboxChange('selectedBedrooms', opt.label)}
+            />{' '}
+            &nbsp;{opt.label}
+          </p>
+        ))}
+      </div>
 
-              <p className="selectRealestateType">Furnishing Type</p>
-              <div className="filterOptionsForFurniture">
-                {furnitureOptions.map((opt) => (
-                  <p key={opt.id}>
-                    <input type="checkbox" /> &nbsp;{opt.label}
-                  </p>
-                ))}
-              </div>
+      {/* Furnishing Type */}
+      <p className="selectRealestateType">Furnishing Type</p>
+      <div className="filterOptionsForFurniture">
+        {furnitureOptions.map((opt) => (
+          <p key={opt.id}>
+            <input
+              type="checkbox"
+              value={opt.label}
+              checked={formValues.selectedFurnishing?.includes(opt.label)}
+              onChange={() => handleCheckboxChange('selectedFurnishing', opt.label)}
+            />{' '}
+            &nbsp;{opt.label}
+          </p>
+        ))}
+      </div>
 
-              <p className="selectRealestateType">Others</p>
-              <div className="filterOptionsForFurniture">
-                {others.map((opt) => (
-                  <p key={opt.id}>
-                    <input type="checkbox" /> &nbsp;{opt.label}
-                  </p>
-                ))}
-              </div>
-              <div>
-              <p className='text-start selectRealestateType'>{"Amenities"}</p>
-              <MultiselectDropdown options={[...amminitiesJson]} setSelected={setSelectedAmenities} selected={selectedAmenities}/>
-              </div>
-              <p className='text-start selectRealestateType'>{"Miscellenous"}</p>
-              <MultiselectDropdown options={[...miscelleneousJson]} setSelected={setSelectedMiscellaneous} selected={selectedMiscellaneous}/>
-              <p className='text-start selectRealestateType'>{"Near By Facilities"}</p>
-              <MultiselectDropdown options={[...nearByFacilitiesJson]} setSelected={setSelectedNearbyServices} selected={selectedNearbyServices}/>
+      {/* Others */}
+      <p className="selectRealestateType">Others</p>
+      <div className="filterOptionsForFurniture">
+        {others.map((opt) => (
+          <p key={opt.id}>
+            <input
+              type="checkbox"
+              value={opt.label}
+              checked={formValues.selectedOthers?.includes(opt.label)}
+              onChange={() => handleCheckboxChange('selectedOthers', opt.label)}
+            />{' '}
+            &nbsp;{opt.label}
+          </p>
+        ))}
+      </div>
 
+      {/* Amenities */}
+      <p className="text-start selectRealestateType">Amenities</p>
+      <MultiselectDropdown
+        options={amminitiesJson}
+        setSelected={(value) => setValue('selectedAmenities', value)}
+        selected={formValues.selectedAmenities}
+      />
+
+      {/* Miscellaneous */}
+      <p className="text-start selectRealestateType">Miscellaneous</p>
+      <MultiselectDropdown
+        options={miscelleneousJson}
+        setSelected={(value) => setValue('selectedMiscellaneous', value)}
+        selected={formValues.selectedMiscellaneous}
+      />
+
+      {/* Nearby Facilities */}
+      <p className="text-start selectRealestateType">Near By Facilities</p>
+      <MultiselectDropdown
+        options={nearByFacilitiesJson}
+        setSelected={(value) => setValue('selectedNearbyServices', value)}
+        selected={formValues.selectedNearbyServices}
+      />
+
+      <button type="submit">Search</button>
+    </form>
               {/* <p className="selectRealestateType">Minimum Lease Duration</p>
               <RangeSlider min={0} max={100} step={5} value={leaseValue} onChange={handleLeaseChange} /> */}
               {/* <p>

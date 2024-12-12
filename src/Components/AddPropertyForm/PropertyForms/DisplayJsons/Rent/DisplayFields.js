@@ -102,7 +102,7 @@ export const DisplayRentLandFields = [
     //     fieldName: "owner",
     // },
     {
-      title: "Enter Property Status",
+      title: "Select Property Status",
       placeHolder: "Select property Status",
       componetName: "Dropdown",
       required: true,
@@ -114,7 +114,8 @@ export const DisplayRentLandFields = [
       placeHolder: "Select Featured",
       componetName: "Dropdown",
       fieldName: "isFeatured",
-      options: ["True", "False"]
+      options: ["True", "False"],
+      required: true
     },
     {
       title: "Enter Primary Contact",
@@ -382,7 +383,7 @@ export const DisplayRentPGFields = [
       //     fieldName: "owner",
       // },
       {
-        title: "Enter Property Status",
+        title: "Select Property Status",
         placeHolder: "Select property Status",
         componetName: "Dropdown",
         required: true,

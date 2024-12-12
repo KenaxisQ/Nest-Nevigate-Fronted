@@ -16,12 +16,12 @@ export const AdminEditForm = ({ property, canEditRef, propertyDetails }) => {
                             <AddProperty propertyDetails={propertyDetails} isEdit={true}/>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Save Changes</button>
+                            {/* <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Save Changes</button> */}
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+            {/* <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
                 <div class="modal-dialog  modal-fullscreen-sm-down">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -37,7 +37,7 @@ export const AdminEditForm = ({ property, canEditRef, propertyDetails }) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
   );
 }

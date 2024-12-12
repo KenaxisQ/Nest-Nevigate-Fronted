@@ -33,8 +33,8 @@ export const DisplaySellLandFields = [
         title: "Enter Project Name",
         placeHolder: "Enter Project Name",
         componetName: "Input",
-        required: true,
         fieldName: "projectName",
+        required: true
     },
     // {
     //     title: "Select Furniture Status",
@@ -221,56 +221,63 @@ export const DisplaySellResidentialFields = [...DisplaySellLandFields,
         placeHolder: "Select Furniture Status Description",
         componetName: "Input",
         fieldName: "furnitureStatusDescription",
+        required: true,
     },
     {
         title: "Enter Carpet Area",
         placeHolder: "Enter Carpet Area",
         componetName: "Input",
         fieldName: "carpetArea",
+        type: "number",
+        required: true,
+
+    },
+    {
+        title: "Enter No of BathRooms",
+        placeHolder: "No of Bathrooms",
+        componetName: "Input",
+        fieldName: "noOfBathrooms",
+        required: true,
         type: "number"
     },
-  {
-  title: "Enter No of BathRooms",
-  placeHolder: "No of Bathrooms",
-  componetName: "Input",
-  fieldName: "noOfBathrooms",
-  required: true,
-  type: "number"
-},
-{
-    title: "Enter No of BedRooms",
-    placeHolder: "No of BedRooms",
+    {
+        title: "Enter No of BedRooms",
+        placeHolder: "No of BedRooms",
+        componetName: "Input",
+        fieldName: "noOfBedrooms",
+        required: true,
+        type: "number"
+    },
+    {
+        title: "Enter No of Balconies",
+        placeHolder: "No of Balconies",
+        componetName: "Input",
+        fieldName: "noOfBalconies",
+        type: "number",
+        required: true,
+    },
+    {
+        title: "Enter No of Rooms",
+        placeHolder: "No of Rooms",
+        componetName: "Input",
+        fieldName: "noOfRooms",
+        type: "number",
+        required: true,
+    },
+    {
+    title: "Enter Pooja Rooms",
+    placeHolder: "Pooja Rooms",
     componetName: "Input",
-    fieldName: "noOfBedrooms",
-    required: true,
-    type: "number"
-  },
-{
-    title: "Enter No of Balconies",
-    placeHolder: "No of Balconies",
-    componetName: "Input",
-    fieldName: "noOfBalconies",
-    type: "number"
-},
-{
-    title: "Enter No of Rooms",
-    placeHolder: "No of Rooms",
-    componetName: "Input",
-    fieldName: "noOfRooms",
-    type: "number"
-},
-{
-  title: "Enter Pooja Rooms",
-  placeHolder: "Pooja Rooms",
-  componetName: "Input",
-  fieldName: "poojaRoom",
-  type: "number"
-},
-{
-    title: "Move In Date",
-    placeHolder: "Move In Date",
-    componetName: "Input",
-    fieldName: "moveInDate",
-    type:"date"
-  },
+    fieldName: "poojaRoom",
+    type: "number",
+    required: true
+    },
+    {
+        title: "Move In Date",
+        placeHolder: "Move In Date",
+        componetName: "Input",
+        fieldName: "moveInDate",
+        type:"date",
+        required: true
+    },
 ];

@@ -11,6 +11,7 @@ export const useAuth = () => {
 
 // Create a Provider component
 export const AuthProvider = ({ children }) => {
+  
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState(null);  // Initialize userData as null
   const login = async (identifier, homePageRedirect, isRemembered, responseToken) => {

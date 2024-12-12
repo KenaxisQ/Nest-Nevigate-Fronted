@@ -5,7 +5,7 @@ import { PropertyUploadForm } from "../PropertyForms/PropertyUploadForm";
 import { FiUpload } from "react-icons/fi";
 import { BiSolidImageAdd } from "react-icons/bi";
 import HttpService from "../../../Services/http";
-export const ThirdForm = ({ setStep, setValue, register, onSubmit, values }) => {
+export const ThirdForm = ({ setStep, setValue, register, onSubmit, values, setShowSecondFormErrors }) => {
     const defaultPlaceholderImages = []//aceholder image URL
     const [selectedFiles, setSelectedFiles] = useState(defaultPlaceholderImages);
     const [preview, setPreview] = useState("https://via.placeholder.com/150");
@@ -68,6 +68,7 @@ export const ThirdForm = ({ setStep, setValue, register, onSubmit, values }) => 
     console.log('preview', thumbnailFile);
 
     const handleUploadClick = () => {
+        setShowSecondFormErrors(true);
         onSubmit();
         //setStep(3);
     };

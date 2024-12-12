@@ -4,8 +4,8 @@ import { UserInfo } from "./UserInfo/UserInfo"
 import './PropertyForm.css';
 import { AddProperty } from "./Property/AddProperty";
 export const PropertyForm = () => {
-    const location = useLocation();
-    const { customData } = location.state || {}; // Accessing state
+    // const location = useLocation();
+    // const { customData } = location.state || {}; // Accessing state
     return(
         <>
             <Navbar />
