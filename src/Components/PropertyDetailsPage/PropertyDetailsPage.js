@@ -97,7 +97,7 @@ export default function PropertyDetails({properties}) {
   };
 
   useEffect(() => {
-    setLoading(false);
+    setLoading(true)
     if(property){
       apicb.post("file/read", {
         identifier: location?.state?.data.id,    
@@ -106,21 +106,21 @@ export default function PropertyDetails({properties}) {
         const apiImages = createImageObjects(fileResponse?.data || []);
         if (apiImages.length > 0) {
           setImages(apiImages);
-          setLoading(false);
+         
         } else {
-          setImages(propertyImages); 
+          setImages(propertyImages);
           
         }
+        setLoading(false);
       }
     );
 
     }
     else if (!property) {
-      debugger; 
+      debugger;
       apicb.get("property/"+ params.id.replace(/%7D/g, "")).then((response) => {
         if (response.success) {
           setProperty(response.data);
-          setLoading(false)
           // Fetch images associated with the property
           apicb.post("file/read", {
             identifier: response?.data.id,    
@@ -129,11 +129,11 @@ export default function PropertyDetails({properties}) {
             const apiImages = createImageObjects(fileResponse?.data || []);
             if (apiImages.length > 0) {
               setImages(apiImages);
-              setLoading(false);
             } else {
               setImages(propertyImages); 
               
             }
+            setLoading(false)
           }
         );
         } else {
