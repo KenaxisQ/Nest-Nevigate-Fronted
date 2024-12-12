@@ -53,7 +53,7 @@ const PropertyCard = ({ type, title, location, price, beds, washrooms, area, isF
   }
   return (
     <>
-    <div className="card propertylistingcard" style={{height:height,background:bg?`url(${bg})`:`url(${cardbg})`}} onClick={()=>{navigate(`/detail/${props.id}}`,{state: {data:props}})}}>
+    <div className="card propertylistingcard" style={{height:height,background:bg?`url(${bg})`:`url(${cardbg})`}} onClick={()=>{navigate(`/detail/${props.id}`,{state: {data:props}})}}>
       <div className='propertyTags'>
         <div className='PropertyTagWrapper'>
           <div className='propertyTag rent'>{type}</div>

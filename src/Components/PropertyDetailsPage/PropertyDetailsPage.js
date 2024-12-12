@@ -82,7 +82,7 @@ export default function PropertyDetails({properties}) {
   ]
   
   // console.log("From Details",propertyid)
-  const [property, setProperty] = useState(location.state);
+  const [property, setProperty] = useState();
   const [images, setImages] = useState([]);
   
   // Helper to create image objects from Base64
@@ -98,6 +98,7 @@ export default function PropertyDetails({properties}) {
 
   useEffect(() => {
     setLoading(true)
+    setProperty(location?.state?.data);
     if(property){
       apicb.post("file/read", {
         identifier: location?.state?.data.id,    
@@ -118,10 +119,9 @@ export default function PropertyDetails({properties}) {
     }
     else if (!property) {
       debugger;
-      apicb.get("property/"+ params.id.replace(/%7D/g, "")).then((response) => {
+      apicb.get("property/"+ (params.id)).then((response) => {
         if (response.success) {
           setProperty(response.data);
-          // Fetch images associated with the property
           apicb.post("file/read", {
             identifier: response?.data.id,    
             isProperty: true,
