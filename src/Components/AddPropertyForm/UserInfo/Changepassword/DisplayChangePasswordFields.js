@@ -31,6 +31,9 @@ export const DisplayChangePasswordFields = () => {
 
   // Form Submission
   const handleSubmit = async (values, { resetForm, setSubmitting }) => {
+    if(values.oldPassword===values.newPassword){
+      toast.error("New Password cannot be the same as the current password")
+    }
     try {
       const data = {
         userId:userData.id,
@@ -85,7 +88,7 @@ export const DisplayChangePasswordFields = () => {
                                 onBlur={handleBlur}
                                  />
                                 <label for="floatingPassword"/>
-              <label htmlFor="currentPassword">Current Password:</label>
+              <label htmlFor="currentPassword">Current Password</label>
               {touched.currentPassword && errors.currentPassword && (
                     <div className="form-text text-danger error px-2 text-start">
                       {errors.currentPassword}
@@ -101,7 +104,7 @@ export const DisplayChangePasswordFields = () => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}/>
                                 
-              <label htmlFor="newPassword">New Password:</label>
+              <label htmlFor="newPassword">New Password</label>
               {touched.newPassword && errors.newPassword && (
                     <div className="form-text text-danger error px-2 text-start">
                       {errors.newPassword}
@@ -116,7 +119,7 @@ export const DisplayChangePasswordFields = () => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                  />
-              <label htmlFor="confirmPassword">Confirm Password:</label>
+              <label htmlFor="confirmPassword">Confirm Password</label>
               {/* <input
                 type="password"
                 id="confirmPassword"
