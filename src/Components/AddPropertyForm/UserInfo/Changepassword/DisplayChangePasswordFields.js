@@ -1,61 +1,146 @@
 import React, {useState,useRef} from "react";
-export const DisplayChangePasswordFields = () =>{
-    const [otp, setOtp] = useState(new Array(6).fill(""));
-    const [showOtp, setShowOtp] = useState(false);
-    const otpBoxReference = useRef([]);
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import HttpService from "../../../../Services/http";
+import { useAuth } from "../../../SignIn/AuthContext";
+import { ToastContainer,toast } from "react-toastify";
+export const DisplayChangePasswordFields = () => {
 
-    function handleChange(value, index) {
-        let newArr = [...otp];
-        newArr[index] = value;
-        setOtp(newArr);
-    
-        if (value && index < 6 - 1) {
-          otpBoxReference.current[index + 1].focus()
+  const http = new HttpService();
+  const {userData} = useAuth();
+  // Validation Schema
+  const validationSchema = Yup.object({
+    currentPassword: Yup.string().required('Current password is required'),
+    newPassword: Yup.string()
+      .min(8, 'Password must be at least 8 characters')
+      .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .matches(/\d/, 'Password must contain at least one number')
+      .required('New password is required'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
+      .required('Confirm password is required'),
+  });
+
+  // Initial Values
+  const initialValues = {
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  };
+
+  // Form Submission
+  const handleSubmit = async (values, { resetForm, setSubmitting }) => {
+    try {
+      const data = {
+        userId:userData.id,
+        oldPassword: values.currentPassword,
+        newPassword: values.newPassword
+      };
+      http.put('user/resetPassword', {...data}).then((response)=>{
+        if(response.success){
+          toast.success("Password updated successfully")
+          resetForm();
         }
-      }
-    
-      function handleBackspaceAndEnter(e, index) {
-        if (e.key === "Backspace" && !e.target.value && index > 0) {
-          otpBoxReference.current[index - 1].focus()
+        else {
+          toast.error(response.message);
         }
-        if (e.key === "Enter" && e.target.value && index < 6 - 1) {
-          otpBoxReference.current[index + 1].focus()
-        }
-      }
-      const onSubmit = (event) => {
-        console.log(event.target.value)
-      }
-    return(
-        <form onSubmit={(event) => onSubmit(event)} className="container pt-4">
+      })
+
+      
+
+      // Reset form and show success message
+      
+    } catch (error) {
+      console.error('Error updating password:', error);
+      alert('Failed to update password. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div>
+      <h2>Update Password</h2>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({
+            handleChange,
+            handleBlur,
+            touched,
+            errors,
+            isSubmitting,
+            setFieldValue,
+            values,
+          }) => (
+          <Form className="container pt-4"> 
+           <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="currentPassword" placeholder="Password"
+                  
+                                name="currentPassword"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                 />
+                                <label for="floatingPassword"/>
+              <label htmlFor="currentPassword">Current Password:</label>
+              {touched.currentPassword && errors.currentPassword && (
+                    <div className="form-text text-danger error px-2 text-start">
+                      {errors.currentPassword}
+                    </div>
+                  )}
+             
+              {/* <ErrorMessage name="currentPassword" component="div" className="error" /> */}
+            </div>
+
             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="floatingInput" placeholder="Current Password" />
-                                <label for="floatingPassword">Current Password</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" />
-                                <label for="floatingPassword">Password</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" />
-                                <label for="floatingPassword">Confirm Password</label>
-                                </div>
-                                <div>
-                                <button type="submit" onClick={() => setShowOtp(true)}>{"Send OTP"}</button>
+                                <input type="password" class="form-control" id="newPassword" placeholder="Password"
+                                name="newPassword"
+                                onChange={handleChange}
+                                onBlur={handleBlur}/>
                                 
-                                    {showOtp && (<><div className='d-flex justify-content-around'>
-                    <p>{"Enter Otp"}</p>
-                </div><div>
-                        {otp.map((digit, index) => (
-                            <input key={index} value={digit} maxLength={1}
-                                onChange={(e) => handleChange(e.target.value, index)}
-                                onKeyUp={(e) => handleBackspaceAndEnter(e, index)}
-                                ref={(reference) => (otpBoxReference.current[index] = reference)}
-                                className={`border w-5 h-auto text-black p-3 rounded-md block focus:border-2 focus:outline-none appearance-none box-border otpCss`}
-                                style={{ width: '10px' }} />
-                        ))}
-                    </div></>)}
-                    <button type="submit" className="PropertyNextButton">{"Change Password"}</button>
-                                    </div>
-        </form>
-    );
-}
+              <label htmlFor="newPassword">New Password:</label>
+              {touched.newPassword && errors.newPassword && (
+                    <div className="form-text text-danger error px-2 text-start">
+                      {errors.newPassword}
+                    </div>
+                  )}
+              {/* <ErrorMessage name="newPassword" component="div" className="error" /> */}
+            </div>
+
+            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="confirmPassword" placeholder="Password"
+                                name="confirmPassword"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                 />
+              <label htmlFor="confirmPassword">Confirm Password:</label>
+              {/* <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Confirm new password"
+              /> */}
+              {/* <ErrorMessage name="confirmPassword" component="div" className="error" /> */}
+              {touched.confirmPassword && errors.confirmPassword && (
+                    <div className="form-text text-danger error px-2 text-start">
+                      {errors.confirmPassword}
+                    </div>
+                  )}
+            </div>
+
+            <button type="submit" className="PropertyNextButton" 
+            // disabled={isSubmitting}
+            // onClick={handleSubmit}
+            >
+              {isSubmitting ? 'Updating...' : 'Update Password'}
+            </button>
+          </Form>
+        )}
+      </Formik>
+      <ToastContainer/>
+    </div>
+  );
+};
