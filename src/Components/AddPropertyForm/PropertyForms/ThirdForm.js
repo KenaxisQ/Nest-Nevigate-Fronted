@@ -10,8 +10,6 @@ export const ThirdForm = ({ setStep, setValue, register, onSubmit, values, setSh
     const [selectedFiles, setSelectedFiles] = useState(defaultPlaceholderImages);
     const [preview, setPreview] = useState("https://via.placeholder.com/150");
     var thumbnailFile = useRef();
-    const inputRef = useRef(null);
-
     const processData = async (files) => {
         
     
@@ -19,12 +17,9 @@ export const ThirdForm = ({ setStep, setValue, register, onSubmit, values, setSh
     
         // Process files and rename the thumbnail file
         const processedFiles = files.map((file) => {
+            file.thumbnail = false;
             if (file?.name === thumbnailFile?.current?.name) {
-                // Extract the file extension
-                const fileExtension = file.name.substring(file.name.lastIndexOf('.'));
-                const baseName = file.name.substring(0, file.name.lastIndexOf('.')); // Extract the filename without extension
-                // Rename the file to "_thumbnail.<extension>"
-                return new File([file], `${baseName}_thumbnail${fileExtension}`, { type: file.type });
+                file.thumbnail = true;
             }
             return file;
         });
@@ -46,7 +41,16 @@ export const ThirdForm = ({ setStep, setValue, register, onSubmit, values, setSh
         var response = await https.post('file/upload', formData, true);
         console.log('Media Response', response);
         const transformedData = {
-            images: response?.data.map((item) => item.name.split('/').pop()), // Extract only the image name
+            images: response?.data
+            .map((item) => item?.path)
+            .sort((a, b) => {
+                const isAThumbnail = response?.data.some((item) => item?.path === a && item?.name === thumbnailFile?.current?.name);
+                const isBThumbnail = response?.data.some((item) => item?.path === b && item?.name === thumbnailFile?.current?.name);
+    
+                // If a has the thumbnail, it should come first
+                return isBThumbnail - isAThumbnail;
+            }),
+             // Extract only the path
             uploadedDate: new Date().toISOString(), // Get the current date and time
         };    
         console.log('transformedData', transformedData);            
