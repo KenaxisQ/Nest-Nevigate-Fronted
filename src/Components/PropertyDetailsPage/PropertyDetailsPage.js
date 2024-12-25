@@ -42,10 +42,7 @@ import { ToastContainer, toast} from 'react-toastify';
 import placeholder_img from '../../Assets/place_holder_avatar.jpg'
 import { appendErrors } from 'react-hook-form';
 import loading_place_holder from '../../Assets/spinner.svg';
-
-// Image items for the gallery
-
-
+import propertyPlaceholder from '../../Assets/propertyPlaceholder.png';
 export default function PropertyDetails({properties}) {
   // debugger;
   const location = useLocation(); 
@@ -53,99 +50,109 @@ export default function PropertyDetails({properties}) {
   const apicb = new HttpService();
   const params = useParams();
   const[loading,setLoading]=useState(true);
-  
   const propertyImages = [
     {
-      original: propertyImg1,
-      thumbnail: propertyImg1,
+      original: propertyPlaceholder,
+      thumbnail: propertyPlaceholder,
     },
-    {
-      original: propertyImg2,
-      thumbnail: propertyImg2,
-    },
-    {
-      original: propertyImg1,
-      thumbnail: propertyImg1,
-    },
-    {
-      original: propertyImg1,
-      thumbnail: propertyImg1,
-    },
-    {
-      original: propertyImg2,
-      thumbnail: propertyImg2,
-    },
-    {
-      original: propertyImg1,
-      thumbnail: propertyImg1,
-    },
+    // {
+    //   original: propertyImg2,
+    //   thumbnail: propertyImg2,
+    // },
+    // {
+    //   original: propertyImg1,
+    //   thumbnail: propertyImg1,
+    // },
+    // {
+    //   original: propertyImg1,
+    //   thumbnail: propertyImg1,
+    // },
+    // {
+    //   original: propertyImg2,
+    //   thumbnail: propertyImg2,
+    // },
+    // {
+    //   original: propertyImg1,
+    //   thumbnail: propertyImg1,
+    // },
   ]
+  const [Gallery, setGallery] = useState(propertyImages);
   
-  // console.log("From Details",propertyid)
+  
   const [property, setProperty] = useState();
   const [images, setImages] = useState([]);
-  
-  // Helper to create image objects from Base64
-  const createImageObjects = (data) => {
-    return data.map((byteArray) => {
-      const url = `data:image/jpeg;base64,${byteArray}`;
-      return {
-        original: url,
-        thumbnail: url,
-      };
-    });
-  };
-
+  const [ownerProfile, setOwnerProfile] = useState(null);
+  const setPropertyType =()=>{
+    if(property?.propertyCategory?.toUpperCase()==="RESIDENTIAL")
+      setIsResidential(true)
+    else if(property?.propertyCategory?.toUpperCase()==="COMMERCIAL")
+      setIsCommercial(true)
+    else if(property?.propertyCategory?.toUpperCase()==="LAND")
+      setIsLand(true)
+    else
+      setIsPg(true)
+  }
+  const getOwnerRole=()=>{ 
+   return property?.owner?.role
+    ? property.owner.role.charAt(0).toUpperCase() + property.owner.role.slice(1).toLowerCase()
+    : "Unknown role"
+  }
   useEffect(() => {
-    setLoading(true)
-    setProperty(location?.state?.data);
-    if(property){
-      apicb.post("file/read", {
-        identifier: location?.state?.data.id,    
-        isProperty: true,
-      }).then((fileResponse) => {
-        const apiImages = createImageObjects(fileResponse?.data || []);
-        if (apiImages.length > 0) {
-          setImages(apiImages);
-         
-        } else {
-          setImages(propertyImages);
-          
-        }
-        setLoading(false);
-      }
-    );
-
+    setLoading(true);
+    setPropertyType()
+    // If property data is available in location state
+    if (location?.state?.data) {
+      setProperty(location.state.data);
+      const imagesString = location.state.data?.media;
+      if(imagesString!=null){ 
+      console.log("Images From Detail Page", imagesString)
+      const images = typeof imagesString === 'string'
+        ? JSON.parse(imagesString).images
+        : imagesString.images;
+        
+      const imageArray = images.map((image) => ({
+        original: image,
+        thumbnail: image,
+      }));
+  
+      setGallery(imageArray);
     }
-    else if (!property) {
+    else{
+      setGallery(propertyImages)
+    }
+    } else if (!property) {
       debugger;
-      apicb.get("property/"+ (params.id)).then((response) => {
-        if (response.success) {
+      apicb.get(`property/${params.id}`).then((response) => {
+        if(response.success) {
           setProperty(response.data);
-          apicb.post("file/read", {
-            identifier: response?.data.id,    
-            isProperty: true,
-          }).then((fileResponse) => {
-            const apiImages = createImageObjects(fileResponse?.data || []);
-            if (apiImages.length > 0) {
-              setImages(apiImages);
-            } else {
-              setImages(propertyImages); 
-              
-            }
-            setLoading(false)
-          }
-        );
-        } else {
+          const imagesString = response.data?.media;
+          const images = typeof imagesString === 'string'
+            ? JSON.parse(imagesString).images
+            : imagesString.images;
+          console.log(images)
+          const imageArray = images.map((image) => ({
+            original: image,
+            thumbnail: image,
+          }));
+  
+          setGallery(imageArray);
+        } 
+        else {
           toast.error("Invalid PropertyId");
           navigate(-1);
         }
+        setLoading(false);
+      }).catch((error) => {
+        toast.error("Error fetching property data");
+        console.error(error);
+        setLoading(false);
       });
     } else {
-      setProperty(property.data);
+      setLoading(false);
     }
-   
-  },[ ]);
+  
+  }, [location, property, params.id, navigate]); // Add dependencies
+  
   const [selectedImage, setSelectedImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -154,7 +161,6 @@ export default function PropertyDetails({properties}) {
   const [isCommercial, setIsCommercial] = useState(false);
   const [isLand, setIsLand] = useState(false);
   const [isPg, setIsPg] =useState(false);
-  
   // console.log("From Details",data);
   // Updated handler to receive the current index
   const handleImageClick = (event) => {
@@ -176,31 +182,13 @@ export default function PropertyDetails({properties}) {
   const getAmenities = () => {
       
 }
-const setPropertyType =()=>{
-  if(property?.propertyCategory?.toUpperCase()==="RESIDENTIAL")
-    setIsResidential(true)
-  else if(property?.propertyCategory?.toUpperCase()==="COMMERCIAL")
-    setIsCommercial(true)
-  else if(property?.propertyCategory?.toUpperCase()==="LAND")
-    setIsLand(true)
-  else
-    setIsPg(true)
-}
-const getOwnerRole=()=>{ 
- return property?.owner?.role
-  ? property.owner.role.charAt(0).toUpperCase() + property.owner.role.slice(1).toLowerCase()
-  : "Unknown role"
-}
-useEffect(()=>{
-  setPropertyType()
-})
-
-  return (loading?<div><img src={loading_place_holder}></img><p>Loading...</p>.</div>:
+  return (
+    // loading?<div><img src={loading_place_holder}></img><p>Loading...</p>.</div>:
     <div className="propertyDetailsPage">
       <Navbar />
       <div className="propertyImagesDisplay">
         <ImageGallery
-          items={images}
+          items={Gallery}
           thumbnailPosition="right"
           showPlayButton={true}
           autoPlay={false}
@@ -312,7 +300,7 @@ useEffect(()=>{
             <p style={{marginTop: '0px'}}>Supervisor</p>
             </div>
           </div> */}
-           <NameCard name={property?.owner?.name}  designation={getOwnerRole()} avatar={placeholder_img}   />
+           <NameCard name={property?.owner?.name}  designation={getOwnerRole()} avatar={ownerProfile===null?placeholder_img:ownerProfile}   />
           <button className='btn contactAgentBtn bg_0B132A color_white' style={{margin:'20px 0px'}}>
             <FaPhoneAlt />&nbsp;&nbsp;&nbsp;Contact {getOwnerRole()} & View Property Listings</button>
           </div>

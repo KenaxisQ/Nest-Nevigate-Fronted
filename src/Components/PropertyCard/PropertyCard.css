@@ -3,6 +3,7 @@
     margin-bottom: 20px;
     height: 450px;
     background-image: url(../../Assets/p1.jpg);
+    background-repeat: no-repeat !important;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -21,6 +22,7 @@
     border-radius: 10px;
     padding: 20px 20px;
     font-family: Roboto;
+    cursor: pointer;
 }
 .propertyLocation img{
     height:16px;
@@ -157,6 +159,7 @@
 }
 .wish{
     margin: 0px 10px 0px 0px ;
+    cursor: pointer;
 }
 @media(max-width:700px) {
 

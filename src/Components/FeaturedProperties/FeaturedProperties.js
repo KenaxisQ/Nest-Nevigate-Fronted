@@ -46,6 +46,7 @@ export default function FeaturedProperties({ properties}) {
               area={property.area}
               like ={ true}
               props={property}
+              bg={true}
             />
           </div>
         ))}
@@ -66,6 +67,7 @@ export default function FeaturedProperties({ properties}) {
               area={property.carpetArea}
               like ={ true}
               props={property}
+              bg= {true}
             />
           </div>
         ))}
